@@ -11,7 +11,7 @@ const HomePage = async () => {
   console.log(data)
 
   return (<>
-     {data[1]?.status}
+     {data[1]?.status ? "fetch api sucess" : "fetch api error"}
   </>)
 }
 
