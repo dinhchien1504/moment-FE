@@ -1,6 +1,4 @@
 import cookie from "js-cookie";
-
-
 export const FetchPostLoginApi = async (api: string,bodyData: any)=> {
     try {
         const res = await fetch(api, {
@@ -15,6 +13,7 @@ export const FetchPostLoginApi = async (api: string,bodyData: any)=> {
         return data;
       } catch (error) {
         // console.error("Error fetching data:", error);
+      } finally {
       }
 }
 
