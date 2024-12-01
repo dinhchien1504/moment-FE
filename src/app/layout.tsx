@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
+import NextTopLoader from "nextjs-toploader";
 const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
+        <header>
+          <NextTopLoader
+            color="linear-gradient(268deg, #ec3d04 0%, #FF2A69 100%)"
+            initialPosition={0.08}
+            crawlSpeed={50}
+            height={3}
+            crawl={true}
+            easing="ease"
+            speed={50}
+            zIndex={1600}
+            showAtBottom={false}
+          />
+          
+        </header>
         {children}
       </body>
     </html>

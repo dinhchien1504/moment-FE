@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
 import {  useRouter } from 'next/navigation'
 import GlobalErrorCode from '@/exception/global_error_code';
+import { startLoading, stopLoading } from '../shared/nprogress';
 const LoginForm = () => {
     const [userName,setUserName] = useState<string>("")
     const [password,setPassword] = useState<string>("")
@@ -15,6 +16,7 @@ const LoginForm = () => {
     const router = useRouter()
 
     const handleLogin = async () => {
+        startLoading()
         const authenticationRequest:AuthenticationRequest = {
             userName:userName,
             password:password
@@ -24,9 +26,11 @@ const LoginForm = () => {
         if (res.status === 200) {
             setIsInvalid(false)
             router.push(`/`)
+            
         } else {
             setIsInvalid(true)
         }
+        stopLoading()
     }
 
     // change input
@@ -80,7 +84,7 @@ const LoginForm = () => {
                 </FloatingLabel>
 
                 <div className='div-forgot mb-3' >
-                   <Link className='link-forgot' href={"/forgot"}>Bạn quên mật khẩu ? </Link>
+                   <Link className='link-forgot' href={"/"}>Bạn quên mật khẩu ? </Link>
                 </div>
                 
                 <Button className='btn-login' 
