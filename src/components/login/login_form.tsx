@@ -25,7 +25,7 @@ const LoginForm = () => {
                     label="Tài khoản"
                     className="mb-3"
                 >
-                    <Form.Control type="text" placeholder="Tài khoản" 
+                    <Form.Control type="text" placeholder="Tài khoản"  className='input-user-name'
                     //  isInvalid={true}
                     />
                 </FloatingLabel>
@@ -34,7 +34,7 @@ const LoginForm = () => {
                     label="Mật khẩu"
                     className="password"
                 >
-                    <Form.Control type="password" placeholder="Mật khẩu" 
+                    <Form.Control type="password" placeholder="Mật khẩu"  className='input-password'
                     // isInvalid={true}
                     />
                     <Form.Control.Feedback type="invalid">
