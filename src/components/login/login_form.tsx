@@ -4,7 +4,42 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Button } from 'react-bootstrap';
 import Link from 'next/link'
+import { useState } from 'react';
+import { LoginServerActions } from './login_server_actions';
+import {  useRouter } from 'next/navigation'
+import GlobalErrorCode from '@/exception/global_error_code';
 const LoginForm = () => {
+    const [userName,setUserName] = useState<string>("")
+    const [password,setPassword] = useState<string>("")
+    const [isInvalid,setIsInvalid] = useState<boolean>(false)
+    const router = useRouter()
+
+    const handleLogin = async () => {
+        const authenticationRequest:AuthenticationRequest = {
+            userName:userName,
+            password:password
+        }
+
+        const res = await LoginServerActions(authenticationRequest)
+        if (res.status === 200) {
+            setIsInvalid(false)
+            router.push(`/`)
+        } else {
+            setIsInvalid(true)
+        }
+    }
+
+    // change input
+    const handleUserName = (e:string) => {
+        setUserName(e)
+        setIsInvalid(false)
+    }
+    const handlePassword = (e:string) => {
+        setPassword(e)
+        setIsInvalid(false)
+    }
+
+    // end change input
 
 
 
@@ -27,6 +62,7 @@ const LoginForm = () => {
                 >
                     <Form.Control type="text" placeholder="Tài khoản"  className='input-user-name'
                     //  isInvalid={true}
+                    onChange={(e) => {handleUserName(e.target.value)}}
                     />
                 </FloatingLabel>
                 <FloatingLabel
@@ -35,10 +71,11 @@ const LoginForm = () => {
                     className="password"
                 >
                     <Form.Control type="password" placeholder="Mật khẩu"  className='input-password'
-                    // isInvalid={true}
+                    isInvalid={isInvalid}
+                    onChange={(e) => {handlePassword(e.target.value)}}
                     />
                     <Form.Control.Feedback type="invalid">
-                    {"Mật khẩu không chính xác"}
+                    {GlobalErrorCode.GLOBAL_2}
                   </Form.Control.Feedback>
                 </FloatingLabel>
 
@@ -46,7 +83,9 @@ const LoginForm = () => {
                    <Link className='link-forgot' href={"/forgot"}>Bạn quên mật khẩu ? </Link>
                 </div>
                 
-                <Button className='btn-login' >Đăng nhập</Button>
+                <Button className='btn-login' 
+                onClick={() => {handleLogin()}}
+                >Đăng nhập</Button>
             </Form>
 
             <Form className='form-login mt-2'>
