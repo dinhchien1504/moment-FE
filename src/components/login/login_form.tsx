@@ -21,43 +21,36 @@ const LoginForm = () => {
     const { setUser } = useUserContext();
     const router = useRouter()
 
+
     const handleLogin = async () => {
-        try {
-
-            startLoading()
-
+        startLoading()
             const authenticationRequest:AuthenticationRequest = {
                 userName:userName,
                 password:password
             }
-    
             const res = await LoginServerActions(authenticationRequest)
+
             // login  thanh cong
             if (res.status === 200) {
                 setIsInvalid(false)
-    
+
                 const res = await FetchServerGetApi(API.AUTH.MY_INFO)
                 if (res.status === 200) {
                     const user:UserResponse = res.result
+                    console.log("user >>> ", user)
                     setUser(user)
                 }
-                router.push("/")
+       
+               router.push("/")
+ 
             } 
               // login khong thanh cong
             else {
                 setIsInvalid(true)
+                stopLoading()
             }
             
-        } catch (error) {
-            
-        } finally {
-            stopLoading()
-        }
-
       
-        
-    
-
     }
 
     // change input
@@ -101,7 +94,7 @@ const LoginForm = () => {
                     label="Mật khẩu"
                     className="password"
                 >
-                    <Form.Control type="password" placeholder="Mật khẩu"  className='input-password'
+                    <Form.Control type="text" placeholder="Mật khẩu"  className='input-password'
                     isInvalid={isInvalid}
                     onChange={(e) => {handlePassword(e.target.value)}}
                     />
