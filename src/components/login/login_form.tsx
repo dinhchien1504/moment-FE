@@ -6,14 +6,13 @@ import { Button } from 'react-bootstrap';
 import Link from 'next/link'
 import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
-import {  useRouter } from 'next/navigation'
 import GlobalErrorCode from '@/exception/global_error_code';
 import { startLoading, stopLoading } from '../shared/nprogress';
 const LoginForm = () => {
     const [userName,setUserName] = useState<string>("")
     const [password,setPassword] = useState<string>("")
     const [isInvalid,setIsInvalid] = useState<boolean>(false)
-    const router = useRouter()
+
 
     const handleLogin = async () => {
         startLoading()
@@ -23,13 +22,12 @@ const LoginForm = () => {
         }
 
         const res = await LoginServerActions(authenticationRequest)
-        if (res.status === 200) {
-            setIsInvalid(false)
-            router.push(`/`)
-            
-        } else {
+        
+        // login khong thanh cong
+        if (res) {
             setIsInvalid(true)
-        }
+        } 
+
         stopLoading()
     }
 
