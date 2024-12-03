@@ -22,32 +22,42 @@ const LoginForm = () => {
     const router = useRouter()
 
     const handleLogin = async () => {
-        startLoading()
+        try {
 
-        const authenticationRequest:AuthenticationRequest = {
-            userName:userName,
-            password:password
-        }
+            startLoading()
 
-        const res = await LoginServerActions(authenticationRequest)
-        // login  thanh cong
-        if (res.status === 200) {
-            setIsInvalid(false)
-
-            const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-            if (res.status === 200) {
-                const user:UserResponse = res.result
-                setUser(user)
+            const authenticationRequest:AuthenticationRequest = {
+                userName:userName,
+                password:password
             }
-            router.push("/")
-        } 
-          // login khong thanh cong
-        else {
-            setIsInvalid(true)
+    
+            const res = await LoginServerActions(authenticationRequest)
+            // login  thanh cong
+            if (res.status === 200) {
+                setIsInvalid(false)
+    
+                const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+                if (res.status === 200) {
+                    const user:UserResponse = res.result
+                    setUser(user)
+                }
+                router.push("/")
+            } 
+              // login khong thanh cong
+            else {
+                setIsInvalid(true)
+            }
+            
+        } catch (error) {
+            
+        } finally {
+            stopLoading()
         }
+
+      
         
     
-        stopLoading()
+
     }
 
     // change input
