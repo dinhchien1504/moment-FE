@@ -8,25 +8,25 @@ import { useUserContext } from '@/context/user_context';
 import API from '@/api/api';
 import { FetchServerGetApi } from '@/api/fetch_server_api';
 import { Button } from 'react-bootstrap';
+import { useEffect } from 'react';
 const Header = () => {
     const pathname = usePathname();
     const { user, setUser } = useUserContext();
 
-    // useEffect(()=>{
-    //     const fetch = async  () => {
-    //         const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-    //         console.log("res >>> ",res)
-    //     }
-    //     fetch()
+    useEffect(()=>{
+        if (pathname != "/login") {
+            const fetchApiSetUser = async () => {
+                const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+                if (res.status === 200) {
+                    const user:UserResponse = res.result
+                    setUser(user)
+                }
 
-    // },[])
+            }
+            fetchApiSetUser()
+        }
+    },[])
 
-
-
-    const handletest = async  () => {
-        const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-        console.log("res >>> ",res)
-    }
 
     if (pathname === "/login") {
         return (<></>);
@@ -35,11 +35,9 @@ const Header = () => {
         return (
             <>
                 <Navbar expand="lg" className="bg-body-tertiary">
-                    <Button  
-                    onClick={() => {handletest()}}
-                    >bhj</Button>
+
                     <Container>
-                        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                        <Navbar.Brand href="/home">React-Bootstrap</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">

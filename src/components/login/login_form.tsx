@@ -8,26 +8,45 @@ import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
 import GlobalErrorCode from '@/exception/global_error_code';
 import { startLoading, stopLoading } from '../shared/nprogress';
+import { useUserContext } from '@/context/user_context';
+import { FetchServerGetApi } from '@/api/fetch_server_api';
+import API from '@/api/api';
+import { useRouter } from 'next/navigation';
+
+
 const LoginForm = () => {
     const [userName,setUserName] = useState<string>("")
     const [password,setPassword] = useState<string>("")
     const [isInvalid,setIsInvalid] = useState<boolean>(false)
-
+    const { setUser } = useUserContext();
+    const router = useRouter()
 
     const handleLogin = async () => {
         startLoading()
+
         const authenticationRequest:AuthenticationRequest = {
             userName:userName,
             password:password
         }
 
         const res = await LoginServerActions(authenticationRequest)
-        
-        // login khong thanh cong
-        if (res) {
-            setIsInvalid(true)
-        } 
+        // login  thanh cong
+        if (res.status === 200) {
+            setIsInvalid(false)
 
+            const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+            if (res.status === 200) {
+                const user:UserResponse = res.result
+                setUser(user)
+            }
+            router.push("/")
+        } 
+          // login khong thanh cong
+        else {
+            setIsInvalid(true)
+        }
+        
+    
         stopLoading()
     }
 
