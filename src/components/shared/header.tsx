@@ -9,6 +9,7 @@ import API from '@/api/api';
 import { FetchServerGetApi } from '@/api/fetch_server_api';
 import { Button } from 'react-bootstrap';
 import { useEffect } from 'react';
+import { stopLoading } from './nprogress';
 const Header = () => {
     const pathname = usePathname();
     const { user, setUser } = useUserContext();
@@ -24,9 +25,9 @@ const Header = () => {
 
             }
             fetchApiSetUser()
+            console.log("fetch user")
         }
     },[])
-
 
     if (pathname === "/login") {
         return (<></>);
