@@ -2,14 +2,18 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type UserContextType = {
-  user: UserResponse|null;
+  user: UserResponse|undefined;
   setUser: (value: UserResponse) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<UserResponse | null>(null);
+    const [user, setUser] = useState<UserResponse | undefined>(undefined);
+
+    
+
+
 
   return (
     

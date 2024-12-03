@@ -5,20 +5,28 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { usePathname } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
-import { useEffect } from 'react';
-
 import API from '@/api/api';
-import { FetchClientGetApi } from '@/api/fetch_client_api';
+import { FetchServerGetApi } from '@/api/fetch_server_api';
+import { Button } from 'react-bootstrap';
 const Header = () => {
     const pathname = usePathname();
     const { user, setUser } = useUserContext();
 
-    useEffect(() => {
-        const fetchApi = async () => {
-            const res = await FetchClientGetApi(API.AUTH.MY_INFO)
-        }
-        fetchApi()
-    }, [])
+    // useEffect(()=>{
+    //     const fetch = async  () => {
+    //         const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+    //         console.log("res >>> ",res)
+    //     }
+    //     fetch()
+
+    // },[])
+
+
+
+    const handletest = async  () => {
+        const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+        console.log("res >>> ",res)
+    }
 
     if (pathname === "/login") {
         return (<></>);
@@ -27,6 +35,9 @@ const Header = () => {
         return (
             <>
                 <Navbar expand="lg" className="bg-body-tertiary">
+                    <Button  
+                    onClick={() => {handletest()}}
+                    >bhj</Button>
                     <Container>
                         <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />

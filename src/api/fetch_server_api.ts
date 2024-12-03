@@ -1,7 +1,8 @@
 'use server'
 import { getSessionId } from "@/utils/session_store";
 
-export const FetchPostLoginApi = async (api: string,bodyData: any)=> {
+import { redirect } from 'next/navigation'; // Import hàm redirect
+export const FetchServerPostApiNoToken = async (api: string,bodyData: any)=> {
     try {
         const res = await fetch(api, {
           method: "POST", // Đúng phương thức POST
@@ -14,33 +15,33 @@ export const FetchPostLoginApi = async (api: string,bodyData: any)=> {
         const data = await res.json();
         return data;
       } catch (error) {
-        console.log("error")
-      } finally {
-      }
+
+      } 
 }
 
-export const FetchPostApi = async (api: string,bodyData: any) => {
-    try {
-        const res = await fetch(api, {
-          method: "POST", // Đúng phương thức POST
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json", // Đặt Content-Type là JSON
-            Authorization: `Bearer ${getSessionId()}`, // Set Authorization header
-          },
-          body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
-        });
-        const data = await res.json();
-        return data;
-      } catch (error) {
-        console.log("error")
-      }
-}
+// export const FetchServerPostApi = async (api: string,bodyData: any) => {
+//     try {
 
-export const FetchGetApi = async (api: string) => {
-  try {
-      // if (cookie.get("session-id") === undefined) {throws}
+//         const res = await fetch(api, {
+//           method: "POST", // Đúng phương thức POST
+//           headers: {
+//             Accept: "application/json, text/plain, */*",
+//             "Content-Type": "application/json", // Đặt Content-Type là JSON
+//             Authorization: `Bearer ${getSessionId()}`, // Set Authorization header
+//           },
+//           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
+//         });
+//         const data = await res.json();
+//         return data;
+//       } catch (error) {
+//         console.log("error")
+//       }
+// }
 
+
+export const FetchServerGetApi = async (api: string) => {
+  try {    
+    if (getSessionId() === undefined) { throw new Error("Session ID is undefined"); }
       const res = await fetch(api, {
         method: "GET", // Đúng phương thức POST
         headers: {
@@ -48,10 +49,14 @@ export const FetchGetApi = async (api: string) => {
         },
       });
       const data = await res.json();
+
+      if (data.status === 401) {
+        throw new Error("Unauthorization"); 
+      }
+
       return data;
     } catch (error) {
-      // console.error("Error fetching data:", error);
-      console.log("error")
+      redirect('/login');
     }
 }
 
