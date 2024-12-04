@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { UserProvider } from "@/context/user_context";
 import Header from "@/components/shared/header";
 import ProgressBar from "@/components/shared/progress_bar";
+import "@fortawesome/fontawesome-free/css/all.min.css"
 const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-dynamic";

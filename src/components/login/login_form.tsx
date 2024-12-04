@@ -94,7 +94,7 @@ const LoginForm = () => {
                     label="Mật khẩu"
                     className="password"
                 >
-                    <Form.Control type="text" placeholder="Mật khẩu"  className='input-password'
+                    <Form.Control type="password" placeholder="Mật khẩu"  className='input-password'
                     isInvalid={isInvalid}
                     onChange={(e) => {handlePassword(e.target.value)}}
                     />

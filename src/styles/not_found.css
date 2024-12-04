@@ -1,0 +1,23 @@
+.div-error{
+    display: flex;
+    justify-content: center;
+     align-items: center;
+    height: 100vh
+}
+
+/* btn back home */
+
+.btn-back-home {
+    background-color:  black;
+    border: 0px;
+    color: white;
+    height: 56px ;
+}
+.btn-back-home:hover {
+    background-color:  black;
+}
+.btn-back-home:active {
+    background-color:  black !important;
+}
+/* end btn back home */
+
