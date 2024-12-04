@@ -2,24 +2,30 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
 import API from '@/api/api';
 import { FetchServerGetApi } from '@/api/fetch_server_api';
-import { Button } from 'react-bootstrap';
 import { useEffect } from 'react';
-import { stopLoading } from './nprogress';
+import { startLoading } from './nprogress';
+import "@/styles/header.css"
+import Image from 'next/image';
+import {Form } from 'react-bootstrap';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import cookie from "js-cookie";
+
 const Header = () => {
     const pathname = usePathname();
     const { user, setUser } = useUserContext();
+    const router = useRouter()
 
-    useEffect(()=>{
+    useEffect(() => {
         if (pathname != "/login") {
             const fetchApiSetUser = async () => {
                 const res = await FetchServerGetApi(API.AUTH.MY_INFO)
                 if (res.status === 200) {
-                    const user:UserResponse = res.result
+                    const user: UserResponse = res.result
                     setUser(user)
                 }
 
@@ -27,7 +33,15 @@ const Header = () => {
             fetchApiSetUser()
             console.log("fetch user")
         }
-    },[])
+    }, [])
+
+    const handleLogout = () => {
+        startLoading()
+        cookie.remove("session-id");
+        router.push("/login")
+    }
+
+
 
     if (pathname === "/login") {
         return (<></>);
@@ -35,26 +49,80 @@ const Header = () => {
     else {
         return (
             <>
-                <Navbar expand="lg" className="bg-body-tertiary">
+                <Navbar expand="lg" className="bg-body-tertiary ctn-header">
 
-                    <Container>
-                        <Navbar.Brand href="/home">React-Bootstrap</Navbar.Brand>
+                    <Container fluid>
+                        <Navbar.Brand type='button'>
+                            <Image
+                                src={"/images/logo-removebg.png"}
+                                width={50}
+                                height={50}
+                                alt='error'
+                            />
+
+                        </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="me-auto">
-                                <Nav.Link href="#home">Home</Nav.Link>
-                                <Nav.Link href="#link">Link</Nav.Link>
-                                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.2">
-                                        Another action
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">
-                                        Separated link
-                                    </NavDropdown.Item>
-                                </NavDropdown>
+                            <Nav className="mx-auto">
+                                <InputGroup className="d-flex justify-content-center">
+
+                                    <InputGroup.Text id="basic-addon1" className='icon-search'>
+                                        <i className="fa fa-magnifying-glass inp-search"></i>
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        placeholder="Tìm kiếm bạn bè của bạn"
+                                        aria-label="Search"
+                                        aria-describedby="basic-addon1"
+                                        className='inp-search'
+                                    />
+                                </InputGroup>
+
+                            </Nav>
+
+                            <Nav>
+                                <Nav.Link type='div' >
+                                    Home</Nav.Link>
+                                <Nav.Link type='div'>
+
+                                    <Dropdown
+                                        drop='start'
+                                    >
+                                        <Dropdown.Toggle as="div" id="dropdown-custom-components">
+                                            <Image
+                                                src="/images/avatar.jpg"
+                                                width={50}
+                                                height={50}
+                                                alt="Dropdown Trigger"
+                                                className='img-avatar'
+                                            />
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item eventKey="1">
+                                                <div className='text-center font-item'>
+                                                    <Image
+                                                        src="/images/avatar.jpg"
+                                                        width={50}
+                                                        height={50}
+                                                        alt="Dropdown Trigger"
+                                                        className='img-avatar-item'
+                                                    />
+                                                    {user?.name}
+                                                </div>
+                                            </Dropdown.Item>
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item eventKey="2" className='font-item'>
+                                                <i className="fa-solid fa-gear"></i> Cài đặt
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="3" className='font-item'
+                                            onClick={()=>{handleLogout()}}
+                                            >
+                                                <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+
+                                </Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
