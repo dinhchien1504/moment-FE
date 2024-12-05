@@ -21,7 +21,7 @@ export const FetchServerPostApiNoToken = async (api: string,bodyData: any)=> {
 
 // export const FetchServerPostApi = async (api: string,bodyData: any) => {
 //     try {
-
+//       if (getSessionId() === undefined) { throw new Error("Session ID is undefined"); }
 //         const res = await fetch(api, {
 //           method: "POST", // Đúng phương thức POST
 //           headers: {
@@ -32,9 +32,12 @@ export const FetchServerPostApiNoToken = async (api: string,bodyData: any)=> {
 //           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
 //         });
 //         const data = await res.json();
+//         if (data.status === 401) {
+//           throw new Error("Unauthorization"); 
+//         }
 //         return data;
 //       } catch (error) {
-//         console.log("error")
+//         redirect('/login');
 //       }
 // }
 

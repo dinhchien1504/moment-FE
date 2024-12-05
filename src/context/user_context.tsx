@@ -1,6 +1,4 @@
 "use client"
-import API from '@/api/api';
-import { FetchServerGetApi } from '@/api/fetch_server_api';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type UserContextType = {

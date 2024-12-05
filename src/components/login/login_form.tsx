@@ -15,53 +15,71 @@ import { useRouter } from 'next/navigation';
 
 
 const LoginForm = () => {
-    const [userName,setUserName] = useState<string>("")
-    const [password,setPassword] = useState<string>("")
-    const [isInvalid,setIsInvalid] = useState<boolean>(false)
+    const [userName, setUserName] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [isInvalidPassword, setIsInvalidPassword] = useState<boolean>(true)
+    const [isInvalidUserName, setIsInvalidUserName] = useState<boolean>(true)
+    
     const { setUser } = useUserContext();
     const router = useRouter()
 
 
     const handleLogin = async () => {
         startLoading()
-            const authenticationRequest:AuthenticationRequest = {
-                userName:userName,
-                password:password
-            }
-            const res = await LoginServerActions(authenticationRequest)
-
-            // login  thanh cong
-            if (res.status === 200) {
-                setIsInvalid(false)
-
-                const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-                if (res.status === 200) {
-                    const user:UserResponse = res.result
-                    console.log("user >>> ", user)
-                    setUser(user)
-                }
-       
-               router.push("/")
- 
-            } 
-              // login khong thanh cong
-            else {
-                setIsInvalid(true)
-                stopLoading()
-            }
-            
       
+        if (userName === "") {
+            setIsInvalidUserName(false)
+            stopLoading()
+            return;
+        }
+
+        const authenticationRequest: AuthenticationRequest = {
+            userName: userName,
+            password: password
+        }
+        const res = await LoginServerActions(authenticationRequest)
+
+        // login  thanh cong
+        if (res.status === 200) {
+
+            const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+            if (res.status === 200) {
+                const user: UserResponse = res.result
+                console.log("user >>> ", user)
+                setUser(user)
+            }
+
+            router.push("/")
+
+        }
+        // login khong thanh cong
+        else {
+            setIsInvalidPassword(false)
+            stopLoading()
+        }
+    }
+
+    const handleRouterRegister = () => {
+        startLoading()
+        router.push("/register")
     }
 
     // change input
-    const handleUserName = (e:string) => {
+    const handleUserName = (e: string) => {
         setUserName(e)
-        setIsInvalid(false)
+        setIsInvalidUserName(true)
+        setIsInvalidPassword(true)
     }
-    const handlePassword = (e:string) => {
+    const handlePassword = (e: string) => {
         setPassword(e)
-        setIsInvalid(false)
+        setIsInvalidPassword(true)
     }
+
+    const onKeyDown = (e: any) => {
+        if (e.key == "Enter") {
+            handleLogin();
+        }
+    };
 
     // end change input
 
@@ -70,7 +88,7 @@ const LoginForm = () => {
     return (
         <>
             <Form className='form-login' >
-                <div  className='div-img mb-4'>
+                <div className='div-img mb-4'>
                     <Image
                         src="/images/logo-login.jpg"
                         width={130}
@@ -82,38 +100,45 @@ const LoginForm = () => {
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Tài khoản"
-                    className="mb-3"
+                    className="fl-val-inp"
                 >
-                    <Form.Control type="text" placeholder="Tài khoản"  className='input-user-name'
-                    //  isInvalid={true}
-                    onChange={(e) => {handleUserName(e.target.value)}}
+                    <Form.Control type="text" placeholder="Tài khoản" className='input-user-name'
+                         isInvalid={ !isInvalidUserName}
+                        onChange={(e) => { handleUserName(e.target.value) }}
+                        onKeyDown={(e) => onKeyDown(e)}
                     />
+                    <Form.Control.Feedback type="invalid" className='mt-0'>
+                        {"Vui lòng điền tài khoản"}
+                    </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Mật khẩu"
-                    className="password"
+                    className="fl-val-inp"
                 >
-                    <Form.Control type="password" placeholder="Mật khẩu"  className='input-password'
-                    isInvalid={isInvalid}
-                    onChange={(e) => {handlePassword(e.target.value)}}
+                    <Form.Control type="password" placeholder="Mật khẩu" className='input-password'
+                        isInvalid={ !isInvalidPassword}
+                        onChange={(e) => { handlePassword(e.target.value) }}
+                        onKeyDown={(e) => onKeyDown(e)}
                     />
                     <Form.Control.Feedback type="invalid">
-                    {GlobalErrorCode.GLOBAL_2}
-                  </Form.Control.Feedback>
+                        {GlobalErrorCode.GLOBAL_2}
+                    </Form.Control.Feedback>
                 </FloatingLabel>
 
                 <div className='div-forgot mb-3' >
-                   <Link className='link-forgot' href={"/"}>Bạn quên mật khẩu ? </Link>
+                    <Link className='link-forgot' href={"/"}>Bạn quên mật khẩu ? </Link>
                 </div>
-                
-                <Button className='btn-login' 
-                onClick={() => {handleLogin()}}
+
+                <Button className='btn-login'
+                    onClick={() => { handleLogin() }}
                 >Đăng nhập</Button>
             </Form>
 
             <Form className='form-login mt-2'>
-                <Button className='btn-register' >Đăng ký</Button>
+                <Button className='btn-register'
+                    onClick={() => { handleRouterRegister() }}
+                >Đăng ký</Button>
             </Form>
         </>
     )
