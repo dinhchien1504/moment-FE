@@ -55,14 +55,6 @@
     border: 0px ;
 }
 
-@media (max-width: 768px) {
-    .input-password{
-        width: 263px;
-    }
-}
-
-
-
 .input-password:focus{
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 0px 0.25rem;
     border: 0px ;
@@ -101,7 +93,7 @@
     justify-content: center;
 }
 
-.password{
+.fl-val-inp{
     height: 83px;
 }
 
@@ -113,6 +105,27 @@
     .col-login-form{
         width: 100%;
     }
+    .form-login{
+        width: 40vh;
+    }
+      
 
 }
 
+@media (max-width: 365px) {
+   
+    .form-login{
+        width: 35vh;
+    }
+      
+
+}
+
+@media (max-width: 319px) {
+   
+    .form-login{
+        width: 30vh;
+    }
+      
+
+}
