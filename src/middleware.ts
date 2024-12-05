@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
     console.log("bo qua");
     return NextResponse.next();
   }
-
+  console.log("fetch api introspect 1");
   // bỏ qua các call api và load trang khi đang ở /login
   if (currentPath === "/login" || currentPath === "/register") {
     const res = await FetchServerPostApiNoToken(API.AUTH.INTROSPECT, getSessionId())
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  console.log("fetch api introspect");
+  console.log("fetch api introspect 2");
 
   if (getSessionId() === undefined) { return NextResponse.redirect(new URL('/login', request.url)) }
   const res = await FetchServerPostApiNoToken(API.AUTH.INTROSPECT, getSessionId())

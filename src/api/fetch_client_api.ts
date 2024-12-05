@@ -39,6 +39,7 @@ export const FetchClientGetApi = async (api: string) => {
           Authorization: `Bearer ${cookie.get("session-id")}`,
         },
       });
+
       const data = await res.json();
 
       if (data.status === 401) {
@@ -48,7 +49,7 @@ export const FetchClientGetApi = async (api: string) => {
 
       return data;
     } catch (error) {
-         window.location.href= "/login"
+        //  window.location.href= "/login"
     }
 }
 
