@@ -11,11 +11,12 @@ export async function middleware(request: NextRequest) {
 
   // Nếu yêu cầu là call api thì bỏ qua
   if (isHTMLRequest) {
+    console.log("bo qua");
     return NextResponse.next();
   }
 
   // bỏ qua các call api và load trang khi đang ở /login
-  if (currentPath === "/login") {
+  if (currentPath === "/login" || currentPath === "/register") {
     const res = await FetchServerPostApiNoToken(API.AUTH.INTROSPECT, getSessionId())
     if (res.status !== 401) { return NextResponse.redirect(new URL('/', request.url)) }
     return NextResponse.next();
@@ -26,7 +27,6 @@ export async function middleware(request: NextRequest) {
   if (getSessionId() === undefined) { return NextResponse.redirect(new URL('/login', request.url)) }
   const res = await FetchServerPostApiNoToken(API.AUTH.INTROSPECT, getSessionId())
   if (res.status === 401) { return NextResponse.redirect(new URL('/login', request.url)) }
-
 
 
 }

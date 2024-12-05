@@ -10,10 +10,11 @@ import { useEffect } from 'react';
 import { startLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
-import {Form } from 'react-bootstrap';
+import {Button, Form } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import cookie from "js-cookie";
+import { FetchClientGetApi } from '@/api/fetch_client_api';
 
 const Header = () => {
     const pathname = usePathname();
@@ -21,7 +22,7 @@ const Header = () => {
     const router = useRouter()
 
     useEffect(() => {
-        if (pathname != "/login") {
+        if (pathname != "/login" && pathname != "/register") {
             const fetchApiSetUser = async () => {
                 const res = await FetchServerGetApi(API.AUTH.MY_INFO)
                 if (res.status === 200) {
@@ -41,9 +42,24 @@ const Header = () => {
         router.push("/login")
     }
 
+    const handleFetchTestClient = async () => {
+        const res = await FetchClientGetApi(API.AUTH.MY_INFO)
+        if (res.status === 200) {
+        console.log("fetch test client success >>> ", res)
+        }
+    }
+
+    const handleFetchTestServer = async () => {
+        const res = await FetchClientGetApi(API.AUTH.MY_INFO)
+        if (res.status === 200) {
+        console.log("fetch test server success >>> ", res)
+        }
+    }
 
 
-    if (pathname === "/login") {
+
+
+    if (pathname === "/login" || pathname === "/register") {
         return (<></>);
     }
     else {
@@ -59,7 +75,16 @@ const Header = () => {
                                 height={50}
                                 alt='error'
                             />
-
+                            <Button
+                            onClick={()=>{handleFetchTestClient()}}
+                            >
+                                fetch test client
+                            </Button>
+                            <Button
+                            onClick={()=>{handleFetchTestServer()}}
+                            >
+                                fetch test server
+                            </Button>
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
