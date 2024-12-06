@@ -26,3 +26,24 @@ export const validEmail = (str: string): boolean => {
 
     return false
 }
+
+
+export const validPassword = (str: string): boolean => {
+    const regex: RegExp =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
+    
+    if (regex.test(str)) {
+        return true
+    }
+
+    return false
+}
+
+export const validName = (str: string): boolean => {
+    const regex: RegExp =/^(?=(.*\p{L}){2,})[\p{L} ]{2,255}$/u;
+    
+    if (regex.test(str)) {
+        return true
+    }
+
+    return false
+}

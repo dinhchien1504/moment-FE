@@ -14,6 +14,14 @@
 .btn-login:active {
     background-color:  #ff0066 !important;
 }
+.btn-login:focus-visible {
+    background-color:  #ff0066;
+    border: 0px;
+    color: white;
+    width: 100%;
+    height: 56px ;
+}
+
 /* end button login */
 
 /* start forgot */
@@ -42,6 +50,7 @@
 .btn-register:active {
     background-color: black!important;
 }
+
 /* end button register */
 
 /* start  carousel*/
@@ -55,12 +64,35 @@
     border: 0px ;
 }
 
+
 .input-password:focus{
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 0px 0.25rem;
     border: 0px ;
+    
 }
 
+
 /* end input css */
+
+/* eye */
+.btn-eye{
+    background-color: white;
+    border: 0px;
+}
+
+.btn-eye:focus-visible{
+    border: 0px !important;
+    border-color: white !important;
+}
+
+.hidden-pass{
+    height: 58px;
+    background-color: white;
+    border-left: 0px !important;
+    width: 55px;
+}
+
+/* eye */
 
 
 @media (max-width: 1399px) {

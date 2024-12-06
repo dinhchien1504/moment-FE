@@ -4,7 +4,7 @@ enum InvalidErrorCode {
     INVALID_3 = "Email không hợp lệ",
     SEX_INVALID = "Sex chỉ chứa male, female, other",
     INVALID_5=  "Ngày không hợp lệ",
-    INVALID_6 ="Họ tên ít nhất 2 ký tự",
+    INVALID_6 ="Họ tên ít nhất 2 ký tự. chỉ chứa chữ",
     INVALID_7="Invalid json"
 }
 
