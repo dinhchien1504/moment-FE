@@ -6,33 +6,41 @@ import { Button } from 'react-bootstrap';
 import Link from 'next/link'
 import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
-import GlobalErrorCode from '@/exception/global_error_code';
 import { startLoading, stopLoading } from '../shared/nprogress';
 import { useUserContext } from '@/context/user_context';
-import { FetchServerGetApi } from '@/api/fetch_server_api';
-import API from '@/api/api';
 import { useRouter } from 'next/navigation';
-
+import { validNoEmpty } from '@/validation/valid';
+import AuthErrorCode from '@/exception/auth_error_code';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const LoginForm = () => {
     const [userName, setUserName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [isInvalidPassword, setIsInvalidPassword] = useState<boolean>(true)
-    const [isInvalidUserName, setIsInvalidUserName] = useState<boolean>(true)
+    const [isvalid, setIsValid] = useState<boolean>(false) // luc dau tat valid
     
-    const { setUser } = useUserContext();
+    const [isvalidItem, setIsvalidItem] = useState<boolean[]>(Array(2).fill(false));
+
+
+    const [messagePassword, setMessagePassword] = useState<string>("Vui lòng điền mật khẩu")
+    const [isHidden, setIsHidden] = useState<boolean> (true)
+
+    const { setUser,fetchGetUser } = useUserContext();
     const router = useRouter()
 
 
     const handleLogin = async () => {
-        startLoading()
-      
-        if (userName === "") {
-            setIsInvalidUserName(false)
-            stopLoading()
+        //bat dau validation
+        setIsValid(true)
+
+        // kiem tra validation
+        if (isvalidItem.some(v => v === false)) {
             return;
         }
 
+        // bat dau thanh tien trinh
+        startLoading()
+
+        // khoi tao du lieu
         const authenticationRequest: AuthenticationRequest = {
             userName: userName,
             password: password
@@ -40,39 +48,39 @@ const LoginForm = () => {
         const res = await LoginServerActions(authenticationRequest)
 
         // login  thanh cong
-        if (res.status === 200) {
+        if ( res && res.status === 200) {
 
-            const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-            if (res.status === 200) {
-                const user: UserResponse = res.result
-                console.log("user >>> ", user)
-                setUser(user)
-            }
+            // lay thong tin user
+            await fetchGetUser()
 
             router.push("/")
-
         }
+
         // login khong thanh cong
         else {
-            setIsInvalidPassword(false)
+
+            const newArray = [...isvalidItem]; 
+            newArray[1] = false
+            setIsvalidItem(newArray)
+
+            setMessagePassword(AuthErrorCode.AUTH_1)
             stopLoading()
+        }
+
+    }
+
+    const handlleHiddenPass = () => {
+        if (isHidden) {
+            setIsHidden(false)
+        } else {
+            setIsHidden(true)
         }
     }
 
+    // router
     const handleRouterRegister = () => {
         startLoading()
         router.push("/register")
-    }
-
-    // change input
-    const handleUserName = (e: string) => {
-        setUserName(e)
-        setIsInvalidUserName(true)
-        setIsInvalidPassword(true)
-    }
-    const handlePassword = (e: string) => {
-        setPassword(e)
-        setIsInvalidPassword(true)
     }
 
     const onKeyDown = (e: any) => {
@@ -81,9 +89,25 @@ const LoginForm = () => {
         }
     };
 
-    // end change input
+    // router
 
 
+    // validation
+    const handleUserName = (e: string) => {
+        isvalidItem[0] = validNoEmpty(e)
+        setUserName(e);
+
+        if (validNoEmpty(password)) {
+            isvalidItem[1] = true
+        }
+    }
+
+    const handlePassword = (e: string) => {
+        isvalidItem[1] = validNoEmpty(e)
+        setMessagePassword("Vui lòng điền mật khẩu")
+        setPassword(e);
+    }
+    // validation
 
     return (
         <>
@@ -98,33 +122,51 @@ const LoginForm = () => {
                 </div>
 
                 <FloatingLabel
-                    controlId="floatingInput"
+  
                     label="Tài khoản"
                     className="fl-val-inp"
                 >
                     <Form.Control type="text" placeholder="Tài khoản" className='input-user-name'
-                         isInvalid={ !isInvalidUserName}
+                        autoComplete="username" 
+                        isInvalid={isvalid && !isvalidItem[0]}
                         onChange={(e) => { handleUserName(e.target.value) }}
                         onKeyDown={(e) => onKeyDown(e)}
                     />
                     <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"Vui lòng điền tài khoản"}
+                        {"Vui lòng điền tài khoản."}
                     </Form.Control.Feedback>
                 </FloatingLabel>
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Mật khẩu"
-                    className="fl-val-inp"
-                >
-                    <Form.Control type="password" placeholder="Mật khẩu" className='input-password'
-                        isInvalid={ !isInvalidPassword}
-                        onChange={(e) => { handlePassword(e.target.value) }}
-                        onKeyDown={(e) => onKeyDown(e)}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {GlobalErrorCode.GLOBAL_2}
-                    </Form.Control.Feedback>
-                </FloatingLabel>
+
+
+                <InputGroup className="fl-val-inp">
+
+                    <FloatingLabel
+                        label="Mật khẩu"
+                    >
+                        <Form.Control type={isHidden ? "password" : "text"} placeholder="Mật khẩu" className='input-password'
+                        autoComplete="current-password" 
+                            isInvalid={isvalid && !isvalidItem[1]}
+                            onChange={(e) => { handlePassword(e.target.value) }}
+                            onKeyDown={(e) => onKeyDown(e)}
+                            
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {messagePassword}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+
+                    <InputGroup.Text id="basic-addon2" className='hidden-pass'>
+                        <button className='btn-eye' type='button'
+                        onClick={() => {handlleHiddenPass()}}
+                        >
+                            {isHidden ? <i className="fa-regular fa-eye"></i> 
+                            : <i className="fa-regular fa-eye-slash"></i>}  
+                        </button>
+                    </InputGroup.Text>
+                </InputGroup>
+
+
+
 
                 <div className='div-forgot mb-3' >
                     <Link className='link-forgot' href={"/"}>Bạn quên mật khẩu ? </Link>

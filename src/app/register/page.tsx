@@ -4,13 +4,16 @@ import "@/styles/register.css"
 const RegisterPage = () => {
     return (
         <>
-            <Container className="ctn-register">
-                <div className="div-register">
-                    <RegisterForm
-                    />
-                </div>
+            <div style={{backgroundColor:"#f2f4f7"}}>
+                <Container className="ctn-register">
+                    <div className="div-register">
+                        <RegisterForm
+                        />
+                    </div>
 
-            </Container>
+                </Container>
+            </div>
+
         </>
     )
 }

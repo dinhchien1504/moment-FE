@@ -7,8 +7,9 @@ import Caurousels from "@/components/login/carousels"
 const LoginPage = () => {
     return (
         <>
-            <Container className="ctn-login">
-          
+            <div style={{backgroundColor:"#f2f4f7"}}>
+                <Container className="ctn-login">
+
                     <Row>
                         <Col className="col-12 col-sm-6 col-md-8 col-caurousels" >
                             <Caurousels />
@@ -17,8 +18,10 @@ const LoginPage = () => {
                             <LoginForm />
                         </Col>
                     </Row>
-          
-            </Container>
+
+                </Container>
+            </div>
+
         </>
     )
 }

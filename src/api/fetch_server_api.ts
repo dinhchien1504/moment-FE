@@ -19,27 +19,27 @@ export const FetchServerPostApiNoToken = async (api: string,bodyData: any)=> {
       } 
 }
 
-// export const FetchServerPostApi = async (api: string,bodyData: any) => {
-//     try {
-//       if (getSessionId() === undefined) { throw new Error("Session ID is undefined"); }
-//         const res = await fetch(api, {
-//           method: "POST", // Đúng phương thức POST
-//           headers: {
-//             Accept: "application/json, text/plain, */*",
-//             "Content-Type": "application/json", // Đặt Content-Type là JSON
-//             Authorization: `Bearer ${getSessionId()}`, // Set Authorization header
-//           },
-//           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
-//         });
-//         const data = await res.json();
-//         if (data.status === 401) {
-//           throw new Error("Unauthorization"); 
-//         }
-//         return data;
-//       } catch (error) {
-//         redirect('/login');
-//       }
-// }
+export const FetchServerPostApi = async (api: string,bodyData: any) => {
+    try {
+      if (getSessionId() === undefined) { throw new Error("Session ID is undefined"); }
+        const res = await fetch(api, {
+          method: "POST", // Đúng phương thức POST
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json", // Đặt Content-Type là JSON
+            Authorization: `Bearer ${getSessionId()}`, // Set Authorization header
+          },
+          body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
+        });
+        const data = await res.json();
+        if (data.status === 401) {
+          throw new Error("Unauthorization"); 
+        }
+        return data;
+      } catch (error) {
+        redirect('/login');
+      }
+}
 
 
 export const FetchServerGetApi = async (api: string) => {

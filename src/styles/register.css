@@ -4,6 +4,7 @@
     align-items: center;
     flex-direction: column;
    height: 100vh;
+
  }
 
 .form-register{
@@ -26,28 +27,12 @@
     justify-content: center;
 }
 
-
-
-/* div-register */
-.div-register{
-    width: 45vh;
-}
- 
-
-@media (max-width: 587px) {
-    .div-register{
-        width: 40vh;
-    }
-
+.pass-error{
+    width: 410px;
 }
 
-@media (max-width: 389px) {
-    .div-register{
-        width: 35vh;
-    }
 
-}
-/* end div-register */
+
 
 
 /* start button */
@@ -64,6 +49,14 @@
 .btn-register-new:active {
     background-color:  #ff0066 !important;
 }
+
+.btn-register-new:focus-visible {
+    background-color:  #ff0066;
+    border: 0px;
+    color: white;
+    width: 100%;
+    height: 56px ;
+} 
 
 .btn-login-new{
     background-color:  black;
@@ -104,6 +97,7 @@
     margin-left: 20px;
  }
 
+
  .input-user-name-new:focus{
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 0px 0.25rem;
     border: 0px ;
@@ -114,3 +108,67 @@
     border: 0px ;
  }
 /* end input css */
+
+
+
+/* eye */
+.btn-eye{
+    background-color: white;
+    border: 0px;
+}
+
+.btn-eye:focus-visible{
+    border: 0px !important;
+    border-color: white !important;
+}
+
+.hidden-pass{
+    height: 58px;
+    background-color: white;
+    border-left: 0px !important;
+    width: 55px;
+}
+
+/* eye */
+
+
+/* div-register */
+.div-register{
+    width: 436px;
+    height: 717.719px;
+}
+@media (max-width: 483px) {
+   
+    .div-register{
+        width: 329px;
+    }
+    .pass-error{
+        width: 305px;
+    }
+}
+
+@media (max-width: 363px) {
+   
+    .div-register{
+        width: 254px;
+    }
+    .pass-error{
+        width: 231px;
+    }
+    .btn-register-new{
+        margin-top: 15px;
+    }
+}
+
+@media (max-height: 725px) {
+   
+    .ctn-register{
+        height: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+     }
+
+
+}
+
+/* end div-register */
