@@ -49,7 +49,7 @@ export const FetchClientGetApi = async (api: string) => {
 
       return data;
     } catch (error) {
-        //  window.location.href= "/login"
+         window.location.href= "/login"
     }
 }
 

@@ -6,33 +6,41 @@ import { Button } from 'react-bootstrap';
 import Link from 'next/link'
 import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
-import GlobalErrorCode from '@/exception/global_error_code';
+import GlobalErrorCode from '@/exception/invalid_error_code';
 import { startLoading, stopLoading } from '../shared/nprogress';
 import { useUserContext } from '@/context/user_context';
 import { FetchServerGetApi } from '@/api/fetch_server_api';
 import API from '@/api/api';
 import { useRouter } from 'next/navigation';
+import { validNoEmpty } from '@/validation/valid';
+import AuthErrorCode from '@/exception/auth_error_code';
 
 
 const LoginForm = () => {
     const [userName, setUserName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [isInvalidPassword, setIsInvalidPassword] = useState<boolean>(true)
-    const [isInvalidUserName, setIsInvalidUserName] = useState<boolean>(true)
-    
+    const [isvalid, setIsValid] = useState<boolean>(false) // luc dau tat valid
+    const [isvalidItem, setIsvalidItem] = useState<boolean[]>(Array(2).fill(false));
+    const [messagePassword, setMessagePassword] = useState<string>("Vui lòng điền mật khẩu")
+
     const { setUser } = useUserContext();
     const router = useRouter()
 
 
     const handleLogin = async () => {
-        startLoading()
-      
-        if (userName === "") {
-            setIsInvalidUserName(false)
+        //bat dau validation
+        setIsValid(true)
+
+        // kiem tra validation
+        if (isvalidItem.some(v => v === false)) {
             stopLoading()
             return;
         }
 
+        // bat dau thanh tien trinh
+        startLoading()
+
+        // khoi tao du lieu
         const authenticationRequest: AuthenticationRequest = {
             userName: userName,
             password: password
@@ -42,46 +50,52 @@ const LoginForm = () => {
         // login  thanh cong
         if (res.status === 200) {
 
+            // lay thong tin user
             const res = await FetchServerGetApi(API.AUTH.MY_INFO)
             if (res.status === 200) {
                 const user: UserResponse = res.result
-                console.log("user >>> ", user)
                 setUser(user)
             }
 
             router.push("/")
-
         }
+
         // login khong thanh cong
         else {
-            setIsInvalidPassword(false)
+            isvalidItem[1] = false
+            setMessagePassword(AuthErrorCode.AUTH_1)
             stopLoading()
         }
+
     }
 
+    // router
     const handleRouterRegister = () => {
         startLoading()
         router.push("/register")
     }
-
-    // change input
-    const handleUserName = (e: string) => {
-        setUserName(e)
-        setIsInvalidUserName(true)
-        setIsInvalidPassword(true)
-    }
-    const handlePassword = (e: string) => {
-        setPassword(e)
-        setIsInvalidPassword(true)
-    }
-
+    
     const onKeyDown = (e: any) => {
         if (e.key == "Enter") {
             handleLogin();
         }
     };
 
-    // end change input
+    // router
+
+
+    // validation
+    const handleUserName = (e: string) => {
+        isvalidItem[0] = validNoEmpty(e)
+        setUserName(e);
+    }
+
+    const handlePassword = (e: string) => {
+        isvalidItem[1]  = validNoEmpty(e)
+        setMessagePassword("Vui lòng điền mật khẩu")
+        setPassword(e);
+    }
+    // validation
 
 
 
@@ -103,12 +117,12 @@ const LoginForm = () => {
                     className="fl-val-inp"
                 >
                     <Form.Control type="text" placeholder="Tài khoản" className='input-user-name'
-                         isInvalid={ !isInvalidUserName}
+                        isInvalid={isvalid && ! isvalidItem[0]}
                         onChange={(e) => { handleUserName(e.target.value) }}
                         onKeyDown={(e) => onKeyDown(e)}
                     />
                     <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"Vui lòng điền tài khoản"}
+                        {"Vui lòng điền tài khoản."}
                     </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
@@ -117,12 +131,12 @@ const LoginForm = () => {
                     className="fl-val-inp"
                 >
                     <Form.Control type="password" placeholder="Mật khẩu" className='input-password'
-                        isInvalid={ !isInvalidPassword}
+                        isInvalid={isvalid && ! isvalidItem[1]}
                         onChange={(e) => { handlePassword(e.target.value) }}
                         onKeyDown={(e) => onKeyDown(e)}
                     />
                     <Form.Control.Feedback type="invalid">
-                        {GlobalErrorCode.GLOBAL_2}
+                        {messagePassword}
                     </Form.Control.Feedback>
                 </FloatingLabel>
 

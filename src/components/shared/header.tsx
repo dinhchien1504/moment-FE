@@ -43,15 +43,24 @@ const Header = () => {
     }
 
     const handleFetchTestClient = async () => {
+        console.log("api client >>> ", API.AUTH.MY_INFO)
         const res = await FetchClientGetApi(API.AUTH.MY_INFO)
-        console.log("fetch test client success >>> ", res)
+
+        if (res.status === 200) {
+            console.log("fetch test client success >>> ", res)
+        }
+
  
     }
 
     const handleFetchTestServer = async () => {
+        console.log("api server >>> ", API.AUTH.MY_INFO)
         const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-        console.log("fetch test server success >>> ", res)
-       
+
+        if (res.status === 200) {
+            console.log("fetch test server success >>> ", res)
+        }
+
     }
 
 

@@ -5,8 +5,10 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import { startLoading } from '../shared/nprogress';
+import { useState } from 'react';
+import InvalidErrorCode from '@/exception/invalid_error_code';
 const RegisterForm = () => {
-
+    const [isvalidItem, setIsvalidItem] = useState<boolean[]>(Array(4).fill(false));
     const router = useRouter()
 
     const handleRouterLogin = () =>{
@@ -18,7 +20,7 @@ const RegisterForm = () => {
         <>
             <div className='div-img mb-4'>
                 <Image
-                    src="/images/logo-login.jpg"
+                    src="/images/logo-login-removebg.png"
                     width={130}
                     height={130}
                     alt="Picture of the author"
@@ -26,8 +28,8 @@ const RegisterForm = () => {
             </div>
             <Form className='form-register' >
                 <div className='text-center' >
-                    <p className='fs-4 fw-bold'>Tạo tài khoản mới</p>
-                    <p className='fs-6'>Đăng ký để theo dõi và xem ảnh từ bạn bè của bạn</p>
+                    <p className='fs-4 fw-bold mb-2'>Tạo tài khoản mới</p>
+                    {/* <p className='fs-6'>Đăng ký để theo dõi và xem ảnh từ bạn bè của bạn</p> */}
                 </div>
 
                 <FloatingLabel
@@ -36,11 +38,11 @@ const RegisterForm = () => {
                     className="fl-val-inp"
                 >
                     <Form.Control type="text" placeholder="Họ và tên" className='input-name'
-                        // isInvalid={true}
+                        isInvalid={true}
                     />
 
                     <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"vui lòng điền tên"}
+                        {InvalidErrorCode.INVALID_6}
                     </Form.Control.Feedback>
                 </FloatingLabel>
 
@@ -48,13 +50,13 @@ const RegisterForm = () => {
                     <FloatingLabel
                         controlId="floatingInput"
                         label="Ngày sinh"
-                        className="fl-val-inp w-50 "
+                        className="fl-val-inp w-55 "
                     >
                         <Form.Control type="date" placeholder="Ngày sinh" className='input-birthday'
-                        //   isInvalid={true}
+                          isInvalid={true}
                         />
                           <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"vui lòng điền tên"}
+                        {InvalidErrorCode.INVALID_5}
                     </Form.Control.Feedback>
                     </FloatingLabel>
 
@@ -77,23 +79,23 @@ const RegisterForm = () => {
                     className="fl-val-inp"
                 >
                     <Form.Control type="text" placeholder="Tài khoản" className='input-user-name-new'
-                    //   isInvalid={true}
+                      isInvalid={true}
                     />
                       <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"vui lòng điền tên"}
+                        {InvalidErrorCode.INVALID_1}
                     </Form.Control.Feedback>
                 </FloatingLabel>
 
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Mật khẩu"
-                    className="fl-val-inp"
+                    className="fl-val-inp mb-4"
                 >
                     <Form.Control type="text" placeholder="Mật khẩu" className='input-password-new'
-                    //   isInvalid={true}
+                      isInvalid={true}
                     />
                       <Form.Control.Feedback type="invalid" className='mt-0'>
-                        {"vui lòng điền tên"}
+                        {InvalidErrorCode.INVALID_2}
                     </Form.Control.Feedback>
                 </FloatingLabel>
 

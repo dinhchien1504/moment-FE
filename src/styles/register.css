@@ -4,6 +4,7 @@
     align-items: center;
     flex-direction: column;
    height: 100vh;
+
  }
 
 .form-register{
@@ -30,23 +31,33 @@
 
 /* div-register */
 .div-register{
-    width: 45vh;
+    width: 436px;
+    height: 717.719px;
 }
- 
-
-@media (max-width: 587px) {
+@media (max-width: 483px) {
+   
     .div-register{
-        width: 40vh;
+        width: 329px;
     }
-
 }
 
-@media (max-width: 389px) {
+@media (max-width: 363px) {
+   
     .div-register{
-        width: 35vh;
+        width: 254px;
     }
+}
+
+@media (max-height: 725px) {
+   
+    .ctn-register{
+        height: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+     }
 
 }
+
 /* end div-register */
 
 

@@ -94,8 +94,10 @@
 }
 
 .fl-val-inp{
-    height: 83px;
+    height: 80px;
 }
+
+/* max width */
 
 @media (max-width: 768px) {
    
@@ -106,26 +108,35 @@
         width: 100%;
     }
     .form-login{
-        width: 40vh;
+        width: 436px;
     }
-      
-
 }
 
-@media (max-width: 365px) {
+@media (max-width: 483px) {
    
     .form-login{
-        width: 35vh;
+        width: 329px;
     }
-      
-
 }
 
-@media (max-width: 319px) {
+@media (max-width: 363px) {
    
     .form-login{
-        width: 30vh;
+        width: 254px;
     }
-      
+}
+
+
+/* max width */
+
+
+@media (max-height: 544px) {
+   
+    .ctn-login{
+        height: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+     }
 
 }
+

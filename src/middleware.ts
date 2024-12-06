@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
   // bỏ qua các call api và load trang khi đang ở /login
   if (currentPath === "/login" || currentPath === "/register") {
     const res = await FetchServerPostApiNoToken(API.AUTH.INTROSPECT, getSessionId())
-    if (res.status !== 401) { return NextResponse.redirect(new URL('/', request.url)) }
+    if (res.status == 200) { return NextResponse.redirect(new URL('/', request.url)) }
     return NextResponse.next();
   }
 
