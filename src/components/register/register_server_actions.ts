@@ -2,10 +2,10 @@
 import API from "@/api/api";
 import { FetchServerPostApiNoToken } from "@/api/fetch_server_api";
 import { setSessionId } from "@/utils/session_store"
-export const LoginServerActions = async (AuthenticationRequest: AuthenticationRequest) => {
+export const RegisterServerActions = async (RegisterRequest:RegisterRequest) => {
 
-    // post login
-    const res = await FetchServerPostApiNoToken(API.AUTH.TOKEN, AuthenticationRequest);
+    // post register
+    const res = await FetchServerPostApiNoToken(API.ACCOUNT.REGISTER, RegisterRequest);
     // thanh cong
     if (res.status === 200) {
         const data:AuthenticationResponse = res.result 

@@ -4,36 +4,29 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
-import API from '@/api/api';
-import { FetchServerGetApi } from '@/api/fetch_server_api';
 import { useEffect } from 'react';
 import { startLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
-import {Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import cookie from "js-cookie";
-import { FetchClientGetApi } from '@/api/fetch_client_api';
 
 const Header = () => {
     const pathname = usePathname();
-    const { user, setUser } = useUserContext();
+    const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
 
     useEffect(() => {
-        if (pathname != "/login" && pathname != "/register") {
-            const fetchApiSetUser = async () => {
-                const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-                if (res.status === 200) {
-                    const user: UserResponse = res.result
-                    setUser(user)
-                }
-
-            }
-            fetchApiSetUser()
-            console.log("fetch user")
+        const fetchUser = async () => {
+            await fetchGetUser()
         }
+
+        if (pathname != "/login" && pathname != "/register") {
+           fetchUser()
+        }
+
     }, [])
 
     const handleLogout = () => {
@@ -42,19 +35,6 @@ const Header = () => {
         router.push("/login")
     }
 
-    const handleFetchTestClient = async () => {
-        const res = await FetchClientGetApi(API.AUTH.MY_INFO)
-        if (res.status === 200) {
-        console.log("fetch test client success >>> ", res)
-        }
-    }
-
-    const handleFetchTestServer = async () => {
-        const res = await FetchClientGetApi(API.AUTH.MY_INFO)
-        if (res.status === 200) {
-        console.log("fetch test server success >>> ", res)
-        }
-    }
 
 
 
@@ -75,16 +55,6 @@ const Header = () => {
                                 height={50}
                                 alt='error'
                             />
-                            <Button
-                            onClick={()=>{handleFetchTestClient()}}
-                            >
-                                fetch test client
-                            </Button>
-                            <Button
-                            onClick={()=>{handleFetchTestServer()}}
-                            >
-                                fetch test server
-                            </Button>
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
@@ -105,8 +75,11 @@ const Header = () => {
                             </Nav>
 
                             <Nav>
-                                <Nav.Link type='div' >
-                                    Home</Nav.Link>
+
+                                {/* <Nav.Link type='div' >
+                                    Home
+                                </Nav.Link> */}
+
                                 <Nav.Link type='div'>
 
                                     <Dropdown
@@ -123,7 +96,7 @@ const Header = () => {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item eventKey="1">
+                                            <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
                                                     <Image
                                                         src="/images/avatar.jpg"
@@ -136,11 +109,11 @@ const Header = () => {
                                                 </div>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item eventKey="2" className='font-item'>
+                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
                                                 <i className="fa-solid fa-gear"></i> Cài đặt
                                             </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item'
-                                            onClick={()=>{handleLogout()}}
+                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
+                                                onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
                                             </Dropdown.Item>
@@ -148,6 +121,7 @@ const Header = () => {
                                     </Dropdown>
 
                                 </Nav.Link>
+
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
