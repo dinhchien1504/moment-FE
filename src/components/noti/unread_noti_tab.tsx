@@ -6,6 +6,13 @@ const UnReadNotiTab = () => {
     return (
         <>
             <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
+            <ItemNoti/>
         </>
     )
 }

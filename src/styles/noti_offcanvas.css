@@ -1,5 +1,6 @@
 .offcanvas{
     margin-top: 84px;
+    width: 375px !important;
 }
 
 #uncontrolled-tab-example-tab-unread{

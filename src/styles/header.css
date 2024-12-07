@@ -22,6 +22,10 @@
     background-color: rgb(203, 200, 200) !important;
 }
 
+#dropdown-custom-components{
+    width: 51px;
+}
+
 /* end avatar */
 
 /* search */
@@ -45,6 +49,8 @@
 }
 /* end search */
 
+
+
 /* noti */
 
 .btn-noti{
@@ -52,7 +58,7 @@
     color: #ff0066;
     border: 0px;
     padding: 0px;
-    margin-right: 20px;
+    width: 50px;
 }
 
 .btn-noti:hover{
@@ -76,3 +82,15 @@
 }
 
 /* end noti */
+
+
+@media (max-width: 550px) {
+    .nav-profile{
+        padding-right: 0px !important;
+    }
+    
+    .nav-noti{
+        padding-right: 0px !important;
+    }
+}
+
