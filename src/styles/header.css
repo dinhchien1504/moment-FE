@@ -22,6 +22,10 @@
     background-color: rgb(203, 200, 200) !important;
 }
 
+#dropdown-custom-components{
+    width: 51px;
+}
+
 /* end avatar */
 
 /* search */
@@ -44,3 +48,49 @@
     
 }
 /* end search */
+
+
+
+/* noti */
+
+.btn-noti{
+    background-color: black;
+    color: #ff0066;
+    border: 0px;
+    padding: 0px;
+    width: 50px;
+}
+
+.btn-noti:hover{
+    background-color: black;
+    color: #ff0066;
+}
+.btn-noti:active{
+    background-color: black !important;
+    color: #ff0066 !important;
+}
+
+.icon-bell{
+    font-size: 30px;
+}
+
+.badge-custom{
+    position: relative !important;
+    top: -20px !important;
+    
+
+}
+
+/* end noti */
+
+
+@media (max-width: 550px) {
+    .nav-profile{
+        padding-right: 0px !important;
+    }
+    
+    .nav-noti{
+        padding-right: 0px !important;
+    }
+}
+

@@ -4,19 +4,21 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { startLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import cookie from "js-cookie";
-
+import NotiOffCanvas from '../noti/noti_offcanvas';
+import Badge from 'react-bootstrap/Badge';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
+    const [showNoti,setShowNoti] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -35,6 +37,14 @@ const Header = () => {
         router.push("/login")
     }
 
+    const hanlleShowNoti = () => {
+        if (showNoti) {
+            setShowNoti(false)
+        } else {
+            setShowNoti(true)
+        }
+    }
+
 
 
 
@@ -45,7 +55,7 @@ const Header = () => {
     else {
         return (
             <>
-                <Navbar expand="lg" className="bg-body-tertiary ctn-header">
+                <Navbar className="bg-body-tertiary ctn-header">
 
                     <Container fluid>
                         <Navbar.Brand type='button'>
@@ -57,7 +67,9 @@ const Header = () => {
                             />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        
                         <Navbar.Collapse id="basic-navbar-nav">
+
                             <Nav className="mx-auto">
                                 <InputGroup className="d-flex justify-content-center">
 
@@ -65,7 +77,7 @@ const Header = () => {
                                         <i className="fa fa-magnifying-glass inp-search"></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        placeholder="Tìm kiếm bạn bè của bạn"
+                                        placeholder="Tìm kiếm bạn"
                                         aria-label="Search"
                                         aria-describedby="basic-addon1"
                                         className='inp-search'
@@ -75,27 +87,33 @@ const Header = () => {
                             </Nav>
 
                             <Nav>
+                                <Nav.Link type='div' className='d-flex align-items-center nav-noti'>
+                                    <Button className='btn-noti'
+                                    onClick={()=>{hanlleShowNoti()}}
+                                    >
+                                        <i className="fa-solid fa-bell icon-bell"></i>
+                                        <Badge bg="secondary" className='badge-custom'>9</Badge>
+                                   </Button>
+                                </Nav.Link>
 
-                                {/* <Nav.Link type='div' >
-                                    Home
-                                </Nav.Link> */}
-
-                                <Nav.Link type='div'>
+                                <Nav.Link type='div' className='nav-profile'>
 
                                     <Dropdown
-                                        drop='start'
+                                        drop='down'
                                     >
-                                        <Dropdown.Toggle as="div" id="dropdown-custom-components">
+                                        <Dropdown.Toggle as="div" id="dropdown-custom-components"
+                                        >
                                             <Image
                                                 src="/images/avatar.jpg"
                                                 width={50}
                                                 height={50}
                                                 alt="Dropdown Trigger"
                                                 className='img-avatar'
+                                                onClick={()=>{setShowNoti(false)}}
                                             />
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
+                                        <Dropdown.Menu  align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
                                                     <Image
@@ -126,6 +144,10 @@ const Header = () => {
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
+                <NotiOffCanvas
+                showNoti = {showNoti}
+                setShowNoti={setShowNoti}
+                />
             </>
         )
     }

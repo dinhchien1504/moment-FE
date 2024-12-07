@@ -15,14 +15,18 @@ const Caurousels = () => {
         <>
             <Carousel activeIndex={index} onSelect={handleSelect} className='carousel-custom'>
                 <Carousel.Item>
-                    <Image src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }} className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }} className='img-carousel'
+                    />
      
                 </Carousel.Item>
                 <Carousel.Item>
-                    <Image src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'
+    
+                    />
                 </Carousel.Item>
                 <Carousel.Item>
-                    <Image src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'
+                    />
 
                 </Carousel.Item>
             </Carousel>

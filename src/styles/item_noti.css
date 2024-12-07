@@ -1,0 +1,38 @@
+.img-custom {
+    border-radius: 100px;
+}
+
+.div-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.div-item:hover {
+    background-color: #f2f4f7;
+    border-radius: 20px;
+}
+
+.div-caption-createat {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.caption {
+    /* height: 72; */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.createat {
+   font-size: 13px;
+}
+
+.icon-unread{
+    color: #ff0066;
+    margin-left: 5px;
+}
