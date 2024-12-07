@@ -39,7 +39,7 @@ const VerticalSwiper = (props: Props) => {
 
   const fetchAdditionalImages = async () => {
     setIsLoading(true);
-    let data = {
+    const data = {
       pageCurrent: pageCurrent + 1,
       time: time,
     };
