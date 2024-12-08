@@ -7,9 +7,6 @@ import { useState } from "react";
 import { Slider, Typography } from "@mui/material";
 import "@/styles/crop_modal.css"
 
-import ReactCrop from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-
 interface IProps {
     showCrop: boolean;
     setShowCrop: (value: boolean) => void;
@@ -56,7 +53,6 @@ const CropModal = (props: IProps) => {
                     setShowCrop(false);
                 }}
                 aria-labelledby="contained-modal-title-vcenter"
-                centered
                 animation={false}
             >
                 <Modal.Header closeButton>

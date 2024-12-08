@@ -9,7 +9,6 @@
     background-color: #ff0066;
     border: 0px;
     color: white;
-    width: 100%;
 }
 
 .btn-post:hover {
@@ -31,17 +30,22 @@
 
 
 .div-img-capture {
-    height: 540px;
     display: flex;
     justify-content: center;
     width: 100%;
+    border: 0px !important;
+    background-color: #f2f4f7;
 
 }
 
 .img-capture {
+    margin-top: 10px;
+    margin-bottom: 10px;
     object-fit:contain ;
-    height: 540px;
+    height: 45vh;
     width: 100%;
+    border: 0px !important;
+    border-radius: 20px;
 }
 
 .div-info-cature {
@@ -63,6 +67,7 @@
     border: 0px;
     color: white;
     width: 100%;
+
 }
 
 .btn-screen-shot:hover {
@@ -103,5 +108,9 @@
     margin-right: 10px;
 }
 
+
 /* btn action  */
 
+.div-caption{
+    margin-top: 10px;
+}

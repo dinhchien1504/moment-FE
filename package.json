@@ -22,7 +22,6 @@
     "react-bootstrap": "^2.10.6",
     "react-dom": "^18",
     "react-easy-crop": "^5.2.0",
-    "react-image-crop": "^11.0.7",
     "swiper": "^11.1.15"
   },
   "devDependencies": {

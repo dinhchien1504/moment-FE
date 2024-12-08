@@ -7,11 +7,11 @@ import "@/styles/post_modal.css";
 import Image from "next/image";
 import { useUserContext } from "@/context/user_context";
 import { captureScreen } from "./screen_shot";
-
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { useCallback } from 'react'
 import Cropper from 'react-easy-crop'
 import CropModal from "./crop_modal";
-
+import Form from 'react-bootstrap/Form';
 
 interface IProps {
     showPost: boolean;
@@ -23,7 +23,7 @@ const PostModal = (props: IProps) => {
     const { showPost, setShowPost } = props;
 
     const [srcRoot, setSrcRoot] = useState<any>("") // cai nay la anh chup man hinh kh cat
-    const [src, setSrc] = useState<any>("") // cai nay la anh da cat
+    const [src, setSrc] = useState<any>("/images/unnamed.png") // cai nay la anh da cat
 
     const [showCrop, setShowCrop] = useState<boolean>(false)
 
@@ -42,9 +42,9 @@ const PostModal = (props: IProps) => {
     const handleRestore = () => {
         setSrc(srcRoot)
     }
-    
+
     const handleDelete = () => {
-        setSrc("")
+        setSrc("/images/unnamed.png")
         setSrcRoot("")
     }
 
@@ -54,12 +54,11 @@ const PostModal = (props: IProps) => {
         <>
             <Modal
                 show={showPost}
-                size={"xl"}
+                size={"lg"}
                 onHide={() => {
                     handleClosePost();
                 }}
                 aria-labelledby="contained-modal-title-vcenter"
-                centered
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">Tạo khoảnh khắc của bạn</Modal.Title>
@@ -79,21 +78,27 @@ const PostModal = (props: IProps) => {
 
                         <div className="div-btn-capture">
                             <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
-                            <i className="fa-solid fa-camera-retro icon-action"></i>
-                                 Chụp màn hình
+                                <i className="fa-solid fa-camera-retro icon-action"></i>
+                                Chụp màn hình
                             </Button>
 
-                            <Button onClick={() => { setShowCrop(true) }} className="btn-action-img">
-                            <i className="fa-solid fa-scissors icon-action"></i>
-                                Cắt ảnh</Button>
+                            {src != "/images/unnamed.png" &&
+                                <>
+                                    <Button onClick={() => { setShowCrop(true) }} className="btn-action-img">
+                                        <i className="fa-solid fa-scissors icon-action"></i>
+                                        Cắt ảnh</Button>
 
-                            <Button onClick={() =>{ handleRestore() }} className="btn-action-img">
-                                <i className="fa-solid fa-reply icon-action"></i>
-                                Phục hồi</Button>
+                                    <Button onClick={() => { handleRestore() }} className="btn-action-img">
+                                        <i className="fa-solid fa-reply icon-action"></i>
+                                        Phục hồi</Button>
 
-                            <Button onClick={() => { handleDelete() }} className="btn-action-img">
-                                <i className="fa-solid fa-trash-can icon-action"></i>
-                                Xóa ảnh</Button>
+                                    <Button onClick={() => { handleDelete() }} className="btn-action-img">
+                                        <i className="fa-solid fa-trash-can icon-action"></i>
+                                        Xóa ảnh</Button>
+                                </>
+                            }
+
+
                         </div>
 
                     </div>
@@ -103,16 +108,24 @@ const PostModal = (props: IProps) => {
 
                     <div className="div-img-capture">
                         <img
-                            alt="Ảnh chụp màn hình sẽ xuất hiện ở đây"
                             style={{
                                 display: "block",
                                 maxWidth: "100%",
-                                border: "1px solid black",
                             }}
                             src={src}
                             className="img-capture"
                         />
                     </div>
+
+                    <div className="div-caption">
+                        <Form.Control as="textarea" aria-label="With textarea" placeholder="Nêu cảm nghĩ của bạn" />
+                        <Form.Control.Feedback type="invalid" className='mt-0'>
+                            {"Vui lòng điền tài khoản."}
+                        </Form.Control.Feedback>
+                    </div>
+
+
+
 
 
                 </Modal.Body>
