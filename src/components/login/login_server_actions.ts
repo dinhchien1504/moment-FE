@@ -7,7 +7,7 @@ export const LoginServerActions = async (AuthenticationRequest: AuthenticationRe
     // post login
     const res = await FetchServerPostApiNoToken(API.AUTH.TOKEN, AuthenticationRequest);
     // thanh cong
-    if (res.status === 200) {
+    if (res && res.status === 200) {
         const data:AuthenticationResponse = res.result 
         setSessionId(data.token);
 
