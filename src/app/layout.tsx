@@ -23,6 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/images/logo-removebg.png" />
+        {/* <meta name="viewport" content="width=device-width, initial-scale=1"></meta> */}
       </head>
       <body className={`${inter.className}`}>
         <UserProvider>

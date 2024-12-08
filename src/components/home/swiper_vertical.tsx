@@ -1,11 +1,15 @@
 "use client";
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import PhotoCard from "./photo_card";
+import { getCurrentTime } from "@/utils/utils_time";
+import { startLoading, stopLoading } from "../shared/nprogress";
+import { create_slug } from "@/utils/slug";
 
 interface Props {
   photoResponses: IPhotoResponse[];
@@ -13,71 +17,126 @@ interface Props {
 }
 
 const VerticalSwiper = (props: Props) => {
+  //nhận props
   const [photoResponses, setPhotoResponses] = useState<IPhotoResponse[]>(
     props.photoResponses
   );
-  const time = props.time;
-
-  const [valueLimit, setValueLimit] = useState<number>(3);
+  // taoj cacs useState
+  const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  const swiperRef = useRef<SwiperCore | null>(null);
+  // xu ly dong mo modal
   const openModal = (src: string) => {
     setImageSrc(src);
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setImageSrc("");
   };
-  useEffect(() => {
-    console.log(imageSrc);
-  }, [imageSrc]);
 
-  const fetchAdditionalImages = async () => {
-    setIsLoading(true);
-    const data = {
-      pageCurrent: pageCurrent + 1,
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!swiperRef.current) return;
+
+      if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+        swiperRef.current.slidePrev();
+      } else if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+        swiperRef.current.slideNext();
+      }
+    };
+
+    // lang nghe su kien keydown
+    window.addEventListener("keydown", handleKeyDown);
+    // don de su kien sau sau khi conmonent unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const handleReloadPhoto = async () => {
+    startLoading();
+    if (swiperRef.current) swiperRef.current.slideTo(0);
+    setTime(getCurrentTime());
+    setPageCurrent(0);
+    try {
+      await fetchReloadPhoto();
+    } catch (error) {
+      console.error("Error fetching additional images:", error);
+    } finally {
+      stopLoading();
+    }
+  };
+
+  const fetchReloadPhoto = async () => {
+    const dataBody = {
+      pageCurrent: pageCurrent,
       time: time,
     };
-    setPageCurrent(pageCurrent + 1);
-    setValueLimit(valueLimit + 3);
-    setTimeout(async () => {
-      try {
-        const res = await FetchClientPostApi(API.HOME.PHOTO, data);
-
-        const newPhotoResponses = res.result;
-        setPhotoResponses((prevPhotoResponses) => [
-          ...prevPhotoResponses,
-          ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
-        ]);
-      } catch (error) {
-        console.error("Error fetching additional images:", error);
-      } finally {
-        setIsLoading(false); // Đảm bảo set loading là false sau khi tải ảnh xong
-      }
-    }, 0);
+    try {
+      const res = await FetchClientPostApi(API.HOME.PHOTO, dataBody);
+      const newPhotoResponses = res.result;
+      setPhotoResponses(newPhotoResponses);
+    } catch (error) {
+      console.error("Error fetching additional images:", error);
+    }
   };
+
+  const handleAdditionalPhoto = () => {
+    setPageCurrent(pageCurrent + 1);
+    fetchAdditionalPhoto();
+  };
+
+  const fetchAdditionalPhoto = async () => {
+    const data = {
+      pageCurrent: pageCurrent,
+      time: time,
+    };
+
+    try {
+      const res = await FetchClientPostApi(API.HOME.PHOTO, data);
+
+      const newPhotoResponses = res.result;
+      setPhotoResponses((prevPhotoResponses) => [
+        ...prevPhotoResponses,
+        ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
+      ]);
+    } catch (error) {
+      console.error("Error fetching additional images:", error);
+    } finally {
+    }
+  };
+
   return (
     <>
       <div className="wrapper-swiper position-relative h-100">
         <Swiper
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           direction={"vertical"}
-          className="h-100"
-          spaceBetween={10}
+          slidesPerView={1}
           navigation={{
             nextEl: ".swiper-button-down",
             prevEl: ".swiper-button-up",
           }}
           mousewheel={true}
           modules={[Navigation, Mousewheel]}
+          className="h-100"
+          autoHeight={true}
+          zoom={{
+            maxRatio: 3, // Kích thước tối đa khi zoom
+            minRatio: 1, // Kích thước tối thiểu khi zoom
+          }}
+          lazyPreloadPrevNext={2}
           onSlideChange={(swiper) => {
-            if (swiper.activeIndex === valueLimit && !isLoading) {
-              fetchAdditionalImages();
+            if (swiper.activeIndex === 5 * pageCurrent + 3) {
+              handleAdditionalPhoto();
             }
+            const slideIndex = swiper.activeIndex;
+            const currentPhoto = photoResponses[slideIndex];
+            console.log(currentPhoto.caption);
+            
           }}
         >
           {photoResponses.map((photoResponse, index) => (
@@ -141,7 +200,7 @@ const VerticalSwiper = (props: Props) => {
           </div>
           <div
             className="bg-primary ms-auto p-2 rounded-2 mt-auto"
-            onClick={() => window.location.reload()}
+            onClick={handleReloadPhoto}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
