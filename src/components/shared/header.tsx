@@ -14,11 +14,13 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import cookie from "js-cookie";
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import Badge from 'react-bootstrap/Badge';
+import PostModal from '../post/post_modal';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
     const [showNoti,setShowNoti] = useState<boolean>(false)
+    const [showPost,setShowPost] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -49,6 +51,7 @@ const Header = () => {
 
 
 
+
     if (pathname === "/login" || pathname === "/register") {
         return (<></>);
     }
@@ -64,6 +67,7 @@ const Header = () => {
                                 width={50}
                                 height={50}
                                 alt='error'
+                                onClick={()=>{setShowPost(true)}}
                             />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -147,6 +151,10 @@ const Header = () => {
                 <NotiOffCanvas
                 showNoti = {showNoti}
                 setShowNoti={setShowNoti}
+                />
+                <PostModal
+                showPost = {showPost}
+                setShowPost= {setShowPost}
                 />
             </>
         )
