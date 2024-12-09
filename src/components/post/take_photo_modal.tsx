@@ -30,7 +30,7 @@ const TakePhotoModal = (props: IProps) => {
             console.log("tắt camera")
         }
 
-    }, [showTakePhoto])
+    }, [showTakePhoto,facingMode])
 
     // Bắt đầu camera
     const startCamera = async () => {
@@ -122,15 +122,18 @@ const TakePhotoModal = (props: IProps) => {
 
                 </Modal.Body>
                 <div className="div-btn-take-photo">
-                    <Button
-                      onClick={() => { toggleCamera() }}
-                    >
-                        Xoay camera
-                    </Button>
-                    <Button className="btn-take-photo"
+
+                <Button className="btn-take-photo"
                         onClick={() => { captureImage() }}
                     >
                         <i className="fa-solid fa-camera"></i>  Chụp ảnh</Button>
+
+                    <Button className="btn-take-photo"
+                      onClick={() => { toggleCamera() }}
+                    >
+                     <i className="fa-solid fa-repeat"></i>   Xoay camera
+                    </Button>
+                   
 
                 </div>
 
