@@ -13,11 +13,13 @@ interface IProps {
 
 const TakePhotoModal = (props: IProps) => {
 
-    const { showTakePhoto, setShowTakePhoto,setSrc,setSrcRoot } = props
+    const { showTakePhoto, setShowTakePhoto, setSrc, setSrcRoot } = props
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
+    const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user'); // 'user' is front camera, 'environment' is rear camera
+
 
     useEffect(() => {
         if (showTakePhoto) {
@@ -34,12 +36,13 @@ const TakePhotoModal = (props: IProps) => {
     const startCamera = async () => {
         const constraints: MediaStreamConstraints = {
             video: {
-              width: { ideal: 1920 },
-              height: { ideal: 1080 },
-              aspectRatio: 16 / 9, // Tỉ lệ khung hình góc rộng
+                width: { ideal: 1920 },
+                height: { ideal: 1080 },
+                aspectRatio: 16 / 9, // Tỉ lệ khung hình góc rộng
+                facingMode: facingMode 
             },
-          };
-        
+        };
+
         try {
             const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
             setStream(mediaStream);
@@ -69,18 +72,34 @@ const TakePhotoModal = (props: IProps) => {
         const video = videoRef.current;
         if (canvas && video) {
             const context = canvas.getContext("2d");
+
             if (context) {
+                // Lấy kích thước video thực tế
+                const videoWidth = video.videoWidth;
+                const videoHeight = video.videoHeight;
+
+                // Điều chỉnh kích thước canvas theo kích thước video
+                canvas.width = videoWidth;
+                canvas.height = videoHeight;
+
+                // Vẽ hình ảnh từ video vào canvas
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Lấy dữ liệu ảnh dưới dạng Data URL
                 const imageData = canvas.toDataURL("image/png");
                 setSrc(imageData); // Lưu URL của ảnh vào state
-                setSrcRoot(imageData)
+                setSrcRoot(imageData);
 
-                setShowTakePhoto(false)
-                console.log("Chụp ")
+                setShowTakePhoto(false);
+                console.log("Chụp ảnh thành công")
             }
         }
     };
 
+    // Hàm để đổi camera (xoay giữa camera trước và sau)
+    const toggleCamera = () => {
+        setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user')); // Đổi giữa camera trước và sau
+    };
 
     return (
         <>
@@ -99,12 +118,17 @@ const TakePhotoModal = (props: IProps) => {
                 </Modal.Header>
                 <Modal.Body className="md-bd-take-photo" >
                     <video ref={videoRef} className="video" autoPlay></video>
-                    <canvas ref={canvasRef} width="1920" height="1080" style={{ display: "none" }}></canvas>
+                    <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
                 </Modal.Body>
                 <div className="div-btn-take-photo">
+                    <Button
+                      onClick={() => { toggleCamera() }}
+                    >
+                        Xoay camera
+                    </Button>
                     <Button className="btn-take-photo"
-                    onClick={() => {captureImage()}}
+                        onClick={() => { captureImage() }}
                     >
                         <i className="fa-solid fa-camera"></i>  Chụp ảnh</Button>
 
