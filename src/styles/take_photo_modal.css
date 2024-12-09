@@ -1,0 +1,36 @@
+.div-btn-take-photo{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-take-photo{
+    margin-left: 10px;
+    background-color:  black;
+    border: 0px;
+    color: white;
+}
+
+.btn-take-photo:hover {
+    background-color:  black;
+}
+.btn-take-photo:active {
+    background-color:  black !important;
+}
+.btn-take-photo:focus-visible {
+    background-color:  black;
+    border: 0px;
+    color: white;
+}
+
+.md-bd-take-photo{
+
+}
+
+.video{
+    width: 100%;
+    height: 65vh;
+    background-color: #f2f4f7;
+    border-radius: 20px;
+    padding: 10px;
+}
