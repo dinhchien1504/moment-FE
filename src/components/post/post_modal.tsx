@@ -12,6 +12,7 @@ import { useCallback } from 'react'
 import Cropper from 'react-easy-crop'
 import CropModal from "./crop_modal";
 import Form from 'react-bootstrap/Form';
+import TakePhotoModal from "./take_photo_modal";
 
 interface IProps {
     showPost: boolean;
@@ -26,6 +27,7 @@ const PostModal = (props: IProps) => {
     const [src, setSrc] = useState<any>("/images/unnamed.png") // cai nay la anh da cat
 
     const [showCrop, setShowCrop] = useState<boolean>(false)
+    const [showTakePhoto,setShowTakePhoto] = useState<boolean> (false)
 
     const handleClosePost = () => {
         setShowPost(false);
@@ -64,8 +66,8 @@ const PostModal = (props: IProps) => {
                     <Modal.Title id="contained-modal-title-vcenter">Tạo khoảnh khắc của bạn</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="md-bd-post">
-                    <div className="div-info-cature">
-                        <div>
+
+                    {/* <div>
                             <Image
                                 src="/images/avatar.jpg"
                                 width={50}
@@ -74,34 +76,42 @@ const PostModal = (props: IProps) => {
                                 className="img-avatar-item"
                             />
                             {user?.name}
-                        </div>
+                        </div> */}
 
-                        <div className="div-btn-capture">
-                            <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
-                                <i className="fa-solid fa-camera-retro icon-action"></i>
-                                Chụp màn hình
-                            </Button>
+                    <div className="div-btn-capture">
+                        <Button 
+                        onClick={() => { setShowTakePhoto(true) }} 
+                        style={{marginRight:"10px"}}
+                        className="btn-screen-shot">
+                            <i className="fa-solid fa-camera icon-action"></i>
+                            Chụp ảnh
+                        </Button>
 
-                            {src != "/images/unnamed.png" &&
-                                <>
-                                    <Button onClick={() => { setShowCrop(true) }} className="btn-action-img">
-                                        <i className="fa-solid fa-scissors icon-action"></i>
-                                        Cắt ảnh</Button>
+                        <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
+                            <i className="fa-solid fa-camera-retro icon-action"></i>
+                            Chụp màn hình
+                        </Button>
 
-                                    <Button onClick={() => { handleRestore() }} className="btn-action-img">
-                                        <i className="fa-solid fa-reply icon-action"></i>
-                                        Phục hồi</Button>
+                        {src != "/images/unnamed.png" &&
+                            <>
+                                <Button onClick={() => { setShowCrop(true) }} className="btn-action-img">
+                                    <i className="fa-solid fa-scissors icon-action"></i>
+                                    Cắt ảnh</Button>
 
-                                    <Button onClick={() => { handleDelete() }} className="btn-action-img">
-                                        <i className="fa-solid fa-trash-can icon-action"></i>
-                                        Xóa ảnh</Button>
-                                </>
-                            }
+                                <Button onClick={() => { handleRestore() }} className="btn-action-img">
+                                    <i className="fa-solid fa-reply icon-action"></i>
+                                    Phục hồi</Button>
 
+                                <Button onClick={() => { handleDelete() }} className="btn-action-img">
+                                    <i className="fa-solid fa-trash-can icon-action"></i>
+                                    Xóa ảnh</Button>
+                            </>
+                        }
 
-                        </div>
 
                     </div>
+
+
 
 
 
@@ -141,6 +151,14 @@ const PostModal = (props: IProps) => {
                 setSrc={setSrc}
 
             />
+
+            <TakePhotoModal
+            showTakePhoto = {showTakePhoto}
+            setShowTakePhoto={setShowTakePhoto}
+            setSrc = {setSrc}
+            setSrcRoot = {setSrcRoot}
+            />
+
 
 
 
