@@ -1,6 +1,7 @@
 'use client'
 import cookie from "js-cookie";
 
+
 export const FetchClientPostApi = async (api: string,bodyData: any) => {
     try {
       if (cookie.get("session-id") === undefined) { 

@@ -26,6 +26,10 @@
     width: 100%;
 }
 
+.btn-post:disabled {
+    background-color: #e16697;
+}
+
 /* btn-post */
 
 
@@ -35,24 +39,23 @@
     width: 100%;
     border: 0px !important;
     background-color: #f2f4f7;
-
+    padding: 10px;
+    border-radius: 20px;
 }
 
 .img-capture {
-    margin-top: 10px;
-    margin-bottom: 10px;
     object-fit:contain ;
     height: 45vh;
     width: 100%;
     border: 0px !important;
-    border-radius: 20px;
 }
 
-.div-info-cature {
+.div-info-capture {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     margin-bottom: 10px;
+    
 }
 
 .div-btn-capture{
@@ -61,56 +64,36 @@
     margin-top: 10px;
 }
 
-/* btn action  */
+/* btn screen  */
 .btn-screen-shot{
-    background-color:  #ff0066;
+    background-color:  black !important;
     border: 0px;
     color: white;
     width: 100%;
+    font-size: 15px;
+    border-radius: 100px;
+    height: 100% !important;
+    margin-right: 10px;
 
 }
 
 .btn-screen-shot:hover {
-    background-color:  #ff0066;
+    background-color:  black;
 }
 .btn-screen-shot:active {
-    background-color:  #ff0066 !important;
-}
-.btn-screen-shot:focus-visible {
-    background-color:  #ff0066;
-    border: 0px;
-    color: white;
-}
-
-
-
-.btn-action-img{
-    margin-left: 10px;
-    background-color:  black;
-    border: 0px;
-    color: white;
-    width: 100%;
-}
-
-.btn-action-img:hover {
-    background-color:  black;
-}
-.btn-action-img:active {
     background-color:  black !important;
 }
-.btn-action-img:focus-visible {
+.btn-screen-shot:focus-visible {
     background-color:  black;
     border: 0px;
     color: white;
 }
 
-.icon-action{
-    margin-right: 10px;
-}
+/* btn screen  */
 
-
-/* btn action  */
 
 .div-caption{
     margin-top: 10px;
 }
+
+

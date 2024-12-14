@@ -4,14 +4,18 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "@/styles/post_modal.css";
-import Image from "next/image";
 import { useUserContext } from "@/context/user_context";
 import { captureScreen } from "./screen_shot";
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { useCallback } from 'react'
-import Cropper from 'react-easy-crop'
 import CropModal from "./crop_modal";
 import Form from 'react-bootstrap/Form';
+import TakePhotoModal from "./take_photo_modal";
+import { UploadImages } from "@/utils/upload_images";
+import { GetImage } from "@/utils/get_images";
+import Image from "next/image";
+import Dropdown from 'react-bootstrap/Dropdown';
+import { FetchClientPostApi } from "@/api/fetch_client_api";
+import API from "@/api/api";
+import { startLoading, stopLoading } from "../shared/nprogress";
 
 interface IProps {
     showPost: boolean;
@@ -23,9 +27,12 @@ const PostModal = (props: IProps) => {
     const { showPost, setShowPost } = props;
 
     const [srcRoot, setSrcRoot] = useState<any>("") // cai nay la anh chup man hinh kh cat
-    const [src, setSrc] = useState<any>("/images/unnamed.png") // cai nay la anh da cat
+    const [src, setSrc] = useState<any>("") // cai nay la anh da cat
 
     const [showCrop, setShowCrop] = useState<boolean>(false)
+    const [showTakePhoto, setShowTakePhoto] = useState<boolean>(false)
+
+    const [caption,setCaption] =useState<string>("")
 
     const handleClosePost = () => {
         setShowPost(false);
@@ -44,9 +51,38 @@ const PostModal = (props: IProps) => {
     }
 
     const handleDelete = () => {
-        setSrc("/images/unnamed.png")
+        setSrc("")
         setSrcRoot("")
     }
+
+    const handlePost = async () => {
+        startLoading()
+
+        if (src != "") {
+            const res = await UploadImages(src)
+            // lưu thành công ảnh trên cloundy
+            if (res.public_id) {
+                const postRequest:PostRequest = {
+                    url: res.public_id,
+                    caption: caption
+                }
+
+                const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
+                if (resPost && resPost.status === 200) {
+                    setShowPost(false)
+                    setCaption("")
+                    setSrc("")
+                    setSrcRoot("")
+                }
+            }
+        }
+
+
+        stopLoading()
+    }
+
+
+
 
 
 
@@ -64,8 +100,9 @@ const PostModal = (props: IProps) => {
                     <Modal.Title id="contained-modal-title-vcenter">Tạo khoảnh khắc của bạn</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="md-bd-post">
-                    <div className="div-info-cature">
-                        <div>
+                    <div className="div-info-capture">
+
+                        <div >
                             <Image
                                 src="/images/avatar.jpg"
                                 width={50}
@@ -76,35 +113,52 @@ const PostModal = (props: IProps) => {
                             {user?.name}
                         </div>
 
+
                         <div className="div-btn-capture">
-                            <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
-                                <i className="fa-solid fa-camera-retro icon-action"></i>
-                                Chụp màn hình
+                            <Button
+                                onClick={() => { setShowTakePhoto(true) }}
+
+                                className="btn-screen-shot">
+                                <i className="fa-solid fa-camera"></i>
+
                             </Button>
 
-                            {src != "/images/unnamed.png" &&
+                            <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
+                                <i className="fa-regular fa-image"></i>
+
+                            </Button>
+
+                            {src != "" &&
                                 <>
-                                    <Button onClick={() => { setShowCrop(true) }} className="btn-action-img">
-                                        <i className="fa-solid fa-scissors icon-action"></i>
-                                        Cắt ảnh</Button>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic"
+                                            className="btn-screen-shot"
+                                        >
+                                            <i className="fa-regular fa-pen-to-square"></i>
+                                        </Dropdown.Toggle>
 
-                                    <Button onClick={() => { handleRestore() }} className="btn-action-img">
-                                        <i className="fa-solid fa-reply icon-action"></i>
-                                        Phục hồi</Button>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item as="button" onClick={() => { setShowCrop(true) }}>
+                                                <i className="fa-solid fa-scissors "></i> Cắt ảnh
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as="button" onClick={() => { handleRestore() }}>
+                                                <i className="fa-solid fa-reply "></i> Khôi phục
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as="button" onClick={() => { handleDelete() }}>
+                                                <i className="fa-solid fa-trash-can "></i> Xóa ảnh
+                                            </Dropdown.Item>
 
-                                    <Button onClick={() => { handleDelete() }} className="btn-action-img">
-                                        <i className="fa-solid fa-trash-can icon-action"></i>
-                                        Xóa ảnh</Button>
+
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+
+
                                 </>
                             }
 
 
                         </div>
-
                     </div>
-
-
-
 
                     <div className="div-img-capture">
                         <img
@@ -113,12 +167,17 @@ const PostModal = (props: IProps) => {
                                 maxWidth: "100%",
                             }}
                             src={src}
+                            onError={(e) => {
+                                e.currentTarget.src = "/images/unnamed.png";
+                            }}
                             className="img-capture"
                         />
                     </div>
 
                     <div className="div-caption">
-                        <Form.Control as="textarea" aria-label="With textarea" placeholder="Nêu cảm nghĩ của bạn" />
+                        <Form.Control as="textarea" aria-label="With textarea" placeholder="Nêu cảm nghĩ của bạn" 
+                        onChange={(e) => {setCaption(e.target.value)}}
+                        />
                         <Form.Control.Feedback type="invalid" className='mt-0'>
                             {"Vui lòng điền tài khoản."}
                         </Form.Control.Feedback>
@@ -130,9 +189,12 @@ const PostModal = (props: IProps) => {
 
                 </Modal.Body>
                 <Modal.Footer className="mdl-footer">
-                    <Button className="btn-post">Đăng</Button>
+                    <Button className={`btn-post`}
+                        disabled={src === ""}
+                        onClick={() => { handlePost() }}
+                    >Đăng</Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal >
 
             <CropModal
                 setShowCrop={setShowCrop}
@@ -141,6 +203,14 @@ const PostModal = (props: IProps) => {
                 setSrc={setSrc}
 
             />
+
+            <TakePhotoModal
+                showTakePhoto={showTakePhoto}
+                setShowTakePhoto={setShowTakePhoto}
+                setSrc={setSrc}
+                setSrcRoot={setSrcRoot}
+            />
+
 
 
 
