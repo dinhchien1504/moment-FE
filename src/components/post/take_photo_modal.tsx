@@ -105,12 +105,13 @@ const TakePhotoModal = (props: IProps) => {
 
     // Hàm để đổi camera (xoay giữa camera trước và sau)
     const toggleCamera = () => {
-        setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user')); // Đổi giữa camera trước và sau
         if (isFrontCamera){
             setIsFrontCamera(false)
         } else {
         setIsFrontCamera(true)
         }
+        setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user')); // Đổi giữa camera trước và sau
+      
     };
 
     return (
