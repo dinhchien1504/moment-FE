@@ -19,7 +19,7 @@ const TakePhotoModal = (props: IProps) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user'); // 'user' is front camera, 'environment' is rear camera
-
+    const [isFrontCamera, setIsFrontCamera] = useState<boolean> (true)
 
     useEffect(() => {
         if (showTakePhoto) {
@@ -83,8 +83,11 @@ const TakePhotoModal = (props: IProps) => {
                 canvas.height = videoHeight;
 
                 // Lật canvas theo trục X
-                context.translate(videoWidth, 0); // Di chuyển canvas
-                context.scale(-1, 1); // Lật ngược trên trục X
+                if (isFrontCamera) {
+                    context.translate(videoWidth, 0); // Di chuyển canvas
+                    context.scale(-1, 1); // Lật ngược trên trục X
+                }
+              
 
                 // Vẽ hình ảnh từ video vào canvas
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -103,6 +106,11 @@ const TakePhotoModal = (props: IProps) => {
     // Hàm để đổi camera (xoay giữa camera trước và sau)
     const toggleCamera = () => {
         setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user')); // Đổi giữa camera trước và sau
+        if (isFrontCamera){
+            setIsFrontCamera(false)
+        } else {
+        setIsFrontCamera(true)
+        }
     };
 
     return (
@@ -121,7 +129,12 @@ const TakePhotoModal = (props: IProps) => {
 
                 </Modal.Header>
                 <Modal.Body className="md-bd-take-photo" >
-                    <video ref={videoRef} className="video" autoPlay style={{ transform: 'scaleX(-1)' }}></video>
+                    <video ref={videoRef} className="video" autoPlay 
+                     style={{ transform: isFrontCamera ? 'scaleX(-1)' : 'none' }} 
+                    
+                    >
+                    
+                    </video>
                     <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
                 </Modal.Body>

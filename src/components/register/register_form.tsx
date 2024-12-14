@@ -221,8 +221,8 @@ const RegisterForm = () => {
                         <button className='btn-eye' type='button'
                             onClick={() => { handlleHiddenPass() }}
                         >
-                            {isHidden ? <i className="fa-regular fa-eye"></i>
-                                : <i className="fa-regular fa-eye-slash"></i>}
+                            {isHidden ?  <i className="fa-regular fa-eye-slash"></i>
+                                : <i className="fa-regular fa-eye"> </i> }
                         </button>
                     </InputGroup.Text>
                 </InputGroup>
