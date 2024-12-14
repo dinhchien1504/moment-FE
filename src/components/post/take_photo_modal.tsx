@@ -19,7 +19,6 @@ const TakePhotoModal = (props: IProps) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user'); // 'user' is front camera, 'environment' is rear camera
-    const [isFrontCamera, setIsFrontCamera] = useState<boolean> (true)
 
     useEffect(() => {
         if (showTakePhoto) {
@@ -29,6 +28,8 @@ const TakePhotoModal = (props: IProps) => {
             stopCamera()
             console.log("tắt camera")
         }
+
+        
 
     }, [showTakePhoto, facingMode])
 
@@ -83,7 +84,7 @@ const TakePhotoModal = (props: IProps) => {
                 canvas.height = videoHeight;
 
                 // Lật canvas theo trục X
-                if (isFrontCamera) {
+                if (facingMode === "user") {
                     context.translate(videoWidth, 0); // Di chuyển canvas
                     context.scale(-1, 1); // Lật ngược trên trục X
                 }
@@ -105,11 +106,7 @@ const TakePhotoModal = (props: IProps) => {
 
     // Hàm để đổi camera (xoay giữa camera trước và sau)
     const toggleCamera = () => {
-        if (isFrontCamera){
-            setIsFrontCamera(false)
-        } else {
-        setIsFrontCamera(true)
-        }
+      
         setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user')); // Đổi giữa camera trước và sau
       
     };
@@ -131,7 +128,7 @@ const TakePhotoModal = (props: IProps) => {
                 </Modal.Header>
                 <Modal.Body className="md-bd-take-photo" >
                     <video ref={videoRef} className="video" autoPlay 
-                     style={{ transform: isFrontCamera ? 'scaleX(-1)' : 'none' }} 
+                     style={{ transform: facingMode ==="user" ? 'scaleX(-1)' : 'none' }} 
                     
                     >
                     
