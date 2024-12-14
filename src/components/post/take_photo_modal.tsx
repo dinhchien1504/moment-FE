@@ -30,7 +30,7 @@ const TakePhotoModal = (props: IProps) => {
             console.log("tắt camera")
         }
 
-    }, [showTakePhoto,facingMode])
+    }, [showTakePhoto, facingMode])
 
     // Bắt đầu camera
     const startCamera = async () => {
@@ -39,7 +39,7 @@ const TakePhotoModal = (props: IProps) => {
                 width: { ideal: 1920 },
                 height: { ideal: 1080 },
                 aspectRatio: 16 / 9, // Tỉ lệ khung hình góc rộng
-                facingMode: facingMode 
+                facingMode: facingMode
             },
         };
 
@@ -82,6 +82,10 @@ const TakePhotoModal = (props: IProps) => {
                 canvas.width = videoWidth;
                 canvas.height = videoHeight;
 
+                // Lật canvas theo trục X
+                context.translate(videoWidth, 0); // Di chuyển canvas
+                context.scale(-1, 1); // Lật ngược trên trục X
+
                 // Vẽ hình ảnh từ video vào canvas
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -117,25 +121,28 @@ const TakePhotoModal = (props: IProps) => {
 
                 </Modal.Header>
                 <Modal.Body className="md-bd-take-photo" >
-                    <video ref={videoRef} className="video" autoPlay></video>
+                    <video ref={videoRef} className="video" autoPlay style={{ transform: 'scaleX(-1)' }}></video>
                     <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
                 </Modal.Body>
                 <div className="div-btn-take-photo">
+                    <div style={{width:"36px"}}>
 
-                <Button className="btn-take-photo"
-                        onClick={() => { captureImage() }}
-                    >
-                        <i className="fa-solid fa-camera"></i>  Chụp ảnh</Button>
+                    </div>
 
                     <Button className="btn-take-photo"
-                      onClick={() => { toggleCamera() }}
+                        onClick={() => { captureImage() }}
                     >
-                     <i className="fa-solid fa-repeat"></i>   Xoay camera
+                        <i className="fa-solid fa-camera"></i>
                     </Button>
-                   
 
+                    <Button className="btn-take-photo" style={{marginRight:"15px"}}
+                        onClick={() => { toggleCamera() }}
+                    >
+                        <i className="fa-solid fa-repeat"></i>
+                    </Button>
                 </div>
+
 
             </Modal>
 

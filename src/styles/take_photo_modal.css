@@ -1,14 +1,17 @@
-.div-btn-take-photo{
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.div-btn-take-photo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 35px;
 }
 
 .btn-take-photo{
-    margin-left: 10px;
     background-color:  black;
     border: 0px;
     color: white;
+    border-radius: 100px;
+    padding: 20px;
 }
 
 .btn-take-photo:hover {
@@ -23,9 +26,7 @@
     color: white;
 }
 
-.md-bd-take-photo{
 
-}
 
 .video{
     width: 100%;
