@@ -1,6 +1,8 @@
 export const getCurrentTime = () => {
-  const now = new Date();
-  return now.toISOString().slice(0, 19);
+  return new Date().toISOString();
+};
+export const getTimeZone = () => {
+ return Intl.DateTimeFormat().resolvedOptions().timeZone;
 };
 
 export const formatDate = (dateString: string): string => {
