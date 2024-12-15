@@ -9,11 +9,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import PhotoCard from "./photo_card";
 import { getCurrentTime } from "@/utils/utils_time";
 import { startLoading, stopLoading } from "../shared/nprogress";
-import { create_slug } from "@/utils/slug";
 
 interface Props {
   photoResponses: IPhotoResponse[];
-  time: string;
+  timezone: string;
+  timestamp:string;
 }
 
 const VerticalSwiper = (props: Props) => {
@@ -22,7 +22,8 @@ const VerticalSwiper = (props: Props) => {
     props.photoResponses
   );
   // taoj cacs useState
-  const [time, setTime] = useState<string>(props.time);
+  const [time, setTime] = useState<string>(props.timestamp);
+  const timezone =props.timezone;
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
@@ -73,7 +74,8 @@ const VerticalSwiper = (props: Props) => {
   const fetchReloadPhoto = async () => {
     const dataBody = {
       pageCurrent: pageCurrent,
-      time: time,
+      timeStamp: time,
+      timezone:timezone
     };
     try {
       const res = await FetchClientPostApi(API.HOME.PHOTO, dataBody);
@@ -99,6 +101,7 @@ const VerticalSwiper = (props: Props) => {
       const res = await FetchClientPostApi(API.HOME.PHOTO, data);
 
       const newPhotoResponses = res.result;
+      if(newPhotoResponses!=null && newPhotoResponses!= undefined)
       setPhotoResponses((prevPhotoResponses) => [
         ...prevPhotoResponses,
         ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
@@ -139,7 +142,7 @@ const VerticalSwiper = (props: Props) => {
             
           }}
         >
-          {photoResponses.map((photoResponse, index) => (
+          {photoResponses?.map((photoResponse, index) => (
             <SwiperSlide key={index}>
               <PhotoCard
                 photoResponse={photoResponse}
