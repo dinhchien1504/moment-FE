@@ -9,20 +9,20 @@ interface IProps {
     setFilePreview: (value: File) => void;
     setFileRoot: (value: File) => void;
 
-    
+
 }
 
 const TakePhotoModal = (props: IProps) => {
 
-    const { showTakePhoto, setShowTakePhoto, setFilePreview ,setFileRoot} = props
+    const { showTakePhoto, setShowTakePhoto, setFilePreview, setFileRoot } = props
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     // const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user'); // 'user' is front camera, 'environment' is rear camera
-    const [turnOver,setTurnOver] = useState<boolean> (false)
+    const [turnOver, setTurnOver] = useState<boolean>(false)
 
-    
+
     useEffect(() => {
         if (showTakePhoto) {
             startCamera()
@@ -37,12 +37,7 @@ const TakePhotoModal = (props: IProps) => {
     // Bắt đầu camera
     const startCamera = async () => {
         const constraints: MediaStreamConstraints = {
-            video: {
-                width: { ideal: 1920 },
-                height: { ideal: 1080 },
-                aspectRatio: 16 / 9, // Tỉ lệ khung hình góc rộng
-                // facingMode: facingMode
-            },
+            video:true
         };
 
         try {
@@ -72,62 +67,62 @@ const TakePhotoModal = (props: IProps) => {
     const captureImage = async () => {
         const canvas = canvasRef.current;
         const video = videoRef.current;
-      
+
         if (canvas && video) {
-          const context = canvas.getContext("2d");
-      
-          if (context) {
-            // Lấy kích thước video
-            const videoWidth = video.videoWidth;
-            const videoHeight = video.videoHeight;
-      
-            canvas.width = videoWidth;
-            canvas.height = videoHeight;
-      
-            // Lật canvas nếu cần
-            if (!turnOver) {
-              context.translate(videoWidth, 0);
-              context.scale(-1, 1);
+            const context = canvas.getContext("2d");
+
+            if (context) {
+                // Lấy kích thước video
+                const videoWidth = video.videoWidth;
+                const videoHeight = video.videoHeight;
+
+                canvas.width = videoWidth;
+                canvas.height = videoHeight;
+
+                // Lật canvas nếu cần
+                if (!turnOver) {
+                    context.translate(videoWidth, 0);
+                    context.scale(-1, 1);
+                }
+
+                // Vẽ video vào canvas
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Chuyển đổi canvas thành Blob
+                const blob = await new Promise<Blob | null>((resolve) => {
+                    canvas.toBlob((fileBlob) => {
+                        resolve(fileBlob);
+                    }, "image/png");
+                });
+
+                if (blob) {
+                    // Tạo file từ Blob
+                    const imageFile = new File([blob], "captured_image.png", { type: "image/png" });
+
+
+                    setFileRoot(imageFile)
+                    setFilePreview(imageFile)
+
+                    setShowTakePhoto(false);
+                    console.log("Chụp ảnh thành công");
+                } else {
+                    console.error("Không thể tạo Blob từ canvas");
+                }
             }
-      
-            // Vẽ video vào canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-            // Chuyển đổi canvas thành Blob
-            const blob = await new Promise<Blob | null>((resolve) => {
-              canvas.toBlob((fileBlob) => {
-                resolve(fileBlob);
-              }, "image/png");
-            });
-      
-            if (blob) {
-              // Tạo file từ Blob
-              const imageFile = new File([blob], "captured_image.png", { type: "image/png" });
-      
-         
-              setFileRoot(imageFile)
-              setFilePreview(imageFile)
-      
-              setShowTakePhoto(false);
-              console.log("Chụp ảnh thành công");
-            } else {
-              console.error("Không thể tạo Blob từ canvas");
-            }
-          }
         }
-      };
+    };
 
 
 
     // Hàm để đổi camera (xoay giữa camera trước và sau)
     const toggleCamera = () => {
 
-       if (turnOver) {
-        setTurnOver(false)
-       } else {
-        setTurnOver(true)
-       }
-      
+        if (turnOver) {
+            setTurnOver(false)
+        } else {
+            setTurnOver(true)
+        }
+
     };
 
     return (
@@ -146,17 +141,17 @@ const TakePhotoModal = (props: IProps) => {
 
                 </Modal.Header>
                 <Modal.Body className="md-bd-take-photo" >
-                    <video ref={videoRef} className="video" autoPlay 
-                     style={{ transform: !turnOver ? 'scaleX(-1)' : 'none' }} 
-                    
+                    <video ref={videoRef} className="video" autoPlay
+                        style={{ transform: !turnOver ? 'scaleX(-1)' : 'none' }}
+
                     >
-                    
+
                     </video>
                     <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
                 </Modal.Body>
                 <div className="div-btn-take-photo">
-                    <div style={{width:"36px"}}>
+                    <div style={{ width: "36px" }}>
 
                     </div>
 
@@ -166,7 +161,7 @@ const TakePhotoModal = (props: IProps) => {
                         <i className="fa-solid fa-camera"></i>
                     </Button>
 
-                    <Button className="btn-take-photo" style={{marginRight:"15px"}}
+                    <Button className="btn-take-photo" style={{ marginRight: "15px" }}
                         onClick={() => { toggleCamera() }}
                     >
                         <i className="fa-solid fa-repeat"></i>

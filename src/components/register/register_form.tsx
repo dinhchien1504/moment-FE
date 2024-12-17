@@ -8,7 +8,7 @@ import { startLoading, stopLoading } from '../shared/nprogress';
 import { useState } from 'react';
 import InvalidErrorCode from '@/exception/invalid_error_code';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { validName, validNoEmpty, validPassword, validUserName } from '@/validation/valid';
+import { validBirthday, validName, validNoEmpty, validPassword, validUserName } from '@/validation/valid';
 import { useUserContext } from '@/context/user_context';
 import { RegisterServerActions } from './register_server_actions';
 import AccountErrorCode from '@/exception/account_error_code';
@@ -53,7 +53,7 @@ const RegisterForm = () => {
     }
 
     const handleBirtday = (str: string) => {
-        isvalidItem[1] = validNoEmpty(str)
+        isvalidItem[1] = validBirthday(str)
         setBirthday(str)
     }
 

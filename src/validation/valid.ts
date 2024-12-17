@@ -27,6 +27,16 @@ export const validEmail = (str: string): boolean => {
     return false
 }
 
+export const validBirthday = (str: string): boolean => {
+    const regex: RegExp =  /^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])/;
+    
+    if (regex.test(str)) {
+        return true
+    }
+
+    return false
+}
+
 
 export const validPassword = (str: string): boolean => {
     const regex: RegExp =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
