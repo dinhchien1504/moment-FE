@@ -1,5 +1,5 @@
 "use client";
-import { GetImage } from "@/utils/get_images";
+import { GetImage } from "@/utils/handle_images";
 import { formatDate } from "@/utils/utils_time";
 
 interface IProps {
