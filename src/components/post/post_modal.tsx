@@ -38,6 +38,8 @@ const PostModal = (props: IProps) => {
 
     const [md, setMd] = useState<MobileDetect | null>(null);
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             const mobileDetect = new MobileDetect(window.navigator.userAgent);
@@ -68,6 +70,7 @@ const PostModal = (props: IProps) => {
     }
 
     const handlePost = async () => {
+        setIsLoading(true);  // Bắt đầu quá trình tải lên
         startLoading()
 
         if (filePreview) {
@@ -92,6 +95,7 @@ const PostModal = (props: IProps) => {
 
 
         stopLoading()
+        setIsLoading(false);  // Kết thúc quá trình tải lên
     }
 
 
@@ -224,7 +228,7 @@ const PostModal = (props: IProps) => {
                 </Modal.Body>
                 <Modal.Footer className="mdl-footer">
                     <Button className={`btn-post`}
-                        // disabled={src === ""}
+                        disabled={filePreview === null || isLoading}
                         onClick={() => { handlePost() }}
                     >Đăng</Button>
                 </Modal.Footer>
