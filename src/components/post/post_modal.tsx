@@ -9,7 +9,7 @@ import { captureScreen } from "./screen_shot";
 import CropModal from "./crop_modal";
 import Form from 'react-bootstrap/Form';
 import TakePhotoModal from "./take_photo_modal";
-import {  handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
+import { handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
 import Image from "next/image";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FetchClientPostApi } from "@/api/fetch_client_api";
@@ -38,7 +38,6 @@ const PostModal = (props: IProps) => {
 
     const [md, setMd] = useState<MobileDetect | null>(null);
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -70,7 +69,7 @@ const PostModal = (props: IProps) => {
     }
 
     const handlePost = async () => {
-        setIsLoading(true);  // Bắt đầu quá trình tải lên
+
         startLoading()
 
         if (filePreview) {
@@ -95,7 +94,7 @@ const PostModal = (props: IProps) => {
 
 
         stopLoading()
-        setIsLoading(false);  // Kết thúc quá trình tải lên
+
     }
 
 
@@ -157,6 +156,10 @@ const PostModal = (props: IProps) => {
                                     <i className="fa-solid fa-camera"></i>
 
                                 </Button>
+                                <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
+                                    <i className="fa-regular fa-image"></i>
+
+                                </Button>
                             </>)}
 
 
@@ -164,10 +167,7 @@ const PostModal = (props: IProps) => {
 
 
 
-                            <Button onClick={() => { handleCaptureScreen() }} className="btn-screen-shot">
-                                <i className="fa-regular fa-image"></i>
 
-                            </Button>
 
                             {filePreview != null &&
                                 <>
@@ -228,7 +228,7 @@ const PostModal = (props: IProps) => {
                 </Modal.Body>
                 <Modal.Footer className="mdl-footer">
                     <Button className={`btn-post`}
-                        disabled={filePreview === null || isLoading}
+                        disabled={filePreview === null}
                         onClick={() => { handlePost() }}
                     >Đăng</Button>
                 </Modal.Footer>
