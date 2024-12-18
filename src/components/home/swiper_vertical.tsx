@@ -61,11 +61,12 @@ const VerticalSwiper = (props: Props) => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(getCurrentTime());
     setPageCurrent(0);
+    await fetchReloadPhoto()
   };
 
   const fetchReloadPhoto = async () => {
     const dataBody = {
-      pageCurrent: pageCurrent,
+      pageCurrent: 0,
       time: time,
       timezone: timezone,
     };
@@ -83,15 +84,11 @@ const VerticalSwiper = (props: Props) => {
 
   const handleAdditionalPhoto = () => {
     setPageCurrent(pageCurrent + 1);
-    fetchAdditionalPhoto();
+    fetchAdditionalPhoto(pageCurrent + 1);
   };
-  useEffect(() => {
-    fetchReloadPhoto();
 
-    fetchReloadPhoto();
-  }, [time]);
 
-  const fetchAdditionalPhoto = async () => {
+  const fetchAdditionalPhoto = async (pageCurrent:number) => {
     const data = {
       pageCurrent: pageCurrent,
       time: time,
