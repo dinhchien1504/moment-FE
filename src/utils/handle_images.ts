@@ -4,6 +4,9 @@ import { CreateSignature } from "./create_signature";
 
 
 export const GetImage = (src: any): string => {
+    if(src === null) {
+        return "/images/avatar.jpg"
+    }
 
     return `${API.POST.GET_IMG}${src}`
 

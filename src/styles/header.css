@@ -7,11 +7,17 @@
 
 .img-avatar{
     border-radius: 100px;
+    width: 50px;
+    height: 50px;
+    object-fit:cover ;
 }
 
 .img-avatar-item{
    margin-right: 20px;
    border-radius: 100px;
+   width: 50px;
+   height: 50px;
+   object-fit:cover ;
 }
 
 .font-item{
@@ -93,4 +99,3 @@
         padding-right: 0px !important;
     }
 }
-
