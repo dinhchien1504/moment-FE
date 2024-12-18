@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import NProgress from 'nprogress';
-
+import "@/styles/nprogress.css"
 
 const ProgressBar = () => {
   const pathname = usePathname();
@@ -18,10 +18,15 @@ const ProgressBar = () => {
     NProgress.start();
 
     // Khi pathname thay đổi, NProgress sẽ dừng sau khi trang mới đã render
-    NProgress.done();
-    if (overlay) {
-      overlay.style.display = "none";
-    }
+    const timeout =  setTimeout(() => {
+      NProgress.done();
+      if (overlay) {
+        overlay.style.display = "none";
+      }
+    }, 400);
+
+    return () => clearTimeout(timeout);
+
 
   }, [pathname]);
 
