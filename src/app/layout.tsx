@@ -5,6 +5,8 @@ import { UserProvider } from "@/context/user_context";
 import Header from "@/components/shared/header";
 import ProgressBar from "@/components/shared/progress_bar";
 import "@fortawesome/fontawesome-free/css/all.min.css"
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-dynamic";
@@ -25,6 +27,7 @@ export default async function RootLayout({
         <link rel="icon" href="/images/logo-removebg.png" />
       </head>
       <body className={`${inter.className}`}>
+      <div id="nprogress-overlay"></div>
         <UserProvider>
           <Header />
           <ProgressBar />

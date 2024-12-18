@@ -6,16 +6,19 @@ import Cropper from 'react-easy-crop'
 import { useState } from "react";
 import { Slider, Typography } from "@mui/material";
 import "@/styles/crop_modal.css"
+import { blobUrlToFile,  handlePreviewImg } from "@/utils/handle_images";
+import { startLoading, stopLoading } from "../shared/nprogress";
 
 interface IProps {
     showCrop: boolean;
     setShowCrop: (value: boolean) => void;
-    setSrc: (value: string) => void;
-    srcRoot: any
+
+    setFilePreview: (value: File) => void;
+    fileRoot: File | null
 
 }
 const CropModal = (props: IProps) => {
-    const { showCrop, setShowCrop, srcRoot, setSrc } = props
+    const { showCrop, setShowCrop,  setFilePreview, fileRoot } = props
 
 
     const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -28,19 +31,27 @@ const CropModal = (props: IProps) => {
     }
 
     const showCroppedImage = async () => {
+        startLoading()
 
         try {
+            if (fileRoot === null) {
+                return
+            }
+
+            const fileRootUrl = handlePreviewImg(fileRoot);
             const croppedImage = await getCroppedImg(
-                srcRoot,
+                fileRootUrl,
                 croppedAreaPixels,
                 rotation
             )
-            console.log('donee >>>> ', { croppedImage })
-            setSrc(croppedImage)
+
+            setFilePreview( await blobUrlToFile(String(croppedImage), String (fileRoot.name)))
             setShowCrop(false)
         } catch (e) {
             console.error(e)
         }
+        
+        stopLoading()
     }
 
 
@@ -62,7 +73,7 @@ const CropModal = (props: IProps) => {
                 <Modal.Body className="md-bd-crop">
                     <div>
                         <Cropper
-                            image={srcRoot}
+                            image={handlePreviewImg(fileRoot)}
                             crop={crop}
                             rotation={rotation}
                             zoom={zoom}
@@ -90,7 +101,7 @@ const CropModal = (props: IProps) => {
                         step={0.1}
                         aria-labelledby="Zoom"
                         onChange={(e, zoom) => setZoom(Number(zoom))}
-                        style={{color:"black"}}
+                        style={{ color: "black" }}
                     />
 
                     <Typography
@@ -105,7 +116,7 @@ const CropModal = (props: IProps) => {
                         step={1}
                         aria-labelledby="Rotation"
                         onChange={(e, rotation) => setRotation(Number(rotation))}
-                        style={{color:"black"}}
+                        style={{ color: "black" }}
                     />
                     <Button className="btn-crop"
                         onClick={() => { showCroppedImage() }}
