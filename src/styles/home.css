@@ -121,3 +121,6 @@ body {
   background-color: #e4e4e4;
   box-shadow: var(--bs-box-shadow-sm) !important;
 }
+.search-load{
+  height:50px;
+}
