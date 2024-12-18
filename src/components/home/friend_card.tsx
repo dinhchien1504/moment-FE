@@ -8,11 +8,11 @@ import { startLoading, stopLoading } from "../shared/nprogress";
 import { useState } from "react";
 
 interface Props {
-  friendResponse: IFriendResponse;
+  accountResponse: IAccountResponse;
 }
 const FriendCard = (props: Props) => {
   const { name, urlPhoto, urlProfile, friendStatus, requestedAt, id } =
-    props.friendResponse;
+    props.accountResponse;
   const getStatusMessage = (status: string) => {
     switch (status) {
       case "accepted":

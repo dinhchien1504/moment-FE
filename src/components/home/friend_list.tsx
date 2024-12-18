@@ -2,16 +2,16 @@
 import FriendCard from "./friend_card";
 
 interface Props {
-  friendResponses: IFriendResponse[];
+  accountResponses: IAccountResponse[];
 }
 const FriendList = (props: Props) => {
-  const friendResponses =props.friendResponses;
+  const accountResponses =props.accountResponses;
   return (
     <>
       <div className="d-flex flex-column">
-        {Array.isArray(friendResponses) &&friendResponses?.map((friendResponse, index) => (
+        {Array.isArray(accountResponses) &&accountResponses?.map((accountResponse, index) => (
           <div key={index} className="m-1 bg-hover p-2 rounded-4">
-            <FriendCard friendResponse={friendResponse}></FriendCard>
+            <FriendCard accountResponse={accountResponse}></FriendCard>
           </div>
         )
 

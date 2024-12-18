@@ -6,7 +6,7 @@ import { Form, InputGroup } from "react-bootstrap";
 import FriendCard from "./friend_card";
 
 const LiveSearch = () => {
-  const [suggestions, setSuggestions] = useState<IFriendResponse[]>([]);
+  const [suggestions, setSuggestions] = useState<IAccountResponse[]>([]);
 
   const handleSearch = async (value: string) => {
     if (value.trim().length === 0) {
@@ -44,7 +44,7 @@ const LiveSearch = () => {
         {suggestions.length > 0 && (
           <div className="dropdown-menu w-100 shadow show w-100 position-absolute">
             {suggestions.map((item,index) => (
-                <FriendCard friendResponse={item} key={index}></FriendCard>
+                <FriendCard accountResponse={item} key={index}></FriendCard>
             ))}
           </div>
         )}

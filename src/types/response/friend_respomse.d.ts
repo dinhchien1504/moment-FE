@@ -1,4 +1,4 @@
-interface IFriendResponse {
+interface IAccountResponse {
   name: string;
   urlPhoto: string;
   urlProfile: string;
