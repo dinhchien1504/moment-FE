@@ -20,7 +20,7 @@ const PhotoCard = (props: IProps) => {
       <div className="d-flex h-100 flex-column w-100 border border-2 shadow-sm rounded-2 m-2 p-2 bg-light">
         <div className="pt-2 px-2 post-info d-flex">
           <div className="img-avt mx-2">
-            <img className="rounded-circle border border-1" src={urlAvt ? urlAvt : "/images/avatar.jpg"} alt={userName} />
+            <img className="rounded-circle border border-1" src={GetImage(urlAvt)} alt={userName} />
           </div>
           <div className="d-block">
             <a className="text-black" href={`/${userName}`}>{name}</a>

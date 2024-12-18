@@ -4,32 +4,32 @@ import { FetchServerGetApi } from '@/api/fetch_server_api';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type UserContextType = {
-  user: UserResponse|undefined;
-  setUser: (value: UserResponse) => void;
-  fetchGetUser : () =>void
+  user: IUserResponse | undefined;
+  setUser: (value: IUserResponse) => void;
+  fetchGetUser: () => void
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<UserResponse | undefined>(undefined);
-    
-    const fetchGetUser  =  async ( ) => {
-           // lay thong tin user
-           const res = await FetchServerGetApi(API.AUTH.MY_INFO)
-           if ( res && res.status === 200) {
-               const user: UserResponse = res.result
-               setUser(user)
-           }
+  const [user, setUser] = useState<IUserResponse | undefined>(undefined);
 
+  const fetchGetUser = async () => {
+    // lay thong tin user
+    const res = await FetchServerGetApi(API.AUTH.MY_INFO)
+    if (res && res.status === 200) {
+      const user: IUserResponse = res.result
+      setUser(user)
     }
 
-    
+  }
+
+
   return (
-    
+
     <UserContext.Provider value={{ user, setUser, fetchGetUser }}>
-    {children}
-  </UserContext.Provider>
+      {children}
+    </UserContext.Provider>
 
   );
 };
