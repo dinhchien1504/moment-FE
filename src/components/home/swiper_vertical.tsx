@@ -58,12 +58,22 @@ const VerticalSwiper = (props: Props) => {
   }, []);
 
   const handleReloadPhoto = async () => {
-    startLoading();
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(getCurrentTime());
     setPageCurrent(0);
+  };
+
+  const fetchReloadPhoto = async () => {
+    const dataBody = {
+      pageCurrent: pageCurrent,
+      time: time,
+      timezone: timezone,
+    };
     try {
-      await fetchReloadPhoto();
+      startLoading();
+      const res = await FetchClientPostApi(API.PHOTO.LIST, dataBody);
+      const newPhotoResponses = res.result;
+      setPhotoResponses(newPhotoResponses);
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
@@ -71,41 +81,32 @@ const VerticalSwiper = (props: Props) => {
     }
   };
 
-  const fetchReloadPhoto = async () => {
-    const dataBody = {
-      pageCurrent: pageCurrent,
-      timeStamp: time,
-      timezone:timezone
-    };
-    try {
-      const res = await FetchClientPostApi(API.HOME.PHOTO, dataBody);
-      const newPhotoResponses = res.result;
-      setPhotoResponses(newPhotoResponses);
-    } catch (error) {
-      console.error("Error fetching additional images:", error);
-    }
-  };
-
   const handleAdditionalPhoto = () => {
     setPageCurrent(pageCurrent + 1);
     fetchAdditionalPhoto();
   };
+  useEffect(() => {
+    fetchReloadPhoto();
+
+    fetchReloadPhoto();
+  }, [time]);
 
   const fetchAdditionalPhoto = async () => {
     const data = {
       pageCurrent: pageCurrent,
       time: time,
+      timezone: timezone,
     };
 
     try {
-      const res = await FetchClientPostApi(API.HOME.PHOTO, data);
+      const res = await FetchClientPostApi(API.PHOTO.LIST, data);
 
       const newPhotoResponses = res.result;
-      if(newPhotoResponses!=null && newPhotoResponses!= undefined)
-      setPhotoResponses((prevPhotoResponses) => [
-        ...prevPhotoResponses,
-        ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
-      ]);
+      if (newPhotoResponses != null && newPhotoResponses != undefined)
+        setPhotoResponses((prevPhotoResponses) => [
+          ...prevPhotoResponses,
+          ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
+        ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
@@ -136,10 +137,6 @@ const VerticalSwiper = (props: Props) => {
             if (swiper.activeIndex === 5 * pageCurrent + 3) {
               handleAdditionalPhoto();
             }
-            const slideIndex = swiper.activeIndex;
-            const currentPhoto = photoResponses[slideIndex];
-            console.log(currentPhoto.caption);
-            
           }}
         >
           {photoResponses?.map((photoResponse, index) => (

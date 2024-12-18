@@ -15,6 +15,7 @@ import cookie from "js-cookie";
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import Badge from 'react-bootstrap/Badge';
 import PostModal from '../post/post_modal';
+import LiveSearch from '../home/search';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -75,18 +76,7 @@ const Header = () => {
                         <Navbar.Collapse id="basic-navbar-nav">
 
                             <Nav className="mx-auto">
-                                <InputGroup className="d-flex justify-content-center">
-
-                                    <InputGroup.Text id="basic-addon1" className='icon-search'>
-                                        <i className="fa fa-magnifying-glass inp-search"></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Tìm kiếm bạn"
-                                        aria-label="Search"
-                                        aria-describedby="basic-addon1"
-                                        className='inp-search'
-                                    />
-                                </InputGroup>
+                            <LiveSearch></LiveSearch>
 
                             </Nav>
 

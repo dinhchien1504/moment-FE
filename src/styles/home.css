@@ -111,3 +111,13 @@ body {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.friend-card .img-avt{
+  height:60px;
+  width: 60px;
+  border-radius: 100%;;
+}
+.bg-hover:hover{
+  background-color: #e4e4e4;
+  box-shadow: var(--bs-box-shadow-sm) !important;
+}
