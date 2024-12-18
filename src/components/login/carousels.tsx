@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image';
 import { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 
@@ -14,14 +15,18 @@ const Caurousels = () => {
         <>
             <Carousel activeIndex={index} onSelect={handleSelect} className='carousel-custom'>
                 <Carousel.Item>
-                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }} className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }} className='img-carousel'
+                    />
      
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'
+    
+                    />
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'/>
+                    <img src="/images/second-slide.jpg" alt="First slide" style={{ width: "100%" }}  className='img-carousel'
+                    />
 
                 </Carousel.Item>
             </Carousel>

@@ -1,0 +1,27 @@
+/* btn crop */
+.btn-crop{
+    width: 100%;
+    background-color:  black;
+    border: 0px;
+    color: white;
+    width: 100%;
+}
+
+.btn-crop:hover {
+    background-color:  black;
+}
+.btn-crop:active {
+    background-color:  black !important;
+}
+.btn-crop:focus-visible {
+    background-color:  black;
+    border: 0px;
+    color: white;
+    width: 100%;
+}
+
+/* btn crop */
+
+.md-bd-crop{
+    height: 50vh;
+}

@@ -1,13 +1,13 @@
 'use client'
 import React from 'react'
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Container, Row,Button } from "react-bootstrap"
 
 
 const InforUser = () => {
   return (
     <Row  >
         <Col>
-        <div className=""></div>
+        <Button variant="dark">Dark</Button>
           My AVT
         </Col>
         <Col>

@@ -33,7 +33,7 @@ const ProfileUser = () => {
             <InforUser />
           </div>
           <div>
-            <ContentOfUser data={images} />
+            {/* <ContentOfUser data={images} /> */}
           </div>
         </Col>
       </Row>
