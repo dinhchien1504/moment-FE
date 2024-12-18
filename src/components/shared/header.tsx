@@ -16,6 +16,7 @@ import NotiOffCanvas from '../noti/noti_offcanvas';
 import Badge from 'react-bootstrap/Badge';
 import PostModal from '../post/post_modal';
 import LiveSearch from '../home/search';
+import { GetImage } from '@/utils/handle_images';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -50,7 +51,7 @@ const Header = () => {
 
 
 
-
+    console.log(user)
 
 
     if (pathname === "/login" || pathname === "/register") {
@@ -97,23 +98,21 @@ const Header = () => {
                                     >
                                         <Dropdown.Toggle as="div" id="dropdown-custom-components"
                                         >
-                                            <Image
-                                                src="/images/avatar.jpg"
-                                                width={50}
-                                                height={50}
-                                                alt="Dropdown Trigger"
+                                            <img 
+                                                src={GetImage(user?.urlPhoto)}
+                                                alt="Không có ảnh"
                                                 className='img-avatar'
                                                 onClick={()=>{setShowNoti(false)}}
+                                            
                                             />
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu  align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
-                                                    <Image
-                                                        src="/images/avatar.jpg"
-                                                        width={50}
-                                                        height={50}
+                                                    <img
+                                                       src={GetImage(user?.urlPhoto)}
+                                                       
                                                         alt="Dropdown Trigger"
                                                         className='img-avatar-item'
                                                     />
