@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
 import FriendCard from "./friend_card";
 
 interface Props {
   friendResponses: IFriendResponse[];
 }
 const FriendList = (props: Props) => {
-  const [friendResponses] = useState<IFriendResponse[]>(props.friendResponses);
-  console.log(friendResponses)
+  const friendResponses =props.friendResponses;
   return (
     <>
       <div className="d-flex flex-column">

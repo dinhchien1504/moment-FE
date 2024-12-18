@@ -15,8 +15,8 @@ const HomePage = async () => {
     timezone:timezone
   };
 
-  const resPhoto = await FetchServerPostApi(API.HOME.PHOTO, dataPhoto);
-  const resFriend= await FetchServerGetApi(API.HOME.FRIEND);
+  const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  const resFriend= await FetchServerGetApi(API.ACCOUNT.LIST);
   return (
     <>
       <Container fluid className="container-home h-100">
