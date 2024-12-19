@@ -122,5 +122,5 @@ body {
   box-shadow: var(--bs-box-shadow-sm) !important;
 }
 .search-load{
-  height:50px;
+  min-height:50px;
 }

@@ -9,11 +9,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import PhotoCard from "./photo_card";
 import { getCurrentTime } from "@/utils/utils_time";
 import { startLoading, stopLoading } from "../shared/nprogress";
+import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   photoResponses: IPhotoResponse[];
   timezone: string;
-  timestamp:string;
+  timestamp: string;
 }
 
 const VerticalSwiper = (props: Props) => {
@@ -23,15 +24,19 @@ const VerticalSwiper = (props: Props) => {
   );
   // taoj cacs useState
   const [time, setTime] = useState<string>(props.timestamp);
-  const timezone =props.timezone;
+  const timezone = props.timezone;
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const swiperRef = useRef<SwiperCore | null>(null);
   // xu ly dong mo modal
   const openModal = (src: string) => {
     setImageSrc(src);
     setIsModalOpen(true);
+  };
+  const setUrlImageModal = (src: string) => {
+    openModal(src);
   };
   const closeModal = () => {
     setIsModalOpen(false);
@@ -61,7 +66,7 @@ const VerticalSwiper = (props: Props) => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(getCurrentTime());
     setPageCurrent(0);
-    await fetchReloadPhoto()
+    await fetchReloadPhoto();
   };
 
   const fetchReloadPhoto = async () => {
@@ -87,8 +92,7 @@ const VerticalSwiper = (props: Props) => {
     fetchAdditionalPhoto(pageCurrent + 1);
   };
 
-
-  const fetchAdditionalPhoto = async (pageCurrent:number) => {
+  const fetchAdditionalPhoto = async (pageCurrent: number) => {
     const data = {
       pageCurrent: pageCurrent,
       time: time,
@@ -96,6 +100,7 @@ const VerticalSwiper = (props: Props) => {
     };
 
     try {
+      setLoading(true);
       const res = await FetchClientPostApi(API.PHOTO.LIST, data);
 
       const newPhotoResponses = res.result;
@@ -107,6 +112,7 @@ const VerticalSwiper = (props: Props) => {
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
+      setLoading(false);
     }
   };
 
@@ -140,10 +146,17 @@ const VerticalSwiper = (props: Props) => {
             <SwiperSlide key={index}>
               <PhotoCard
                 photoResponse={photoResponse}
-                openModal={openModal}
+                setUrlImageModal={setUrlImageModal}
               ></PhotoCard>
             </SwiperSlide>
           ))}
+          {loading && (
+            <SwiperSlide >
+              <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
+                <SpinnerAnimation />
+              </div>
+            </SwiperSlide>
+          )}
         </Swiper>
 
         {/* popup image */}

@@ -4,12 +4,10 @@ import { FetchClientGetApiWithSignal } from "@/api/fetch_client_api";
 import { useRef, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import FriendCard from "./friend_card";
-import { SpinnerOverlay } from "./spinner_overlay";
+import SpinnerAnimation from "../shared/spiner_animation";
 
 const LiveSearch = () => {
-  const [suggestions, setSuggestions] = useState<IAccountResponse[] | null>(
-    null
-  );
+  const [suggestions, setSuggestions] = useState<IAccountResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [valueSearch, setValueSearch] = useState<string>("");
   const abortControllerRef = useRef<AbortController | null>(null); // Use ref to keep track of the controller
@@ -21,7 +19,7 @@ const LiveSearch = () => {
 
     // Nếu giá trị nhập trống, dừng và xóa kết quả
     if (value.trim().length === 0) {
-      setSuggestions([]);
+      // setSuggestions([]);
       setLoading(false); // Tắt loading nếu không cần fetch
       return;
     }
@@ -43,7 +41,8 @@ const LiveSearch = () => {
         API.SEARCH.ALL + "?s=" + value,
         signal
       );
-      setSuggestions(data?.result); // Cập nhật kết quả
+      if(data)
+        setSuggestions(data.result); // Cập nhật kết quả
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.name === "AbortError") {
@@ -70,48 +69,68 @@ const LiveSearch = () => {
         onClick={() => setValueSearch("")}
       ></div>
     );
-
-    // Nếu đang tải, hiển thị spinner
-    if (loading) {
+  
+    // Nếu không có từ khóa tìm kiếm, không hiển thị gì
+    if (!valueSearch.trim()) return <></>;
+  
+    // Nếu không có suggestions hoặc suggestions trống, hiển thị "Không tìm thấy"
+    if (!loading && (suggestions === null || suggestions?.length === 0)) {
       return (
         <>
           {renderOverlay()}
           <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded">
-            <div className="search-load z-2">
-              <SpinnerOverlay />
+            <p>Không tìm thấy</p>
+          </div>
+        </>
+      );
+    }
+  
+    // Nếu đang tải và có danh sách suggestions, hiển thị cả hai
+    if (loading && suggestions?.length > 0) {
+      return (
+        <>
+          {renderOverlay()}
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
+            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-2">
+              <SpinnerAnimation />
+            </div>
+            {suggestions.map((item, index) => (
+              <FriendCard accountResponse={item} key={index} />
+            ))}
+          </div>
+        </>
+      );
+    }
+  
+    // Nếu chỉ có danh sách suggestions
+    if (suggestions?.length > 0) {
+      return (
+        <>
+          {renderOverlay()}
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
+            {suggestions.map((item, index) => (
+              <FriendCard accountResponse={item} key={index} />
+            ))}
+          </div>
+        </>
+      );
+    }
+  
+    // Trường hợp mặc định, loading mà không có suggestions
+    if (loading) {
+      return (
+        <>
+          {renderOverlay()}
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
+            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-2">
+              <SpinnerAnimation />
             </div>
           </div>
         </>
       );
-    } else {
-      // Nếu không có từ khóa tìm kiếm, không hiển thị gì
-      if (!valueSearch.trim()) return <></>;
-
-      // Nếu không có suggestions hoặc suggestions trống, hiển thị "Không tìm thấy"
-      if (suggestions === null || suggestions?.length === 0) {
-        return (
-          <>
-            {renderOverlay()}
-            <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded">
-              <p>Không tìm thấy</p>
-            </div>
-          </>
-        );
-      }
-      if (suggestions !== null && suggestions?.length > 0)
-        // Nếu có kết quả tìm kiếm, hiển thị danh sách kết quả
-        return (
-          <>
-            {renderOverlay()}
-            <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded">
-              {suggestions.map((item, index) => (
-                <FriendCard accountResponse={item} key={index} />
-              ))}
-            </div>
-          </>
-        );
     }
   };
+  
 
   return (
     <>
