@@ -15,43 +15,51 @@ const LiveSearch = () => {
   const abortControllerRef = useRef<AbortController | null>(null); // Use ref to keep track of the controller
 
   const handleSearch = async (value: string) => {
+    // Bật trạng thái loading
     setLoading(true);
     setValueSearch(value);
+
+    // Nếu giá trị nhập trống, dừng và xóa kết quả
     if (value.trim().length === 0) {
       setSuggestions([]);
+      setLoading(false); // Tắt loading nếu không cần fetch
       return;
     }
 
-    // Cancel the previous request if any
+    // Hủy yêu cầu trước đó nếu có
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
 
-    // Create a new AbortController for the current request
+    // Tạo một AbortController mới
     const abortController = new AbortController();
-    abortControllerRef.current = abortController; // Store it in the ref
+    abortControllerRef.current = abortController; // Lưu vào ref để có thể hủy
 
     const { signal } = abortController;
 
     try {
-      // Thêm `signal` vào request để có thể hủy khi cần
+      // Thực hiện fetch với signal
       const data = await FetchClientGetApiWithSignal(
         API.SEARCH.ALL + "?s=" + value,
         signal
       );
-      setSuggestions(data?.result);
+      setSuggestions(data?.result); // Cập nhật kết quả
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.name === "AbortError") {
+          // Yêu cầu bị hủy, không làm gì
+          console.log("Yêu cầu đã bị hủy");
         } else {
           console.error("Lỗi khi fetch dữ liệu:", error.message);
         }
       } else {
-        // Nếu không phải lỗi là instance của Error
         console.error("Lỗi không xác định:", error);
       }
     } finally {
-      setLoading(false);
+      // Chỉ tắt trạng thái loading khi yêu cầu không bị hủy
+      if (!signal.aborted) {
+        setLoading(false);
+      }
     }
   };
   const renderSearchPanel = () => {
