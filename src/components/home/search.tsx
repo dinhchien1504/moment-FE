@@ -65,8 +65,8 @@ const LiveSearch = () => {
     // Hàm để tái sử dụng phần giao diện nền
     const renderOverlay = () => (
       <div
-        className="position-fixed top-0 bottom-0 start-0 end-0 z-1"
-        onClick={() => setValueSearch("")}
+        className="position-fixed top-0 bottom-0 start-0 end-0 z-2"
+        onClick={() =>{setValueSearch("");setSuggestions([])} }
       ></div>
     );
   
@@ -78,7 +78,7 @@ const LiveSearch = () => {
       return (
         <>
           {renderOverlay()}
-          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded">
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded">
             <p>Không tìm thấy</p>
           </div>
         </>
@@ -90,8 +90,8 @@ const LiveSearch = () => {
       return (
         <>
           {renderOverlay()}
-          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
-            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-2">
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded search-load">
+            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-3">
               <SpinnerAnimation />
             </div>
             {suggestions.map((item, index) => (
@@ -107,7 +107,7 @@ const LiveSearch = () => {
       return (
         <>
           {renderOverlay()}
-          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded search-load">
             {suggestions.map((item, index) => (
               <FriendCard accountResponse={item} key={index} />
             ))}
@@ -121,8 +121,8 @@ const LiveSearch = () => {
       return (
         <>
           {renderOverlay()}
-          <div className="w-100 shadow show w-100 position-absolute bg-white z-2 p-2 rounded search-load">
-            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-2">
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded search-load">
+            <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-3">
               <SpinnerAnimation />
             </div>
           </div>
