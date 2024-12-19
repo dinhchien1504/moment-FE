@@ -4,7 +4,7 @@ import { formatDate } from "@/utils/utils_time";
 
 interface IProps {
   photoResponse: IPhotoResponse;
-  openModal: (src: string) => void;
+  setUrlImageModal: (src: string) => void;
 }
 const PhotoCard = (props: IProps) => {
   const id = props.photoResponse.id;
@@ -14,7 +14,7 @@ const PhotoCard = (props: IProps) => {
   const name = props.photoResponse.name;
   const urlAvt = props.photoResponse.urlAvt;
   const userName = props.photoResponse.userName;
-  const openModal = props.openModal;
+  const setUrlImageModal = props.setUrlImageModal;
   return (
     <>
       <div className="d-flex h-100 flex-column w-100 border border-2 shadow-sm rounded-2 m-2 p-2 bg-light">
@@ -32,7 +32,7 @@ const PhotoCard = (props: IProps) => {
         </div>
         <div className="post-img">
           <img src={GetImage(urlPhoto)}
-            onClick={() => { openModal(GetImage(urlPhoto)) }}
+            onClick={() => { setUrlImageModal(GetImage(urlPhoto)) }}
             alt="Không có ảnh"
           />
 

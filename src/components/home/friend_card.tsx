@@ -57,7 +57,7 @@ const FriendCard = (props: Props) => {
               variant="outline-primary"
               onClick={() => handleChangeStatus("deleted")}
             >
-              Xóa
+              Từ chối
             </Button>
           </>
         );
@@ -81,7 +81,7 @@ const FriendCard = (props: Props) => {
       };
       const res = await FetchClientPostApi(API.ACCOUNT.ADD, dataChangeStatus);
       if (res.status === 200)
-        setStatusMessage(getStatusMessage(res.result.friendStatus));
+        setStatusMessage(getStatusMessage(res?.result?.friendStatus));
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
@@ -105,7 +105,7 @@ const FriendCard = (props: Props) => {
         dataChangeStatus
       );
       if (res.status === 200)
-        setStatusMessage(getStatusMessage(res.result.friendStatus));
+        setStatusMessage(getStatusMessage(res?.result?.friendStatus));
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
