@@ -4,9 +4,11 @@
   box-sizing: border-box;
 }
 
-body {
+body,html {
   overflow: hidden;
-  height: 100vh;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 :root {
@@ -39,7 +41,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px 0 50px;
+  padding: 10px 0 30px;
   border-radius: 20px;
   box-shadow: 0 2rem 3rem rgba(from var(--hover-color) r g b/.2),
     0 0 10px rgba(from var(--hover-color) r g b/.4);
@@ -119,8 +121,8 @@ body {
 }
 .bg-hover:hover{
   background-color: #e4e4e4;
-  box-shadow: var(--bs-box-shadow-sm) !important;
 }
 .search-load{
   min-height:50px;
+  min-width: 265px;
 }
