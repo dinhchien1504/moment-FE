@@ -13,7 +13,6 @@ import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   photoResponses: IPhotoResponse[];
-  timezone: string;
   timestamp: string;
 }
 
@@ -24,7 +23,6 @@ const VerticalSwiper = (props: Props) => {
   );
   // taoj cacs useState
   const [time, setTime] = useState<string>(props.timestamp);
-  const timezone = props.timezone;
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
@@ -64,16 +62,13 @@ const VerticalSwiper = (props: Props) => {
 
   const handleReloadPhoto = async () => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
-    setTime(getCurrentTime());
+    const timeReload = getCurrentTime();
+    setTime(timeReload);
     setPageCurrent(0);
-    await fetchReloadPhoto();
-  };
 
-  const fetchReloadPhoto = async () => {
     const dataBody = {
       pageCurrent: 0,
-      time: time,
-      timezone: timezone,
+      time: timeReload,
     };
     try {
       startLoading();
@@ -96,7 +91,6 @@ const VerticalSwiper = (props: Props) => {
     const data = {
       pageCurrent: pageCurrent,
       time: time,
-      timezone: timezone,
     };
 
     try {
@@ -129,7 +123,7 @@ const VerticalSwiper = (props: Props) => {
           }}
           mousewheel={true}
           modules={[Navigation, Mousewheel]}
-          className="h-100"
+          className="h-100 z-0"
           autoHeight={true}
           zoom={{
             maxRatio: 3, // Kích thước tối đa khi zoom
@@ -142,6 +136,13 @@ const VerticalSwiper = (props: Props) => {
             }
           }}
         >
+          {
+            <SwiperSlide>
+              <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
+                Trang đầu
+              </div>
+            </SwiperSlide>
+          }
           {photoResponses?.map((photoResponse, index) => (
             <SwiperSlide key={index}>
               <PhotoCard
@@ -166,7 +167,7 @@ const VerticalSwiper = (props: Props) => {
               className="modal-custom-content"
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={imageSrc} alt="Zoomed" className="zoomed-image" />
+              <img src={imageSrc} alt="" className="zoomed-image" />
               <div className="modal-close" onClick={closeModal}>
                 X
               </div>
@@ -208,8 +209,10 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div
-            className="bg-primary ms-auto p-2 rounded-2 mt-auto"
+          <div className="ms-auto mt-auto">
+
+          </div>
+          <div className="bg-primary p-2 rounded-2"
             onClick={handleReloadPhoto}
           >
             <svg

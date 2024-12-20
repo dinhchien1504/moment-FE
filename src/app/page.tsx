@@ -7,11 +7,9 @@ import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
 import { Col, Container, Row } from "react-bootstrap";
 const HomePage = async () => {
   const timestamp= getCurrentTime()
-  const timezone = getTimeZone()
   const dataPhoto = {
     pageCurrent: 0,
     time: timestamp,
-    timezone:timezone
   };
 
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
@@ -20,13 +18,12 @@ const HomePage = async () => {
     <>
       <Container fluid className="container-home h-100">
         <Row>
-          <Col md={3} className="d-none d-md-block">
+          <Col md={3} className="d-block">
             <FriendList accountResponses={resAccountFriend.result}></FriendList>
           </Col>
           <Col md={6} className="h-100 p-0">
             <VerticalSwiper
               photoResponses={resPhoto.result}
-              timezone={timezone}
               timestamp={timestamp}
             ></VerticalSwiper>
           </Col>

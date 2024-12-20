@@ -4,9 +4,11 @@
   box-sizing: border-box;
 }
 
-body {
+body,html {
   overflow: hidden;
-  height: 100vh;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 :root {
@@ -24,6 +26,7 @@ body {
 .wrapper-swiper {
   padding-right: 41px;
 }
+/* trong mobile */
 @media (max-width: 768px) {
   .wrapper-swiper {
     padding-right: 0;
@@ -32,6 +35,15 @@ body {
   .container-home > .row{
     height: calc(100vh - 116px);
   }
+  .position-sm-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 300px;
+    background: #ffffff;
+  }
 }
 
 .swiper-slide {
@@ -39,7 +51,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px 0 50px;
+  padding: 10px 0 30px;
   border-radius: 20px;
   box-shadow: 0 2rem 3rem rgba(from var(--hover-color) r g b/.2),
     0 0 10px rgba(from var(--hover-color) r g b/.4);
@@ -119,8 +131,11 @@ body {
 }
 .bg-hover:hover{
   background-color: #e4e4e4;
-  box-shadow: var(--bs-box-shadow-sm) !important;
 }
 .search-load{
   min-height:50px;
+  min-width: 265px;
+}
+.pb-33px{
+  padding-bottom:33px
 }

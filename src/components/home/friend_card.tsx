@@ -20,7 +20,7 @@ const FriendCard = (props: Props) => {
           <span>
             Đã kết bạn
             <Button
-              className="btn-sm mx-1 btn"
+              className="btn-sm m-1 btn"
               variant="outline-primary"
               onClick={() => handleChangeStatus("deleted")}
             >
@@ -34,7 +34,7 @@ const FriendCard = (props: Props) => {
             <span>
               Đã gửi
               <Button
-                className="btn-sm mx-1 btn"
+                className="btn-sm m-1 btn"
                 variant="outline-primary"
                 onClick={() => handleChangeStatus("deleted")}
               >
@@ -47,13 +47,13 @@ const FriendCard = (props: Props) => {
         return (
           <>
             <Button
-              className="btn-sm mx-1 btn btn-primary"
+              className="btn-sm m-1 btn btn-primary"
               onClick={() => handleChangeStatus("accepted")}
             >
               Chấp nhận
             </Button>
             <Button
-              className="btn-sm mx-1 btn"
+              className="btn-sm m-1 btn"
               variant="outline-primary"
               onClick={() => handleChangeStatus("deleted")}
             >
@@ -64,7 +64,7 @@ const FriendCard = (props: Props) => {
       default:
         return (
           <Button
-            className="btn-sm mx-1 btn btn-primary"
+            className="btn-sm m-1 btn btn-primary"
             onClick={() => handleSend()}
           >
             Kết bạn
