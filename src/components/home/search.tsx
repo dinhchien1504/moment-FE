@@ -78,7 +78,7 @@ const LiveSearch = () => {
       return (
         <>
           {renderOverlay()}
-          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded">
+          <div className="w-100 shadow show w-100 position-absolute bg-white z-3 p-2 rounded search-load">
             <p>Không tìm thấy</p>
           </div>
         </>
