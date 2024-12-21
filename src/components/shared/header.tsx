@@ -132,7 +132,7 @@ const Header = () => {
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
                                             <Dropdown.Item eventKey="2" className='font-item' as='div'>
-                                                <i className="fa-solid fa-gear"></i> Cài đặt
+                                                <i className="fa-solid "></i> Cài đặt
                                             </Dropdown.Item>
                                             <Dropdown.Item eventKey="3" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
