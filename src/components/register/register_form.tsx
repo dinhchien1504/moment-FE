@@ -102,7 +102,6 @@ const RegisterForm = () => {
             password:password,
         }
 
-        console.log("request >>> ",registerRequest)
 
         const res = await RegisterServerActions(registerRequest);
         if (res && res.status === 200) {

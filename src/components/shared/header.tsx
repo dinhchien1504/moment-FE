@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
 import { useEffect, useState } from 'react';
-import { startLoading } from './nprogress';
+import { startLoading, stopLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
 import { Button, Form } from 'react-bootstrap';
@@ -24,13 +24,21 @@ const Header = () => {
     const [showNoti,setShowNoti] = useState<boolean>(false)
     const [showPost,setShowPost] = useState<boolean>(false)
 
+    const [numberOfNoti, setNumberOfNoti] = useState<number> (0)
+
+
+
     useEffect(() => {
         const fetchUser = async () => {
+            
             await fetchGetUser()
+         
         }
 
         if (pathname != "/login" && pathname != "/register") {
-           fetchUser()
+            startLoading()
+            fetchUser()
+            stopLoading()
         }
 
     }, [])
@@ -49,9 +57,6 @@ const Header = () => {
         }
     }
 
-
-
-    console.log(user)
 
 
     if (pathname === "/login" || pathname === "/register") {
@@ -87,7 +92,7 @@ const Header = () => {
                                     onClick={()=>{hanlleShowNoti()}}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
-                                        <Badge bg="secondary" className='badge-custom'>9</Badge>
+                                        <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge>
                                    </Button>
                                 </Nav.Link>
 
@@ -140,6 +145,8 @@ const Header = () => {
                 <NotiOffCanvas
                 showNoti = {showNoti}
                 setShowNoti={setShowNoti}
+                setNumberOfNoti = {setNumberOfNoti}
+                numberOfNoti = {numberOfNoti}
                 />
                 <PostModal
                 showPost = {showPost}
