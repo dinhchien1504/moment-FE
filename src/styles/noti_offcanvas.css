@@ -1,12 +1,25 @@
-.offcanvas{
+.offcanvas {
     margin-top: 84px;
     width: 375px !important;
 }
 
-#uncontrolled-tab-example-tab-unread{
+#uncontrolled-tab-example-tab-unread {
     color: black !important;
 }
 
 #uncontrolled-tab-example-tab-all {
     color: black !important;
+}
+
+.btn-view-more {
+  
+    width: 100%;
+}
+
+.div-view-more{
+
+   display: flex;
+   justify-content: center; /* Căn giữa theo chiều ngang */
+   align-items: center; /* Căn giữa theo chiều dọc */
+
 }

@@ -8,6 +8,10 @@ export const GetImage = (src: any): string => {
         return "/images/avatar.jpg"
     }
 
+    if(src === undefined) {
+        return "/images/avatar.jpg"
+    }
+
     return `${API.POST.GET_IMG}${src}`
 
 }
@@ -26,10 +30,6 @@ export const handleUploadImg = async (file: File) => {
 
     const timestamp = Math.round((new Date).getTime() / 1000);
     const { signature, apiKey } = await CreateSignature(timestamp);
-
-    console.log("signature >>> ", signature)
-
-    console.log("apiKey >>> ", apiKey)
 
     const FOLDER = "moment-folder"
     const UPLOAD_PRESET = "moment-preset"
@@ -53,7 +53,6 @@ export const handleUploadImg = async (file: File) => {
 
 
     const data = await res.json();
-    console.log("data >>> ", data)
     return data
 
 }

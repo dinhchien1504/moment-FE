@@ -64,7 +64,6 @@
     color: #ff0066;
     border: 0px;
     padding: 0px;
-    width: 50px;
 }
 
 .btn-noti:hover{
@@ -98,4 +97,17 @@
     .nav-noti{
         padding-right: 0px !important;
     }
+}
+
+
+
+@media (max-width: 491px) {
+    .btn-noti{
+        width: 70px;
+    }
+}
+
+
+.bg-noti{
+    background-color: #ff0066 !important;
 }
