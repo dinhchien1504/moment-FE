@@ -46,7 +46,7 @@ const NotiOffCanvas = (props: IProps) => {
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
 
-    const [handleNumberNoti, setHandleNumberNoti] = useState<number> (0)
+    const [handleNumberNoti, setHandleNumberNoti] = useState<number>(0)
 
 
 
@@ -64,7 +64,7 @@ const NotiOffCanvas = (props: IProps) => {
             // ket noi toi controller de nhan message
             client.subscribe(`/user/${user?.userName}/topic/noti`, (message) => {
                 // nhan message
-                const receivedMessage:INotiResponse = JSON.parse(message.body);
+                const receivedMessage: INotiResponse = JSON.parse(message.body);
 
                 setNotiUnread((prevMessages) => [receivedMessage, ...prevMessages]);
                 setNotiAll((prevMessages) => [receivedMessage, ...prevMessages]);
@@ -87,10 +87,13 @@ const NotiOffCanvas = (props: IProps) => {
         };
     }, [user])
 
-    useEffect (() => {
+    useEffect(() => {
         console.log("set 2 >>> ", handleNumberNoti)
-        setNumberOfNoti(handleNumberNoti + 1)
-        setHandleNumberNoti(handleNumberNoti + 1 )
+        if (notiUnread.length != 0) {
+            setNumberOfNoti(handleNumberNoti + 1)
+            setHandleNumberNoti(handleNumberNoti + 1)
+        }
+   
     }, [notiUnread])
 
     const fetchGetNotiUnread = async (pageCurrent: number) => {
@@ -158,13 +161,14 @@ const NotiOffCanvas = (props: IProps) => {
 
 
     useEffect(() => {
-        // if (showNoti) {
-        startLoading()
-        fetchGetNotiUnread(0)
-        fetchGetNotiAll(0)
-        stopLoading()
-        // }
+        const fetchData = async () => {
+            startLoading()
+            await fetchGetNotiUnread(0)
+            await fetchGetNotiAll(0)
+            stopLoading()
+        }
 
+       fetchData()
     }, [])
 
 
