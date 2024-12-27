@@ -66,9 +66,6 @@ const NotiOffCanvas = (props: IProps) => {
                 // nhan message
                 const receivedMessage:INotiResponse = JSON.parse(message.body);
 
-                console.log("set 2 >>> ", handleNumberNoti)
-                setNumberOfNoti(handleNumberNoti + 1)
-                setHandleNumberNoti(handleNumberNoti + 1 )
                 setNotiUnread((prevMessages) => [receivedMessage, ...prevMessages]);
                 setNotiAll((prevMessages) => [receivedMessage, ...prevMessages]);
 
@@ -89,6 +86,12 @@ const NotiOffCanvas = (props: IProps) => {
             }
         };
     }, [user])
+
+    useEffect (() => {
+        console.log("set 2 >>> ", handleNumberNoti)
+        setNumberOfNoti(handleNumberNoti + 1)
+        setHandleNumberNoti(handleNumberNoti + 1 )
+    }, [notiUnread])
 
     const fetchGetNotiUnread = async (pageCurrent: number) => {
 
