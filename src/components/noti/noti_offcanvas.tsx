@@ -27,8 +27,9 @@ interface IProps {
 
 const NotiOffCanvas = (props: IProps) => {
 
-    const { showNoti, setShowNoti, setNumberOfNoti, numberOfNoti } = props
+    const { showNoti, setShowNoti, setNumberOfNoti } = props
     const router = useRouter();
+
 
     const [input, setInput] = useState<string>("")
 
@@ -44,6 +45,8 @@ const NotiOffCanvas = (props: IProps) => {
 
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
+
+    const [handleNumberNoti, setHandleNumberNoti] = useState<number> (0)
 
 
 
@@ -63,16 +66,11 @@ const NotiOffCanvas = (props: IProps) => {
                 // nhan message
                 const receivedMessage:INotiResponse = JSON.parse(message.body);
 
-                console.log("new >>> ", receivedMessage)
-
-                const newMess = [receivedMessage, ...notiUnread]
-
-                setNotiUnread(newMess);
-                setNotiAll(newMess)
-                // setNotiUnread((prevMessages) => [receivedMessage, ...prevMessages]);
-                // setNotiAll((prevMessages) => [receivedMessage, ...prevMessages]);
-                console.log("set 2 >>> ", numberOfNoti)
-                setNumberOfNoti(newMess.length)
+                console.log("set 2 >>> ", handleNumberNoti)
+                setNumberOfNoti(handleNumberNoti + 1)
+                setHandleNumberNoti(handleNumberNoti + 1 )
+                setNotiUnread((prevMessages) => [receivedMessage, ...prevMessages]);
+                setNotiAll((prevMessages) => [receivedMessage, ...prevMessages]);
 
 
 
@@ -110,6 +108,7 @@ const NotiOffCanvas = (props: IProps) => {
             if (notiUnread.length === 0) {
                 console.log("set 1 >>> ", res.totalItems)
                 setNumberOfNoti(res.totalItems)
+                setHandleNumberNoti(res.totalItems)
             }
 
             // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
@@ -202,7 +201,7 @@ const NotiOffCanvas = (props: IProps) => {
 
                             <div className="d-flex align-items-center">
                                 <span>Chưa đọc</span>
-                                <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>
+                                <Badge bg="secondary" className="bg-noti ms-2">{handleNumberNoti}</Badge>
                             </div>
 
                         }>
