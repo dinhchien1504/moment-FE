@@ -5,19 +5,16 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import UnReadNotiTab from './unread_noti_tab';
 import AllNotiTab from './all_noti_tab';
-import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import Stomp from "stompjs"
 import SockJS from 'sockjs-client'
 import { useEffect, useRef, useState } from "react"
 import { useUserContext } from '@/context/user_context';
-import cookie from "js-cookie";
 import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
-import { FetchClientGetApi, FetchClientPostApi } from '@/api/fetch_client_api';
+import { FetchClientPostApi } from '@/api/fetch_client_api';
 import { startLoading, stopLoading } from '../shared/nprogress';
 import Badge from 'react-bootstrap/Badge';
-import { dividerClasses } from '@mui/material';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -27,7 +24,7 @@ interface IProps {
 
 const NotiOffCanvas = (props: IProps) => {
 
-    const { showNoti, setShowNoti, setNumberOfNoti } = props
+    const { showNoti, setShowNoti, setNumberOfNoti, numberOfNoti } = props
     const router = useRouter();
 
 
@@ -46,8 +43,7 @@ const NotiOffCanvas = (props: IProps) => {
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
 
-    const [handleNumberNoti, setHandleNumberNoti] = useState<number>(0)
-
+    const [notiNew, setNotiNew] = useState<any>("unknow")
 
 
     useEffect(() => {
@@ -64,12 +60,8 @@ const NotiOffCanvas = (props: IProps) => {
             // ket noi toi controller de nhan message
             client.subscribe(`/user/${user?.userName}/topic/noti`, (message) => {
                 // nhan message
-                const receivedMessage: INotiResponse = JSON.parse(message.body);
-
-                setNotiUnread((prevMessages) => [receivedMessage, ...prevMessages]);
-                setNotiAll((prevMessages) => [receivedMessage, ...prevMessages]);
-
-
+                const receivedMessage = JSON.parse(message.body);
+                setNotiNew(receivedMessage)
 
                 console.log("receivedMessage >>> ", receivedMessage)
             })
@@ -88,13 +80,18 @@ const NotiOffCanvas = (props: IProps) => {
     }, [user])
 
     useEffect(() => {
-        console.log("set 2 >>> ", handleNumberNoti)
-        if (notiUnread.length != 0) {
-            setNumberOfNoti(handleNumberNoti + 1)
-            setHandleNumberNoti(handleNumberNoti + 1)
+        console.log("set 2 >>> ", numberOfNoti)
+        if (notiNew != "unknow") {
+            const notiNewConvert: INotiResponse = notiNew
+            setNumberOfNoti(numberOfNoti + 1)
+            // setHandleNumberNoti(handleNumberNoti + 1)
+            setNotiUnread((prevMessages) => [notiNewConvert, ...prevMessages]);
+            setNotiAll((prevMessages) => [notiNewConvert, ...prevMessages]);
+            console.log("vao")
         }
-   
-    }, [notiUnread])
+
+
+    }, [notiNew])
 
     const fetchGetNotiUnread = async (pageCurrent: number) => {
 
@@ -114,18 +111,22 @@ const NotiOffCanvas = (props: IProps) => {
             if (notiUnread.length === 0) {
                 console.log("set 1 >>> ", res.totalItems)
                 setNumberOfNoti(res.totalItems)
-                setHandleNumberNoti(res.totalItems)
+
             }
 
             // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
             setNotiUnread((prev) => {
                 const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-                return [...prev, ...newNotis];
+                const updatedNotis = [...prev, ...newNotis];
+
+                if (updatedNotis.length === numberOfNoti) {
+                    setLockViewMoreNotiUnread(true)
+                }
+
+                return updatedNotis;
             });
 
-            if (notis.length === 0) {
-                setLockViewMoreNotiUnread(true)
-            }
+           
 
 
 
@@ -168,10 +169,8 @@ const NotiOffCanvas = (props: IProps) => {
             stopLoading()
         }
 
-       fetchData()
+        fetchData()
     }, [])
-
-
 
     const sendMessage = () => {
         stompClient.send('/app/noti', {}, JSON.stringify(input.trim()))
@@ -208,7 +207,7 @@ const NotiOffCanvas = (props: IProps) => {
 
                             <div className="d-flex align-items-center">
                                 <span>Chưa đọc</span>
-                                <Badge bg="secondary" className="bg-noti ms-2">{handleNumberNoti}</Badge>
+                                <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>
                             </div>
 
                         }>
