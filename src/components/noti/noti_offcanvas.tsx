@@ -166,10 +166,15 @@ const NotiOffCanvas = (props: IProps) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            startLoading()
+            setIsloadingNotiAll(true)
+            setIsloadingNotiUnread(true)
+            
             await fetchGetNotiAll(0)
             await fetchGetNotiUnread(0)
-            stopLoading()
+
+            setIsloadingNotiAll(false)
+            setIsloadingNotiUnread(false)
+           
         }
 
         fetchData()
