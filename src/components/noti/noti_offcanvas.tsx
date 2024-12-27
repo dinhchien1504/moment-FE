@@ -43,6 +43,10 @@ const NotiOffCanvas = (props: IProps) => {
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
 
+    const [isLoadingNotiUnread, setIsloadingNotiUnread] = useState<boolean>(false)
+    const [isLoadingNotiAll, setIsloadingNotiAll] = useState<boolean>(false)
+    
+
     const [notiNew, setNotiNew] = useState<any>("unknow")
 
 
@@ -57,12 +61,10 @@ const NotiOffCanvas = (props: IProps) => {
         client.connect({
         }, () => {
             isConnectedRef.current = true;
-            // ket noi toi controller de nhan message
             client.subscribe(`/user/${user?.userName}/topic/noti`, (message) => {
                 // nhan message
                 const receivedMessage = JSON.parse(message.body);
                 setNotiNew(receivedMessage)
-
                 console.log("receivedMessage >>> ", receivedMessage)
             })
         })
@@ -84,17 +86,15 @@ const NotiOffCanvas = (props: IProps) => {
         if (notiNew != "unknow") {
             const notiNewConvert: INotiResponse = notiNew
             setNumberOfNoti(numberOfNoti + 1)
-            // setHandleNumberNoti(handleNumberNoti + 1)
             setNotiUnread((prevMessages) => [notiNewConvert, ...prevMessages]);
             setNotiAll((prevMessages) => [notiNewConvert, ...prevMessages]);
-            console.log("vao")
         }
 
 
     }, [notiNew])
 
     const fetchGetNotiUnread = async (pageCurrent: number) => {
-
+        setIsloadingNotiUnread(true)
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
             time: timeCurrent,
@@ -103,13 +103,12 @@ const NotiOffCanvas = (props: IProps) => {
 
         const res = await FetchClientPostApi(API.NOTI.NOTI_GET, req)
 
-        console.log("fetchGetNotiUnread >>> ", timeCurrent)
         if (res && res.status === 200) {
 
             const notis: INotiResponse[] = res.result
 
+        
             if (notiUnread.length === 0) {
-                console.log("set 1 >>> ", res.totalItems)
                 setNumberOfNoti(res.totalItems)
 
             }
@@ -119,7 +118,7 @@ const NotiOffCanvas = (props: IProps) => {
                 const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
                 const updatedNotis = [...prev, ...newNotis];
 
-                if (updatedNotis.length === numberOfNoti) {
+                if (updatedNotis.length === res.totalItems) {
                     setLockViewMoreNotiUnread(true)
                 }
 
@@ -131,17 +130,17 @@ const NotiOffCanvas = (props: IProps) => {
 
 
         }
-
+        setIsloadingNotiUnread(false)
     }
 
     const fetchGetNotiAll = async (pageCurrent: number) => {
+        setIsloadingNotiAll(true)
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
             time: timeCurrent,
             status: "all",
         }
         const res = await FetchClientPostApi(API.NOTI.NOTI_GET, req)
-        console.log("fetchGetNotiAll >>> ", res)
         if (res && res.status === 200) {
 
 
@@ -149,14 +148,18 @@ const NotiOffCanvas = (props: IProps) => {
             // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
             setNotiAll((prev) => {
                 const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-                return [...prev, ...newNotis];
+                const updatedNotis  = [...prev, ...newNotis]
+                
+                if (updatedNotis.length === res.totalItems) {
+                    setLockViewMoreNotiAll(true)
+                }
+
+                return updatedNotis;
             });
 
-            if (notis.length < 6) {
-                setLockViewMoreNotiAll(true)
-            }
+           
         }
-
+        setIsloadingNotiAll(false)
     }
 
 
@@ -164,8 +167,8 @@ const NotiOffCanvas = (props: IProps) => {
     useEffect(() => {
         const fetchData = async () => {
             startLoading()
-            await fetchGetNotiUnread(0)
             await fetchGetNotiAll(0)
+            await fetchGetNotiUnread(0)
             stopLoading()
         }
 
@@ -200,6 +203,7 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiAll={notiAll}
                                 fetchGetNotiAll={fetchGetNotiAll}
                                 lockViewMoreNotiAll={lockViewMoreNotiAll}
+                                isLoadingNotiAll = {isLoadingNotiAll}
                             />
                         </Tab>
 
@@ -215,6 +219,8 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiUnread={notiUnread}
                                 fetchGetNotiUnread={fetchGetNotiUnread}
                                 lockViewMoreNotiUnread={lockViewMoreNotiUnread}
+                                isLoadingNotiUnread = {isLoadingNotiUnread}
+                        
                             />
                         </Tab>
 

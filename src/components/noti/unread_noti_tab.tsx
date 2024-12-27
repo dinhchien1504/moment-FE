@@ -12,25 +12,24 @@ interface Props {
     notiUnread: INotiResponse[],
     fetchGetNotiUnread: (value: number) => void
     lockViewMoreNotiUnread: boolean
+    isLoadingNotiUnread:boolean
 }
 
 const UnReadNotiTab = (props: Props) => {
 
-    const { notiUnread, fetchGetNotiUnread, lockViewMoreNotiUnread } = props
+    const { notiUnread, fetchGetNotiUnread, lockViewMoreNotiUnread , isLoadingNotiUnread} = props
 
-    const [isLoading, setIsloading] = useState<boolean>(false)
+  
 
     const [pageCurrent, setPageCurrent] = useState<number>(0)
 
 
     const handleViewMoreUnread = async () => {
-        setIsloading(true)
+
 
         const pc = pageCurrent + 1;
         setPageCurrent(pc)
         await fetchGetNotiUnread(pc)
-
-        setIsloading(false)
     }
 
 
@@ -45,7 +44,7 @@ const UnReadNotiTab = (props: Props) => {
             ))}
 
             <div className="div-view-more">
-                {isLoading ? (
+                {isLoadingNotiUnread ? (
                     <SpinnerAnimation />
                 ) : (
                     !lockViewMoreNotiUnread && (
