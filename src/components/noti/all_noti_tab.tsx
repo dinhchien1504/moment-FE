@@ -9,26 +9,26 @@ interface Props {
     notiAll: INotiResponse[]
     fetchGetNotiAll: (value: number) => void
     lockViewMoreNotiAll: boolean
+    isLoadingNotiAll:boolean
 }
 
 
 
 const AllNotiTab = (props: Props) => {
-    const { notiAll, fetchGetNotiAll, lockViewMoreNotiAll } = props
+    const { notiAll, fetchGetNotiAll, lockViewMoreNotiAll, isLoadingNotiAll } = props
 
-    const [isLoading, setIsloading] = useState<boolean>(false)
+
 
     const [pageCurrent, setPageCurrent] = useState<number>(0)
 
 
     const handleViewMoreAll = async () => {
-        setIsloading(true)
-
+ 
         const pc = pageCurrent + 1;
         setPageCurrent(pc)
         await fetchGetNotiAll(pc)
 
-        setIsloading(false)
+
     }
 
 
@@ -43,7 +43,7 @@ const AllNotiTab = (props: Props) => {
             ))}
 
             <div className="div-view-more">
-                {isLoading ? (
+                {isLoadingNotiAll ? (
                     <SpinnerAnimation />
                 ) : (
                     !lockViewMoreNotiAll && (
