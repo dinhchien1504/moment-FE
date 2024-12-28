@@ -39,10 +39,13 @@
 
 }
 .nav-tabs .nav-link:hover {
-    color: black; /* Màu chữ khi hover */
-    background-color: none; /* Màu nền khi hover */
+    color: black; 
+    background-color: none;
   }
-.width80ps {
-    width: 80%;
+.width90ps {
+    width: 90%;
+}
+.margin2px {
+    margin: 2%;
 }
 

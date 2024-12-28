@@ -1,8 +1,9 @@
 interface IProfileResponse{
     id:number;
-    listPhotoProfile: string[],
-    description:string;
+    listPhotoProfile: IPhotoResponse[],
+    // description:string;
     name:string;
     userName:string;
     urlAvt:string;
+    quantityFriend: number;
 }

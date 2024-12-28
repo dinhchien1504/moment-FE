@@ -1,27 +1,37 @@
 "use client";
-import React from "react";
+import { GetImage } from "@/utils/handle_images";
+import React, { use, useState } from "react";
 import { Col, Container, Row, Button, Stack , Image} from "react-bootstrap";
 
 interface Props {
-  ProfileRespone: IProfileResponse;
+  profileRespone: IProfileResponse;
+  params:string;
 }
 
 const InforUser = (props: Props) => {
-  const { ProfileRespone } = props;
 
+
+  // const { ProfileRespone } = props;
+  const [profileRespone, setProfileRespone] = useState <IProfileResponse>(props.profileRespone);
+
+  console.log('this is prpfile' , profileRespone)
+  
   return (
     <Row
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent:'center'
+        justifyContent:'center',
+        margin:" 2% 0 "
       }}
     >
       <Col className="center_col" >
         <Stack gap={3} className="center_col " >
-          <Image  src={ProfileRespone.urlAvt} sizes="150px"  roundedCircle />
+          <Image  src={GetImage(profileRespone.urlAvt )} style={{
+            objectFit: "cover" ,
+          }} height= "150px" width="150px"  roundedCircle />
           <div className="">
-            {ProfileRespone.name + " " +  ProfileRespone.userName } 
+            {profileRespone.name + " " +  profileRespone.userName } 
 
           </div>
           <div className="flex gap-2" >
@@ -34,7 +44,7 @@ const InforUser = (props: Props) => {
            111 Friend 
           </div>
           <div className="">
-            {ProfileRespone.description}
+            {profileRespone.quantityFriend}
           </div>
         </Stack>
       </Col>

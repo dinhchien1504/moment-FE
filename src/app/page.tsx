@@ -1,34 +1,34 @@
 import API from "@/api/api";
-import { FetchServerPostApi } from "@/api/fetch_server_api";
-import PhotoCard from "@/components/home/photo_card";
+import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
+import FriendList from "@/components/home/friend_list";
 import VerticalSwiper from "@/components/home/swiper_vertical";
 import "@/styles/home.css";
 import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
 import { Col, Container, Row } from "react-bootstrap";
 const HomePage = async () => {
   const timestamp= getCurrentTime()
-  const timezone = getTimeZone()
-  const data = {
+  const dataPhoto = {
     pageCurrent: 0,
     time: timestamp,
-    timezone:timezone
+    
   };
-  const res = await FetchServerPostApi(API.HOME.PHOTO, data);
+
+  const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  const resAccountFriend= await FetchServerGetApi(API.ACCOUNT.LIST);
   return (
     <>
       <Container fluid className="container-home h-100">
         <Row>
-          <Col sm={3} className="d-none d-sm-block">
-            col 1
+          <Col md={3} className="d-block">
+            <FriendList accountResponses={resAccountFriend.result}></FriendList>
           </Col>
-          <Col sm={6} className="h-100 p-0">
+          <Col md={6} className="h-100 p-0">
             <VerticalSwiper
-              photoResponses={res.result}
-              timezone={timezone}
+              photoResponses={resPhoto.result}
               timestamp={timestamp}
             ></VerticalSwiper>
           </Col>
-          <Col sm={3} className="d-none d-sm-block">col 3</Col>
+          <Col md={3} className="d-none d-md-block">col 3</Col>
         </Row>
       </Container>
       

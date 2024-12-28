@@ -1,39 +1,76 @@
 "use client";
-import React from "react";
+import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { GetImage } from "@/utils/handle_images";
+import { getCurrentTime } from "@/utils/utils_time";
+import React, { useRef,useEffect, useState } from "react";
 import { Row, Col, Tabs, Tab, Container, Image } from "react-bootstrap";
+import API from "@/api/api";
 
 interface Props {
-  ProfileRespone: IProfileResponse;
+  profileRespone: IProfileResponse;
+  params:string
 }
 
-const ContentOfUser = (
-  //  data
-  props: Props
-) => {
-  const { ProfileRespone } = props;
+const ContentOfUser = (props: Props) => {
+  const [profileRespone, setProfileRespone] = useState<IProfileResponse>(
+    props.profileRespone
+  );
+  const [pageCurrent ,setPageCurrent ]= useState(1)
+  const {params} = props;
+  const listImgRef = useRef<HTMLDivElement>(null);
+  
+  // console.log('this is page cur',pageCurrent)
 
-  // // Tách dữ liệu thành nhóm 2 phần tử
-  // const rows = [];
-  // for (let i = 0; i < data.length; i += 2) {
-  //   rows.push(data.slice(i, i + 2));
-  // }
+const handleLazyLoading = async () => {
+  const dataProfile: IProfileFillterRequest  = {
+    pageCurrent: pageCurrent,
+    time: getCurrentTime(),
+    userName:params,
+  }
+  const resPro = await FetchClientPostApi(API.PROFILE.PROFILE ,dataProfile)
+// console.log('this test resPro',resPro.result)
+
+
+// console.log ('profilerespone',profileRespone )
+ // Append new photos to the list
+ setProfileRespone((prev) => ({
+  ...prev,
+  listPhotoProfile: [...prev.listPhotoProfile, ...resPro.result.listPhotoProfile],
+}));
+
+}
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setPageCurrent((prev) => prev + 1);
+      }
+    },
+    { root: null, rootMargin: "100px", threshold: 0 }
+  );
+
+  const element = listImgRef.current;
+  if (element) {
+    observer.observe(element);
+  }
+
+  return () => {
+    if (element) observer.unobserve(element);
+  };
+}, []);
+
+useEffect(() => {
+  handleLazyLoading();
+}, [pageCurrent]);
+
+
+
+
+
 
   return (
     <>
-      {
-        /* {rows.map((row, rowIndex) => (
-        <Row key={rowIndex} className="mb-3">
-          {row.map((item, colIndex) => (
-            <Col key={colIndex} xs={12} sm={6}>
-              <img src={item} alt={`image-${rowIndex}-${colIndex}`} className="img-fluid rounded" />
-            </Col>
-          ))}
-        </Row>
-        
-      ))} */
-        // ProfileRespone.name
-      }
-
       <Tabs
         defaultActiveKey="YourPost"
         id="uncontrolled-tab-example"
@@ -43,46 +80,22 @@ const ContentOfUser = (
         // }}
       >
         <Tab eventKey="YourPost" title="Your Post">
-          <Container>
-            <Row>
-              <Col>
-                <Image
-                  src={ProfileRespone.urlPhoto}
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1 / 1",
-                    objectFit: "contain",
-                  }}
-                  rounded
-                />
-
-              </Col>
-              <Col>
-                <Image
-                  src="https://res.cloudinary.com/moment-images/image/upload/moment-folder/pv9gc4heuan1pvgcjvi8"
-                  style={{
-                    backgroundColor : '#f2f4f7',
-                    maxWidth: "100%",
-                    aspectRatio: "1 / 1",
-                    objectFit: "contain",
-                  }}
-                  rounded
-                />
-
-              </Col>
-              <Col>
-                <Image
-                  src={ProfileRespone.urlPhoto}
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1 / 1",
-                    objectFit: "cover",
-                  }}
-                  rounded
-                />
-
-              </Col>
-              
+          <Container ref={listImgRef} className="ListImg">
+            <Row className="g-4" >
+              {profileRespone.listPhotoProfile.map((photo, index) => (
+                <Col key={photo.id} className="col-12 gap-3 col-sm-6 col-md-4">
+                  <Image
+                    src={GetImage(photo.urlPhoto)}
+                    style={{
+                      backgroundColor: "#f2f4f7",
+                      maxWidth: "100%",
+                      aspectRatio: "1 / 1",
+                      objectFit: "contain",
+                    }}
+                    rounded
+                  />
+                </Col>
+              ))}
             </Row>
           </Container>
         </Tab>
