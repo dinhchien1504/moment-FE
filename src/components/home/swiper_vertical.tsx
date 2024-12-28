@@ -127,7 +127,7 @@ const VerticalSwiper = (props: Props) => {
           autoHeight={true}
           lazyPreloadPrevNext={2}
           // loop={false}
-          // speed={1000}
+          // speed={1000} 
           onSlideChange={(swiper) => {
             if (swiper.activeIndex === 5 * pageCurrent + 3) {
               handleAdditionalPhoto();
