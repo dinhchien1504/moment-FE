@@ -14,6 +14,7 @@ import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
 import { FetchClientPostApi } from '@/api/fetch_client_api';
 import { startLoading, stopLoading } from '../shared/nprogress';
+import cookie from "js-cookie";
 import Badge from 'react-bootstrap/Badge';
 interface IProps {
     showNoti: boolean
@@ -54,19 +55,21 @@ const NotiOffCanvas = (props: IProps) => {
 
         if (!user || isConnectedRef.current) return;
 
-        const socket = new SockJS(API.NOTI.NOTI_SOCKET)
+        const socket = new SockJS( `${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`)
         const client = Stomp.over(socket)
         console.log("client >>> ", client)
 
         client.connect({
         }, () => {
             isConnectedRef.current = true;
-            client.subscribe(`/user/${user?.userName}/topic/noti`, (message) => {
+            client.subscribe(`/user/queue/noti`, (message) => {
                 // nhan message
                 const receivedMessage = JSON.parse(message.body);
                 setNotiNew(receivedMessage)
                 console.log("receivedMessage >>> ", receivedMessage)
+
             })
+            // client.send('/user/sendMessage', {}, JSON.stringify("Authorized"))
         })
         setStompClient(client);
 
@@ -216,7 +219,7 @@ const NotiOffCanvas = (props: IProps) => {
 
                             <div className="d-flex align-items-center">
                                 <span>Chưa đọc</span>
-                                <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>
+                              {numberOfNoti > 0 && <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>}   
                             </div>
 
                         }>
