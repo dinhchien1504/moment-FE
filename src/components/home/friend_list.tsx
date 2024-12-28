@@ -2,6 +2,7 @@
 import { useState } from "react";
 import FriendCard from "./friend_card";
 import { Tab, Tabs } from "react-bootstrap";
+import Link from "next/link";
 
 interface Props {
   accountAcceptedResponses: IAccountResponse[];
@@ -33,36 +34,20 @@ const FriendList = (props: Props) => {
           onClick={() => handleClose()}
         ></div>
         <div className="d-flex flex-column position-sm-fixed">
-          <Tabs
-            defaultActiveKey="profile"
-            id="uncontrolled-tab-example"
-            className="m-1"
-          >
-            <Tab eventKey="home" title="Bạn bè">
-              {Array.isArray(accountAcceptedResponses) &&
-                accountAcceptedResponses?.map((accountResponse, index) => (
-                  <div key={index} className="m-1 bg-hover p-2 rounded-2">
-                    <FriendCard accountResponse={accountResponse}></FriendCard>
-                  </div>
-                ))}
-            </Tab>
-            <Tab eventKey="profile" title="Đã nhận">
-              {Array.isArray(accountInvitedResponses) &&
-                accountInvitedResponses?.map((accountResponse, index) => (
-                  <div key={index} className="m-1 bg-hover p-2 rounded-2">
-                    <FriendCard accountResponse={accountResponse}></FriendCard>
-                  </div>
-                ))}
-            </Tab>
-            <Tab eventKey="contact" title="Đã gửi">
-              {Array.isArray(accountSentResponses) &&
-                accountSentResponses?.map((accountResponse, index) => (
-                  <div key={index} className="m-1 bg-hover p-2 rounded-2">
-                    <FriendCard accountResponse={accountResponse}></FriendCard>
-                  </div>
-                ))}
-            </Tab>
-          </Tabs>
+          <div className="height-list-friend">
+            <h4>Danh sách bạn bè</h4>
+            {Array.isArray(accountAcceptedResponses) &&
+              accountAcceptedResponses?.map((accountResponse, index) => (
+                <div key={index} className="m-1 bg-hover p-2 rounded-2">
+                  <FriendCard accountResponse={accountResponse}></FriendCard>
+                </div>
+              ))}
+
+          </div>
+          <div className="p-2">
+            <Link className="btn btn-outline-dark btn-view-more m-1" href="/friends">Xem tất cả</Link>
+          </div>
+
         </div>
       </div>
 
