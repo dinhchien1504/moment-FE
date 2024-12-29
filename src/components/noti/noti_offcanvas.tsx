@@ -14,6 +14,7 @@ import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
 import { FetchClientPostApi } from '@/api/fetch_client_api';
 import { startLoading, stopLoading } from '../shared/nprogress';
+import cookie from "js-cookie";
 import Badge from 'react-bootstrap/Badge';
 interface IProps {
     showNoti: boolean
@@ -45,7 +46,7 @@ const NotiOffCanvas = (props: IProps) => {
 
     const [isLoadingNotiUnread, setIsloadingNotiUnread] = useState<boolean>(false)
     const [isLoadingNotiAll, setIsloadingNotiAll] = useState<boolean>(false)
-    
+
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
 
@@ -54,19 +55,21 @@ const NotiOffCanvas = (props: IProps) => {
 
         if (!user || isConnectedRef.current) return;
 
-        const socket = new SockJS(API.NOTI.NOTI_SOCKET)
+        const socket = new SockJS(`${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`)
         const client = Stomp.over(socket)
         console.log("client >>> ", client)
 
         client.connect({
         }, () => {
             isConnectedRef.current = true;
-            client.subscribe(`/user/${user?.userName}/topic/noti`, (message) => {
+            client.subscribe(`/user/queue/noti`, (message) => {
                 // nhan message
                 const receivedMessage = JSON.parse(message.body);
                 setNotiNew(receivedMessage)
                 console.log("receivedMessage >>> ", receivedMessage)
+
             })
+            // client.send('/user/sendMessage', {}, JSON.stringify("Authorized"))
         })
         setStompClient(client);
 
@@ -107,25 +110,40 @@ const NotiOffCanvas = (props: IProps) => {
 
             const notis: INotiResponse[] = res.result
 
-        
+
             if (notiUnread.length === 0) {
                 setNumberOfNoti(res.totalItems)
 
             }
 
-            // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
-            setNotiUnread((prev) => {
-                const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-                const updatedNotis = [...prev, ...newNotis];
 
-                if (updatedNotis.length === res.totalItems) {
-                    setLockViewMoreNotiUnread(true)
-                }
+            // Tính toán updatedNotis trước khi cập nhật state
+            const updatedNotis = [
+                ...notiUnread,
+                ...notis.filter((newNoti) => !notiUnread.some((existingNoti) => existingNoti.id === newNoti.id))
+            ];
 
-                return updatedNotis;
-            });
+            // Kiểm tra điều kiện và cập nhật state nếu cần
+            if (updatedNotis.length === res.totalItems) {
+                setLockViewMoreNotiUnread(true);
+            }
 
-           
+            // Cập nhật notiUnread sau khi kiểm tra
+            setNotiUnread(updatedNotis);
+
+            // // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
+            // setNotiUnread((prev) => {
+            //     const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
+            //     const updatedNotis = [...prev, ...newNotis];
+
+            //     if (updatedNotis.length === res.totalItems) {
+            //         setLockViewMoreNotiUnread(true)
+            //     }
+
+            //     return updatedNotis;
+            // });
+
+
 
 
 
@@ -145,19 +163,34 @@ const NotiOffCanvas = (props: IProps) => {
 
 
             const notis: INotiResponse[] = res.result
+
+            // Tính toán updatedNotis trước khi cập nhật state
+            const updatedNotis = [
+                ...notiAll,
+                ...notis.filter((newNoti) => !notiAll.some((existingNoti) => existingNoti.id === newNoti.id))
+            ];
+
+            // Kiểm tra điều kiện và cập nhật state nếu cần
+            if (updatedNotis.length === res.totalItems) {
+                setLockViewMoreNotiAll(true);
+            }
+
+            // Cập nhật notiUnread sau khi kiểm tra
+            setNotiAll(updatedNotis);
+
             // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
-            setNotiAll((prev) => {
-                const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-                const updatedNotis  = [...prev, ...newNotis]
-                
-                if (updatedNotis.length === res.totalItems) {
-                    setLockViewMoreNotiAll(true)
-                }
+            // setNotiAll((prev) => {
+            //     const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
+            //     const updatedNotis = [...prev, ...newNotis]
 
-                return updatedNotis;
-            });
+            //     if (updatedNotis.length === res.totalItems) {
+            //         setLockViewMoreNotiAll(true)
+            //     }
 
-           
+            //     return updatedNotis;
+            // });
+
+
         }
         setIsloadingNotiAll(false)
     }
@@ -168,13 +201,13 @@ const NotiOffCanvas = (props: IProps) => {
         const fetchData = async () => {
             setIsloadingNotiAll(true)
             setIsloadingNotiUnread(true)
-            
+
             await fetchGetNotiAll(0)
             await fetchGetNotiUnread(0)
 
             setIsloadingNotiAll(false)
             setIsloadingNotiUnread(false)
-           
+
         }
 
         fetchData()
@@ -208,7 +241,7 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiAll={notiAll}
                                 fetchGetNotiAll={fetchGetNotiAll}
                                 lockViewMoreNotiAll={lockViewMoreNotiAll}
-                                isLoadingNotiAll = {isLoadingNotiAll}
+                                isLoadingNotiAll={isLoadingNotiAll}
                             />
                         </Tab>
 
@@ -216,7 +249,7 @@ const NotiOffCanvas = (props: IProps) => {
 
                             <div className="d-flex align-items-center">
                                 <span>Chưa đọc</span>
-                                <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>
+                                {numberOfNoti > 0 && <Badge bg="secondary" className="bg-noti ms-2">{numberOfNoti}</Badge>}
                             </div>
 
                         }>
@@ -224,8 +257,8 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiUnread={notiUnread}
                                 fetchGetNotiUnread={fetchGetNotiUnread}
                                 lockViewMoreNotiUnread={lockViewMoreNotiUnread}
-                                isLoadingNotiUnread = {isLoadingNotiUnread}
-                        
+                                isLoadingNotiUnread={isLoadingNotiUnread}
+
                             />
                         </Tab>
 

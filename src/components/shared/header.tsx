@@ -92,7 +92,7 @@ const Header = () => {
                                     onClick={()=>{hanlleShowNoti()}}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
-                                        <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge>
+                                     {numberOfNoti > 0 && <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge> }  
                                    </Button>
                                 </Nav.Link>
 
