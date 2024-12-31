@@ -14,7 +14,7 @@ const InforUser = (props: Props) => {
   // const { ProfileRespone } = props;
   const [profileRespone, setProfileRespone] = useState <IProfileResponse>(props.profileRespone);
 
-  console.log('this is prpfile' , profileRespone)
+  // console.log('this is prpfile' , profileRespone)
   
   return (
     <Row
