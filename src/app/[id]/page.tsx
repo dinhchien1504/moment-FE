@@ -1,33 +1,76 @@
-"use client"
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-const PhotoDetail = (props: any) => {
-    const { params } = props;
-    console.log("params.id >>> ", params.id)
-    return (
-        <>
-            
-            <div
-                className="modal show"
-                style={{ display: 'block', position: 'initial' }}
-            >
-                <Modal.Dialog>
-                    <Modal.Header closeButton>
-                        <Modal.Title>params.id = {params.id}</Modal.Title>
-                    </Modal.Header>
+'use server'
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import ContentOfUser from "@/components/profile/content";
+import InforUser from "@/components/profile/infor_user";
+import "@/styles/profile_user.css";
+import API from "@/api/api";
+import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
+import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
 
-                    <Modal.Body>
-                        <p>Modal body text goes here.</p>
-                    </Modal.Body>
 
-                    <Modal.Footer>
-                        <Button variant="secondary">Close</Button>
-                        <Button variant="primary">Save changes</Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
-            </div>
-        </>
-    )
-}
+const ProfileUser = async (props: any ) => {
+  const { params } = props;
+  // console.log ('para',params.id);
+  const timestamp= getCurrentTime()
 
-export default PhotoDetail
+  const dataProfile: IProfileFillterRequest  = {
+    pageCurrent: 0,
+    time: timestamp,
+    userName:params.id,
+  }
+  const resProfile = await FetchServerPostApi(API.PROFILE.PROFILE ,dataProfile);
+  // console.log(resProfile.result);
+  // const resProfile = await FetchServerGetApi(API.PROFILE.GETPROFILE , dataProfile);
+  // const resProfile = await FetchServerGetApi(API.PHOTO.LIST , dataProfile);
+
+
+  // console.log('this is',resProfile)
+
+  // const res:IProfileResponse  = {
+  //   id:11,
+  //   listUrlPhoto:[
+  //     "",
+  //   ],
+  //   name:"em Chien",
+  //   urlAvt:"https://via.placeholder.com/150",
+  //   userName:"DinhChien",
+  // }; 
+
+
+  return (
+    <div style={{backgroundColor:"#f2f4f7"}}>
+
+    <Container
+      className="py-4 
+      d-flex
+      flex-column
+      jusitify-content-center
+      align-items-center 
+      bg_color
+    "
+    >
+      <Row className="w-100  center_col bg_white margin2px " >
+        <Col md={4} className="mb-4 width90ps">
+          <div className="mb-4  " >
+            <InforUser profileRespone = {resProfile.result } 
+              params = {params.id}
+            />
+          </div>
+          <div>
+            <ContentOfUser profileRespone={resProfile.result}
+             time =  {timestamp}
+              
+              params = {params.id}
+
+            />
+          </div>
+        </Col>
+      </Row>
+    </Container>
+    </div>
+
+  );
+};
+
+export default ProfileUser;

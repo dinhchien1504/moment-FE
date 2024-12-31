@@ -10,6 +10,7 @@ const HomePage = async () => {
   const dataPhoto = {
     pageCurrent: 0,
     time: timestamp,
+    
   };
 
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
