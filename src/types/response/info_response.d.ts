@@ -1,0 +1,3 @@
+interface IInfoResponse {
+    name:string
+}

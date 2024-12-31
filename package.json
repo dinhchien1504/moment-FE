@@ -19,6 +19,7 @@
     "dotenv": "^16.4.7",
     "js-cookie": "^3.0.5",
     "mobile-detect": "^1.4.5",
+    "moment-fe": "file:",
     "next": "14.2.15",
     "nprogress": "^0.2.0",
     "react": "^18",
