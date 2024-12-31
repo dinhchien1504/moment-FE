@@ -6,15 +6,9 @@ import Link from "next/link";
 
 interface Props {
   accountAcceptedResponses: IAccountResponse[];
-  accountSentResponses: IAccountResponse[];
-  accountInvitedResponses: IAccountResponse[];
 }
 const FriendList = (props: Props) => {
-  const {
-    accountAcceptedResponses,
-    accountSentResponses,
-    accountInvitedResponses,
-  } = props;
+  const  accountAcceptedResponses  = props.accountAcceptedResponses;
   const [show, setShow] = useState(false);
 
   const handleShow = () => {

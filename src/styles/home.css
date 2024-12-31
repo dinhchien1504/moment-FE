@@ -39,7 +39,7 @@ body,html {
     0 0 10px rgba(from var(--hover-color) r g b/.4);
 }
 
-.swiper-slide img {
+.swiper-slide .post-img img {
   display: block;
   height: auto;
   object-fit: contain;
@@ -56,7 +56,7 @@ body,html {
 .post-caption {
   user-select: text;
 }
-.post-img {
+.post-img{
   min-height: 30px;
 }
 .container-navigation {
