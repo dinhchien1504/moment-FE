@@ -1,10 +1,10 @@
 .img-custom {
     border-radius: 100px;
+    object-fit: cover;
 }
 
 .div-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 10px;
 }
@@ -35,4 +35,5 @@
 .icon-unread{
     color: #ff0066;
     margin-left: 5px;
+    width: 19px;
 }

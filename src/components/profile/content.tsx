@@ -13,7 +13,9 @@ interface Props {
 }
 
 const ContentOfUser = (props: Props) => {
-  const [profileRespone, setProfileRespone] = useState<IProfileResponse>(props.profileRespone);
+  const [profileRespone, setProfileRespone] = useState<IProfileResponse>(
+    props.profileRespone
+  );
   const [pageCurrent, setPageCurrent] = useState(0);
   const { params, time } = props;
   const [hasMore, setHasMore] = useState(true);
@@ -30,21 +32,30 @@ const ContentOfUser = (props: Props) => {
 
     const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
 
-    
+    // console.log('profile photo 1 ' , profileRespone)
+
     if (resPro.result.listPhotoProfile.length === 0) {
       setHasMore(false);
       return;
     }
     // Append thêm ảnh mới vào danh sách
-    setProfileRespone((prev) => ({
-      ...prev,
-      listPhotoProfile: [...prev.listPhotoProfile, ...resPro.result.listPhotoProfile],
-    }));
+    setProfileRespone((prev) => {
+      const newPhotos = resPro.result.listPhotoProfile.filter(
+        (newPhoto: IPhotoResponse) => 
+          !prev.listPhotoProfile.some((existingPhoto: IPhotoResponse) => existingPhoto.id === newPhoto.id)
+      );
+
+      return {
+        ...prev,
+        listPhotoProfile: [...prev.listPhotoProfile, ...newPhotos],
+      };
+    });
+    // console.log("profile photo 2 ", profileRespone);
   };
 
   // Tăng `pageCurrent` khi phần tử cuối được cuộn vào vùng nhìn thấy
   useEffect(() => {
-    console.log ( "PAge cur first",pageCurrent)
+    // console.log ( "PAge cur first",pageCurrent)
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -59,7 +70,7 @@ const ContentOfUser = (props: Props) => {
         threshold: 0.1,
       }
     );
-    console.log ( "PAge cur  second",pageCurrent)
+    console.log ( "PAge cur  ",pageCurrent)
 
     const element = lastPhotoRef.current;
     if (element) {
@@ -77,20 +88,27 @@ const ContentOfUser = (props: Props) => {
   }, [pageCurrent]);
 
   return (
-    <Tabs defaultActiveKey="YourPost" id="uncontrolled-tab-example" className="mb-3 color_black">
+    <Tabs
+      defaultActiveKey="YourPost"
+      id="uncontrolled-tab-example"
+      className="mb-3 color_black"
+    >
       <Tab eventKey="YourPost" title="Your Post">
         <Container className="ListImg">
           <Row className="g-4">
             {profileRespone.listPhotoProfile.map((photo, index) => {
               // Đặt ref cho phần tử cuối cùng
-              const isLastPhoto = index === profileRespone.listPhotoProfile.length - 1;
+              const isLastPhoto =
+                index === profileRespone.listPhotoProfile.length - 1;
               return (
                 <Col
+                  clas
                   key={photo.id}
                   ref={isLastPhoto ? lastPhotoRef : null}
                   className="col-12 gap-3 col-sm-6 col-md-4"
                 >
                   <Image
+                    className="ImgBlock"
                     src={GetImage(photo.urlPhoto)}
                     style={{
                       backgroundColor: "#f2f4f7",

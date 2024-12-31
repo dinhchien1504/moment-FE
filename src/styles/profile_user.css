@@ -63,6 +63,6 @@
 
 .ImgBlock {
     animation: appear ease;
-    animation-timeline:view();
+    animation-timeline: view();
     animation-range: entry 0;
 }
