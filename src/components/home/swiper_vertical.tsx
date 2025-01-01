@@ -21,8 +21,8 @@ const VerticalSwiper = (props: Props) => {
   const [photoResponses, setPhotoResponses] = useState<IPhotoResponse[]>(
     props.photoResponses
   );
-  // taoj cacs useState
-  const [time, setTime] = useState<string>(props.timestamp);
+  // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
+  const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
