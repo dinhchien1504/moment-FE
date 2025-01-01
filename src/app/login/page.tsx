@@ -4,6 +4,7 @@ import { Col, Container, Row } from "react-bootstrap"
 import '@/styles/login.css'
 import Caurousels from "@/components/login/carousels"
 
+
 const LoginPage = () => {
     return (
         <>

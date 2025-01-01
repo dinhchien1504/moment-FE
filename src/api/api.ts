@@ -4,6 +4,7 @@ import NOTI_API from "./endpoints/noti";
 import PHOTO_API from "./endpoints/photo";
 import POST_API from "./endpoints/post";
 import SEARCH_API from "./endpoints/search";
+import PROFILE_API from "./endpoints/profile";
 
 const API = {
   AUTH: AUTH_API,
@@ -11,6 +12,7 @@ const API = {
   PHOTO: PHOTO_API,
   POST:POST_API,
   SEARCH: SEARCH_API,
+  PROFILE:PROFILE_API,
   NOTI: NOTI_API
 };
 

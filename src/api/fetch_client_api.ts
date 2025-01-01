@@ -7,6 +7,7 @@ export const FetchClientPostApi = async (api: string,bodyData: any) => {
       if (cookie.get("session-id") === undefined) { 
         throw new Error("Session ID is undefined"); 
       }
+
         const res = await fetch(api, {
           method: "POST", // Đúng phương thức POST
           headers: {
@@ -16,6 +17,8 @@ export const FetchClientPostApi = async (api: string,bodyData: any) => {
           },
           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
         });
+
+    
         const data = await res.json();
         if (data.status === 401) {
           throw new Error("Unauthorize"); 
