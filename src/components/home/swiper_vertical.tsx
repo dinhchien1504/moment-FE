@@ -13,7 +13,7 @@ import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   photoResponses: IPhotoResponse[];
-  timestamp: string;
+  time: string;
 }
 
 const VerticalSwiper = (props: Props) => {
