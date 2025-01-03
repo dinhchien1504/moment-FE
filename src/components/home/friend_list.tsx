@@ -1,41 +1,57 @@
 "use client";
 import { useState } from "react";
 import FriendCard from "./friend_card";
+import { Tab, Tabs } from "react-bootstrap";
+import Link from "next/link";
 
 interface Props {
-  accountResponses: IAccountResponse[];
+  accountAcceptedResponses: IAccountResponse[];
 }
 const FriendList = (props: Props) => {
-  const accountResponses = props.accountResponses;
+  const  accountAcceptedResponses  = props.accountAcceptedResponses;
   const [show, setShow] = useState(false);
 
   const handleShow = () => {
     if(show)
       setShow(false);
-    else setShow(true);}
+    else setShow(true);
+  };
   const handleClose = () => setShow(false);
 
   return (
     <>
-      <div className={`d-lg-block ${show ? "d-block" : "d-none"}`}>
+      <div className={`d-md-block ${show ? "d-block" : "d-none"}`}>
         <div
           className={`position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-25 z-2 ${
             show ? "d-block" : "d-none"
           }`}
           onClick={() => handleClose()}
         ></div>
-        <div className="d-flex flex-column position-sm-fixed overflow-auto">
-          {Array.isArray(accountResponses) &&
-            accountResponses?.map((accountResponse, index) => (
-              <div key={index} className="m-1 bg-hover p-2 rounded-2">
-                <FriendCard accountResponse={accountResponse}></FriendCard>
-              </div>
-            ))}
+        <div className="d-flex flex-column position-sm-fixed">
+          <div className="height-list-friend">
+            <h4>Danh sách bạn bè</h4>
+            {Array.isArray(accountAcceptedResponses) &&
+              accountAcceptedResponses?.map((accountResponse, index) => (
+                <div key={index} className="m-1 bg-hover p-2 rounded-2">
+                  <FriendCard accountResponse={accountResponse}></FriendCard>
+                </div>
+              ))}
+
+          </div>
+          <div className="p-2">
+            <Link className="btn btn-outline-dark btn-view-more m-1" href="/friends">Xem tất cả</Link>
+          </div>
+
         </div>
       </div>
 
-      <div className="bottom-0 pb-33px left-50 position-fixed z-1 d-flex d-sm-none">
-        <div className="bg-dark-subtle p-2 rounded-2" onClick={()=>{handleShow()}}>
+      <div className="top-calc-100vh-126px position-fixed z-1 d-flex d-sm-none">
+        <div
+          className="bg-dark-subtle p-2 rounded-2"
+          onClick={() => {
+            handleShow();
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"

@@ -171,8 +171,8 @@ const NotiOffCanvas = (props: IProps) => {
             setIsloadingNotiAll(true)
             setIsloadingNotiUnread(true)
 
-            await fetchGetNotiAll(0)
-            await fetchGetNotiUnread(0)
+           await fetchGetNotiAll(0)
+           await fetchGetNotiUnread(0)
 
             setIsloadingNotiAll(false)
             setIsloadingNotiUnread(false)

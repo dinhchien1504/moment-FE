@@ -18,7 +18,7 @@ export const FetchClientPostApi = async (api: string,bodyData: any) => {
           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
         });
 
-        console.log()
+    
         const data = await res.json();
         if (data.status === 401) {
           throw new Error("Unauthorize"); 

@@ -13,7 +13,7 @@ import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   photoResponses: IPhotoResponse[];
-  timestamp: string;
+  time: string;
 }
 
 const VerticalSwiper = (props: Props) => {
@@ -21,8 +21,8 @@ const VerticalSwiper = (props: Props) => {
   const [photoResponses, setPhotoResponses] = useState<IPhotoResponse[]>(
     props.photoResponses
   );
-  // taoj cacs useState
-  const [time, setTime] = useState<string>(props.timestamp);
+  // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
+  const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
@@ -66,7 +66,7 @@ const VerticalSwiper = (props: Props) => {
     setTime(timeReload);
     setPageCurrent(0);
 
-    const dataBody = {
+    const dataBody: IPhotoRequest = {
       pageCurrent: 0,
       time: timeReload,
     };
@@ -88,7 +88,7 @@ const VerticalSwiper = (props: Props) => {
   };
 
   const fetchAdditionalPhoto = async (pageCurrent: number) => {
-    const data = {
+    const data: IPhotoRequest = {
       pageCurrent: pageCurrent,
       time: time,
     };
@@ -125,16 +125,15 @@ const VerticalSwiper = (props: Props) => {
           modules={[Navigation, Mousewheel]}
           className="h-100 z-0"
           autoHeight={true}
-          zoom={{
-            maxRatio: 3, // Kích thước tối đa khi zoom
-            minRatio: 1, // Kích thước tối thiểu khi zoom
-          }}
           lazyPreloadPrevNext={2}
+          // loop={false}
+          // speed={1000} 
           onSlideChange={(swiper) => {
             if (swiper.activeIndex === 5 * pageCurrent + 3) {
               handleAdditionalPhoto();
             }
           }}
+          freeMode={false}
         >
           {
             <SwiperSlide>
@@ -209,12 +208,8 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div className="ms-auto mt-auto">
-
-          </div>
-          <div className="bg-primary p-2 rounded-2"
-            onClick={handleReloadPhoto}
-          >
+          <div className="ms-auto mt-auto"></div>
+          <div className="bg-primary p-2 rounded-2" onClick={handleReloadPhoto}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="25"
