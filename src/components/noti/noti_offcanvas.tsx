@@ -85,7 +85,6 @@ const NotiOffCanvas = (props: IProps) => {
     }, [user])
 
     useEffect(() => {
-        console.log("set 2 >>> ", numberOfNoti)
         if (notiNew != "unknow") {
             const notiNewConvert: INotiResponse = notiNew
             setNumberOfNoti(numberOfNoti + 1)
@@ -124,28 +123,12 @@ const NotiOffCanvas = (props: IProps) => {
             ];
 
             // Kiểm tra điều kiện và cập nhật state nếu cần
-            if (updatedNotis.length === res.totalItems) {
+            if (updatedNotis.length >= res.totalItems) {
                 setLockViewMoreNotiUnread(true);
             }
 
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiUnread(updatedNotis);
-
-            // // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
-            // setNotiUnread((prev) => {
-            //     const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-            //     const updatedNotis = [...prev, ...newNotis];
-
-            //     if (updatedNotis.length === res.totalItems) {
-            //         setLockViewMoreNotiUnread(true)
-            //     }
-
-            //     return updatedNotis;
-            // });
-
-
-
-
 
         }
         setIsloadingNotiUnread(false)
@@ -171,26 +154,12 @@ const NotiOffCanvas = (props: IProps) => {
             ];
 
             // Kiểm tra điều kiện và cập nhật state nếu cần
-            if (updatedNotis.length === res.totalItems) {
+            if (updatedNotis.length  >=  res.totalItems) {
                 setLockViewMoreNotiAll(true);
             }
 
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiAll(updatedNotis);
-
-            // Kiểm tra dữ liệu đã có trong notiUnread trước khi cập nhật
-            // setNotiAll((prev) => {
-            //     const newNotis = notis.filter((newNoti) => !prev.some((existingNoti) => existingNoti.id === newNoti.id));
-            //     const updatedNotis = [...prev, ...newNotis]
-
-            //     if (updatedNotis.length === res.totalItems) {
-            //         setLockViewMoreNotiAll(true)
-            //     }
-
-            //     return updatedNotis;
-            // });
-
-
         }
         setIsloadingNotiAll(false)
     }
