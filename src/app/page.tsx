@@ -13,7 +13,7 @@ const HomePage = async () => {
     time: time,
   };
 
-  const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  // const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
   const resAccountFriendAccepted= await FetchServerGetApi(API.ACCOUNT.LIST);
   return (
     <>
@@ -25,10 +25,10 @@ const HomePage = async () => {
             ></FriendList>
           </Col>
           <Col md={7} lg={6} className="h-100 p-0">
-            <VerticalSwiper
+{/*             <VerticalSwiper
               photoResponses={resPhoto.result}
               time={time}
-            ></VerticalSwiper>
+            ></VerticalSwiper> */}
           </Col>
           <Col md={0} lg={3} className="d-none d-md-block">col 3</Col>
         </Row>
