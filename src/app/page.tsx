@@ -13,22 +13,22 @@ const HomePage = async () => {
     time: time,
   };
 
-  // const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
-  const resAccountFriendAccepted= await FetchServerGetApi(API.ACCOUNT.LIST);
+  const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  // const resAccountFriendAccepted= await FetchServerGetApi(API.ACCOUNT.LIST);
   return (
     <>
       <Container fluid className="container-home h-100">
         <Row>
           <Col md={5} lg={3}  className="d-block">
-            <FriendList 
+{/*             <FriendList 
             accountAcceptedResponses={resAccountFriendAccepted.result}
-            ></FriendList>
+            ></FriendList> */}
           </Col>
           <Col md={7} lg={6} className="h-100 p-0">
-{/*             <VerticalSwiper
+            <VerticalSwiper
               photoResponses={resPhoto.result}
               time={time}
-            ></VerticalSwiper> */}
+            ></VerticalSwiper>
           </Col>
           <Col md={0} lg={3} className="d-none d-md-block">col 3</Col>
         </Row>
