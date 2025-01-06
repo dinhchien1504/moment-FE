@@ -1,15 +1,17 @@
 "use client";
+
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { getCurrentTime } from "@/utils/utils_time";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import PhotoCard from "./photo_card";
-import { getCurrentTime } from "@/utils/utils_time";
 import { startLoading, stopLoading } from "../shared/nprogress";
 import SpinnerAnimation from "../shared/spiner_animation";
+import PhotoCard from "./photo_card";
+import PostModal from "../post/post_modal";
 
 interface Props {
   photoResponses: IPhotoResponse[];
@@ -24,11 +26,18 @@ const VerticalSwiper = (props: Props) => {
   // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
   const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
+
+  // useState cho modal ảnh
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
+
+  // useState cho loading
   const [loading, setLoading] = useState(false);
+
+  // useRef cho swiper
   const swiperRef = useRef<SwiperCore | null>(null);
-  // xu ly dong mo modal
+
+  // hàm đóng mở modal ảnh
   const openModal = (src: string) => {
     setImageSrc(src);
     setIsModalOpen(true);
@@ -41,6 +50,7 @@ const VerticalSwiper = (props: Props) => {
     setImageSrc("");
   };
 
+  // useEffect cho sự kiện keydown cho swiper
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!swiperRef.current) return;
@@ -60,6 +70,7 @@ const VerticalSwiper = (props: Props) => {
     };
   }, []);
 
+  // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
     const timeReload = getCurrentTime();
@@ -82,14 +93,11 @@ const VerticalSwiper = (props: Props) => {
     }
   };
 
-  const handleAdditionalPhoto = () => {
+  // hàm xử lý tải thêm ảnh và list có sẵn
+  const fetchAdditionalPhoto = async () => {
     setPageCurrent(pageCurrent + 1);
-    fetchAdditionalPhoto(pageCurrent + 1);
-  };
-
-  const fetchAdditionalPhoto = async (pageCurrent: number) => {
     const data: IPhotoRequest = {
-      pageCurrent: pageCurrent,
+      pageCurrent: pageCurrent + 1,
       time: time,
     };
 
@@ -127,19 +135,17 @@ const VerticalSwiper = (props: Props) => {
           autoHeight={true}
           lazyPreloadPrevNext={2}
           // loop={false}
-          // speed={1000} 
+          // speed={1000}
           onSlideChange={(swiper) => {
             if (swiper.activeIndex === 5 * pageCurrent + 3) {
-              handleAdditionalPhoto();
+              fetchAdditionalPhoto();
             }
           }}
           freeMode={false}
         >
           {
             <SwiperSlide>
-              <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
-                Trang đầu
-              </div>
+            <PostModal handleReloadPhoto={handleReloadPhoto}/>
             </SwiperSlide>
           }
           {photoResponses?.map((photoResponse, index) => (
@@ -151,7 +157,7 @@ const VerticalSwiper = (props: Props) => {
             </SwiperSlide>
           ))}
           {loading && (
-            <SwiperSlide >
+            <SwiperSlide>
               <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
                 <SpinnerAnimation />
               </div>
