@@ -1,5 +1,5 @@
 import API from "@/api/api";
-import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
+import { FetchServerPostApi } from "@/api/fetch_server_api";
 import FriendList from "@/components/home/friend_list";
 import VerticalSwiper from "@/components/home/swiper_vertical";
 import "@/styles/home.css";
@@ -14,15 +14,12 @@ const HomePage = async () => {
   };
 
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
-  // const resAccountFriendAccepted= await FetchServerGetApi(API.ACCOUNT.LIST);
   return (
     <>
       <Container fluid className="container-home h-100">
         <Row>
           <Col md={5} lg={3}  className="d-block">
-{/*             <FriendList 
-            accountAcceptedResponses={resAccountFriendAccepted.result}
-            ></FriendList> */}
+            <FriendList />
           </Col>
           <Col md={7} lg={6} className="h-100 p-0">
             <VerticalSwiper

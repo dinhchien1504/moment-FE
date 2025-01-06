@@ -1,14 +1,11 @@
 "use client";
-import { useState } from "react";
-import FriendCard from "./friend_card";
-import { Tab, Tabs } from "react-bootstrap";
+import API from "@/api/api";
+import { FetchClientGetApi} from "@/api/fetch_client_api";
 import Link from "next/link";
-
-interface Props {
-  accountAcceptedResponses: IAccountResponse[];
-}
-const FriendList = (props: Props) => {
-  const  accountAcceptedResponses  = props.accountAcceptedResponses;
+import { useEffect, useState } from "react";
+import FriendCard from "./friend_card";
+const FriendList = () => {
+  const  [accountAcceptedResponses  ,setAccountAcceptedResponse]= useState<IAccountResponse[]>();
   const [show, setShow] = useState(false);
 
   const handleShow = () => {
@@ -17,6 +14,14 @@ const FriendList = (props: Props) => {
     else setShow(true);
   };
   const handleClose = () => setShow(false);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        const res = await FetchClientGetApi(API.ACCOUNT.LIST);
+        setAccountAcceptedResponse(res.result);
+      };
+      fetchData();
+    }, []);
 
   return (
     <>
