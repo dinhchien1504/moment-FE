@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
-function Example() {
+function ModalChangInfo() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -24,6 +24,10 @@ function Example() {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" disabled />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Tên đăng nhập</Form.Label>
+              <Form.Control type="text" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
               <Form.Label>Họ tên</Form.Label>
@@ -76,4 +80,4 @@ function Example() {
   );
 }
 
-export default Example;
+export default ModalChangInfo;

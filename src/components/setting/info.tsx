@@ -1,14 +1,19 @@
 "use client"
-const Info = () => {
+// const Info = () => {
 
-    const data:IInfoResponse = {
-        name:"loc",
-    }
+//     const account:IInfoResponse = {
+//         userName: "loc",
+//         email: "",
+//         birthday: "",
+//         sex: "",
+//         phoneNumber: "",
+//         address: ""
+//     }
 
- return (<>
- {data.name}
- </>)
+//  return (<>
+//  {data.userName}
+//  </>)
 
-}
+// }
 
-export default Info
+// export default Info

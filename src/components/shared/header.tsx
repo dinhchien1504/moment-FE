@@ -2,6 +2,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
 import { useEffect, useState } from 'react';
@@ -19,8 +20,8 @@ const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
-    const [showNoti,setShowNoti] = useState<boolean>(false)
-    const [showPost,setShowPost] = useState<boolean>(false)
+    const [showNoti, setShowNoti] = useState<boolean>(false)
+    const [showPost, setShowPost] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -28,7 +29,7 @@ const Header = () => {
         }
 
         if (pathname != "/login" && pathname != "/register") {
-           fetchUser()
+            fetchUser()
         }
 
     }, [])
@@ -67,11 +68,11 @@ const Header = () => {
                                 width={50}
                                 height={50}
                                 alt='error'
-                                onClick={()=>{setShowPost(true)}}
+                                onClick={() => { setShowPost(true) }}
                             />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        
+
                         <Navbar.Collapse id="basic-navbar-nav">
 
                             <Nav className="mx-auto">
@@ -93,11 +94,11 @@ const Header = () => {
                             <Nav>
                                 <Nav.Link type='div' className='d-flex align-items-center nav-noti'>
                                     <Button className='btn-noti'
-                                    onClick={()=>{hanlleShowNoti()}}
+                                        onClick={() => { hanlleShowNoti() }}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
                                         <Badge bg="secondary" className='badge-custom'>9</Badge>
-                                   </Button>
+                                    </Button>
                                 </Nav.Link>
 
                                 <Nav.Link type='div' className='nav-profile'>
@@ -113,11 +114,11 @@ const Header = () => {
                                                 height={50}
                                                 alt="Dropdown Trigger"
                                                 className='img-avatar'
-                                                onClick={()=>{setShowNoti(false)}}
+                                                onClick={() => { setShowNoti(false) }}
                                             />
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu  align="end">
+                                        <Dropdown.Menu align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
                                                     <Image
@@ -131,8 +132,12 @@ const Header = () => {
                                                 </div>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item href = "#/setting" eventKey="2" className='font-item' as='div'>
-                                                <i className="fa-solid fa-gear"></i> Cài đặt
+                                            <Dropdown.Item as="div" className='font-item' eventKey="2">
+                                                <Link href="/setting" passHref legacyBehavior>
+                                                    <div>
+                                                        <i className="fa-solid fa-gear"></i> Cài đặt
+                                                    </div>
+                                                </Link>
                                             </Dropdown.Item>
                                             <Dropdown.Item eventKey="3" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
@@ -149,12 +154,12 @@ const Header = () => {
                     </Container>
                 </Navbar>
                 <NotiOffCanvas
-                showNoti = {showNoti}
-                setShowNoti={setShowNoti}
+                    showNoti={showNoti}
+                    setShowNoti={setShowNoti}
                 />
                 <PostModal
-                showPost = {showPost}
-                setShowPost= {setShowPost}
+                    showPost={showPost}
+                    setShowPost={setShowPost}
                 />
             </>
         )
