@@ -25,6 +25,8 @@ const Header = () => {
     const [showPost,setShowPost] = useState<boolean>(false)
 
     const [numberOfNoti, setNumberOfNoti] = useState<number> (0)
+    
+  
 
 
 
@@ -39,6 +41,7 @@ const Header = () => {
             startLoading()
             fetchUser()
             stopLoading()
+ 
         }
 
     }, [])

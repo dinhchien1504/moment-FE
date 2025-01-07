@@ -16,6 +16,7 @@ import { FetchClientPostApi } from '@/api/fetch_client_api';
 import { startLoading, stopLoading } from '../shared/nprogress';
 import cookie from "js-cookie";
 import Badge from 'react-bootstrap/Badge';
+// import { useSocketContext } from '@/context/socket_context';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -34,7 +35,7 @@ const NotiOffCanvas = (props: IProps) => {
     const [stompClient, setStompClient] = useState<any>(null)
     const { user } = useUserContext();
 
-    const isConnectedRef = useRef<any>(false); // Dùng để lưu trạng thái kết nối
+    // const isConnectedRef = useRef<any>(false); // Dùng để lưu trạng thái kết nối
 
     const [notiUnread, setNotiUnread] = useState<INotiResponse[]>([])
     const [notiAll, setNotiAll] = useState<INotiResponse[]>([])
@@ -50,10 +51,12 @@ const NotiOffCanvas = (props: IProps) => {
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
 
+    // const { subscribe, stompClient } = useSocketContext();
+
 
     useEffect(() => {
 
-        if (!user || isConnectedRef.current) return;
+        if ( stompClient) return;
 
         const socket = new SockJS(`${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`)
         const client = Stomp.over(socket)
@@ -61,7 +64,7 @@ const NotiOffCanvas = (props: IProps) => {
 
         client.connect({
         }, () => {
-            isConnectedRef.current = true;
+            // isConnectedRef.current = true;
             client.subscribe(`/user/queue/noti`, (message) => {
                 // nhan message
                 const receivedMessage = JSON.parse(message.body);
@@ -77,12 +80,22 @@ const NotiOffCanvas = (props: IProps) => {
         return () => {
             if (stompClient) {
                 client.disconnect(() => {
-                    isConnectedRef.current = false;
+                    setStompClient(null)
                     console.log('Disconnected');
                 });
             }
         };
-    }, [user])
+    }, [])
+
+    // useEffect(() => {
+    
+    //     subscribe('/user/queue/noti', (message) => {
+    //         const receivedMessage = JSON.parse(message.body);
+    //         setNotiNew(receivedMessage)
+    //         console.log('Notification received:', receivedMessage);
+    //       });
+    //       console.log ("stompClient >>> ", stompClient)
+    // }, [stompClient])
 
     useEffect(() => {
         if (notiNew != "unknow") {
