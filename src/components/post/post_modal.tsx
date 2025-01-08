@@ -79,9 +79,9 @@ const PostModal = (props: IProps) => {
 
                 const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
                 if (resPost && resPost.status === 200) {
-                console.log("thời gian khi status 200",getCurrentTime())
                 const time = await getServerUTC(); // Gọi hàm Server Action
                 console.log("get time server vercel >>> ", time)
+                console.log("thời gian khi status 200",getCurrentTime())
                     handleReloadPhoto(time)
                     setCaption("")
                     setFileRoot(null)
