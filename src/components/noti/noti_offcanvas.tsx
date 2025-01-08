@@ -5,17 +5,12 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import UnReadNotiTab from './unread_noti_tab';
 import AllNotiTab from './all_noti_tab';
-import { useRouter } from 'next/navigation';
-import Stomp from "stompjs"
-import SockJS from 'sockjs-client'
-import { useEffect, useRef, useState } from "react"
-import { useUserContext } from '@/context/user_context';
+import { useEffect, useState } from "react"
 import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
 import { FetchClientPostApi } from '@/api/fetch_client_api';
-import { startLoading, stopLoading } from '../shared/nprogress';
-import cookie from "js-cookie";
 import Badge from 'react-bootstrap/Badge';
+import { useSocketContext } from '@/context/socket_context';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -26,15 +21,6 @@ interface IProps {
 const NotiOffCanvas = (props: IProps) => {
 
     const { showNoti, setShowNoti, setNumberOfNoti, numberOfNoti } = props
-    const router = useRouter();
-
-
-    const [input, setInput] = useState<string>("")
-
-    const [stompClient, setStompClient] = useState<any>(null)
-    const { user } = useUserContext();
-
-    const isConnectedRef = useRef<any>(false); // Dùng để lưu trạng thái kết nối
 
     const [notiUnread, setNotiUnread] = useState<INotiResponse[]>([])
     const [notiAll, setNotiAll] = useState<INotiResponse[]>([])
@@ -50,39 +36,17 @@ const NotiOffCanvas = (props: IProps) => {
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
 
+    const { subscribe } = useSocketContext();
 
     useEffect(() => {
 
-        if (!user || isConnectedRef.current) return;
+        subscribe('/user/queue/noti', (message) => {
+            const receivedMessage = JSON.parse(message.body);
+            setNotiNew(receivedMessage)
+            console.log('Notification received:', receivedMessage);
+        });
 
-        const socket = new SockJS(`${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`)
-        const client = Stomp.over(socket)
-        console.log("client >>> ", client)
-
-        client.connect({
-        }, () => {
-            isConnectedRef.current = true;
-            client.subscribe(`/user/queue/noti`, (message) => {
-                // nhan message
-                const receivedMessage = JSON.parse(message.body);
-                setNotiNew(receivedMessage)
-                console.log("receivedMessage >>> ", receivedMessage)
-
-            })
-            // client.send('/user/sendMessage', {}, JSON.stringify("Authorized"))
-        })
-        setStompClient(client);
-
-
-        return () => {
-            if (stompClient) {
-                client.disconnect(() => {
-                    isConnectedRef.current = false;
-                    console.log('Disconnected');
-                });
-            }
-        };
-    }, [user])
+    }, [])
 
     useEffect(() => {
         if (notiNew != "unknow") {
@@ -154,7 +118,7 @@ const NotiOffCanvas = (props: IProps) => {
             ];
 
             // Kiểm tra điều kiện và cập nhật state nếu cần
-            if (updatedNotis.length  >=  res.totalItems) {
+            if (updatedNotis.length >= res.totalItems) {
                 setLockViewMoreNotiAll(true);
             }
 
@@ -171,8 +135,8 @@ const NotiOffCanvas = (props: IProps) => {
             setIsloadingNotiAll(true)
             setIsloadingNotiUnread(true)
 
-           await fetchGetNotiAll(0)
-           await fetchGetNotiUnread(0)
+            await fetchGetNotiAll(0)
+            await fetchGetNotiUnread(0)
 
             setIsloadingNotiAll(false)
             setIsloadingNotiUnread(false)
@@ -182,9 +146,7 @@ const NotiOffCanvas = (props: IProps) => {
         fetchData()
     }, [])
 
-    const sendMessage = () => {
-        stompClient.send('/app/noti', {}, JSON.stringify(input.trim()))
-    }
+
 
 
     return (

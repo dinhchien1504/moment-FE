@@ -78,17 +78,15 @@ const PostModal = (props: IProps) => {
                 const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
                 if (resPost && resPost.status === 200) {
                 
+                    handleReloadPhoto()
                     setCaption("")
                     setFileRoot(null)
                     setFilePreview(null)
-                    handleReloadPhoto()
                 }
             }
 
         }
 
-
-        stopLoading()
 
     }
 
@@ -219,6 +217,7 @@ const PostModal = (props: IProps) => {
                       as="textarea"
                       aria-label="With textarea"
                       placeholder="Nêu cảm nghĩ của bạn"
+                      value={caption}
                       onChange={(e) => {
                         setCaption(e.target.value);
                       }}
