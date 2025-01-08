@@ -1,0 +1,9 @@
+
+.friend-card .img-avt{
+  height:60px;
+  width: 60px;
+  border-radius: 100%;;
+}
+.bg-hover:hover{
+  background-color: #e4e4e4;
+}

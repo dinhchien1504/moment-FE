@@ -17,6 +17,7 @@ import Badge from 'react-bootstrap/Badge';
 import PostModal from '../post/post_modal';
 import LiveSearch from '../home/search';
 import { GetImage } from '@/utils/handle_images';
+import Link from 'next/link';
 import { useSocketContext } from '@/context/socket_context';
 const Header = () => {
     const pathname = usePathname();
@@ -77,13 +78,15 @@ const Header = () => {
 
                     <Container fluid>
                         <Navbar.Brand type='button'>
+                            <Link href='/'>
                             <Image
                                 src={"/images/logo-removebg.png"}
                                 width={50}
                                 height={50}
                                 alt='error'
-                                onClick={() => { setShowPost(true) }}
+                                //onClick={()=>{setShowPost(true)}}
                             />
+                            </Link>
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
@@ -156,10 +159,10 @@ const Header = () => {
                     setNumberOfNoti={setNumberOfNoti}
                     numberOfNoti={numberOfNoti}
                 />
-                <PostModal
-                    showPost={showPost}
-                    setShowPost={setShowPost}
-                />
+                {/* <PostModal
+                showPost = {showPost}
+                setShowPost= {setShowPost}
+                /> */}
             </>
         )
     }

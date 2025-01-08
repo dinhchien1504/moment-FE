@@ -1,14 +1,13 @@
 "use client";
-import { useState } from "react";
+import API from "@/api/api";
+import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { getCurrentTime } from "@/utils/utils_time";
+import { useEffect, useState } from "react";
+import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
-import { Tab, Tabs } from "react-bootstrap";
 import Link from "next/link";
-
-interface Props {
-  accountAcceptedResponses: IAccountResponse[];
-}
-const FriendList = (props: Props) => {
-  const  accountAcceptedResponses  = props.accountAcceptedResponses;
+const FriendList = () => {
+  const  [accountAcceptedResponses  ,setAccountAcceptedResponse]= useState<IAccountResponse[]|null>(null);
   const [show, setShow] = useState(false);
 
   const handleShow = () => {
@@ -17,6 +16,18 @@ const FriendList = (props: Props) => {
     else setShow(true);
   };
   const handleClose = () => setShow(false);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        const dataBody:IFriendFilterRequest={
+          pageCurrent:0,
+          time:getCurrentTime()
+        }
+        const res = await FetchClientPostApi(API.ACCOUNT.LIST,dataBody);
+        setAccountAcceptedResponse(res.result);
+      };
+      fetchData();
+    }, []);
 
   return (
     <>
@@ -28,18 +39,24 @@ const FriendList = (props: Props) => {
           onClick={() => handleClose()}
         ></div>
         <div className="d-flex flex-column position-sm-fixed">
+            <div className="title d-flex justify-content-between p-2">
+              <h4>Bạn bè</h4>
+              <Link href='/friends' className="text-decoration-none">Xem tất cả</Link>
+            </div>
           <div className="height-list-friend">
-            <h4>Danh sách bạn bè</h4>
-            {Array.isArray(accountAcceptedResponses) &&
+            {accountAcceptedResponses === null ? (
+              <div className="d-flex justify-content-center align-items-center">
+                <SpinnerAnimation></SpinnerAnimation>
+              </div>
+            ) : (
+              Array.isArray(accountAcceptedResponses) &&
               accountAcceptedResponses?.map((accountResponse, index) => (
                 <div key={index} className="m-1 bg-hover p-2 rounded-2">
                   <FriendCard accountResponse={accountResponse}></FriendCard>
                 </div>
-              ))}
+              ))
+            )}
 
-          </div>
-          <div className="p-2">
-            <Link className="btn btn-outline-dark btn-view-more m-1" href="/friends">Xem tất cả</Link>
           </div>
 
         </div>
