@@ -167,9 +167,9 @@ const VerticalSwiper = (props: Props) => {
 
         {/* popup image */}
         {isModalOpen && (
-          <div className="modal-custom-overlay" onClick={closeModal}>
+          <div className="modal-custom-overlay position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center" onClick={closeModal}>
             <div
-              className="modal-custom-content"
+              className="modal-custom-content position-relative"
               onClick={(e) => e.stopPropagation()}
             >
               <img src={imageSrc} alt="" className="zoomed-image" />
@@ -181,7 +181,7 @@ const VerticalSwiper = (props: Props) => {
         )}
 
         {/* navigation swiper */}
-        <div className="container-navigation d-flex flex-column z-1">
+        <div className="container-navigation position-absolute bottom-0 end-0 d-flex flex-column z-1 ">
           <div className="d-none flex-column m-auto d-sm-flex justify-content-center flex-grow-1">
             <div className="swiper-button-up p-2 rounded-5 bg-secondary">
               <svg
@@ -214,7 +214,6 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div className="ms-auto mt-auto"></div>
           <div className="bg-primary p-2 rounded-2" onClick={handleReloadPhoto}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
