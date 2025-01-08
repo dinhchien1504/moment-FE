@@ -1,6 +1,7 @@
 "use client";
 import { GetImage } from "@/utils/handle_images";
 import { formatDate } from "@/utils/utils_time";
+import Link from "next/link";
 
 interface IProps {
   photoResponse: IPhotoResponse;
@@ -24,7 +25,7 @@ const PhotoCard = (props: IProps) => {
             <div className="swiper-lazy-preloader"></div>
           </div>
           <div className="d-block">
-            <a className="text-black" href={`/${userName}`}>{name}</a>
+            <Link className="text-black" href={`/${userName}`}>{name}</Link>
             <p className="m-0 fs-6">{formatDate(createdAt)}</p>
           </div>
         </div>

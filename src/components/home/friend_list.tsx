@@ -5,6 +5,7 @@ import { getCurrentTime } from "@/utils/utils_time";
 import { useEffect, useState } from "react";
 import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
+import Link from "next/link";
 const FriendList = () => {
   const  [accountAcceptedResponses  ,setAccountAcceptedResponse]= useState<IAccountResponse[]|null>(null);
   const [show, setShow] = useState(false);
@@ -40,7 +41,7 @@ const FriendList = () => {
         <div className="d-flex flex-column position-sm-fixed">
             <div className="title d-flex justify-content-between p-2">
               <h4>Bạn bè</h4>
-              <a href='/friends' className="text-decoration-none">Xem tất cả</a>
+              <Link href='/friends' className="text-decoration-none">Xem tất cả</Link>
             </div>
           <div className="height-list-friend">
             {accountAcceptedResponses === null ? (

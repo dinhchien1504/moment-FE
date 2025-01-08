@@ -102,7 +102,6 @@ const ContentOfUser = (props: Props) => {
                 index === profileRespone.listPhotoProfile.length - 1;
               return (
                 <Col
-                  clas
                   key={photo.id}
                   ref={isLastPhoto ? lastPhotoRef : null}
                   className="col-12 gap-3 col-sm-6 col-md-4"
