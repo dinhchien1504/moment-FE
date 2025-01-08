@@ -65,7 +65,7 @@ const PostModal = (props: IProps) => {
     }
 
     const handlePost = async () => {
-
+      console.log("thời gian khi bấm nút đăng",getCurrentTime())
         startLoading()
 
         if (filePreview) {
@@ -79,10 +79,9 @@ const PostModal = (props: IProps) => {
 
                 const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
                 if (resPost && resPost.status === 200) {
-                   console.log("get time client user >>> ", getCurrentTime())
-                    
-                   const time = await getServerUTC(); // Gọi hàm Server Action
-                    console.log("get time server vercel >>> ", time)
+                console.log("thời gian khi status 200",getCurrentTime())
+                const time = await getServerUTC(); // Gọi hàm Server Action
+                console.log("get time server vercel >>> ", time)
                     handleReloadPhoto()
                     setCaption("")
                     setFileRoot(null)

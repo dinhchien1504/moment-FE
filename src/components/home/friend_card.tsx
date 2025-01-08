@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "react-bootstrap";
 import { startLoading, stopLoading } from "../shared/nprogress";
 import { useState } from "react";
+import "@/styles/friend_card.css";
 
 interface Props {
   accountResponse: IAccountResponse;
