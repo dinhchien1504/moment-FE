@@ -88,8 +88,6 @@ const PostModal = (props: IProps) => {
         }
 
 
-        stopLoading()
-
     }
 
 
@@ -219,6 +217,7 @@ const PostModal = (props: IProps) => {
                       as="textarea"
                       aria-label="With textarea"
                       placeholder="Nêu cảm nghĩ của bạn"
+                      value={caption}
                       onChange={(e) => {
                         setCaption(e.target.value);
                       }}

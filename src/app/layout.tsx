@@ -5,12 +5,12 @@ import { UserProvider } from "@/context/user_context";
 import Header from "@/components/shared/header";
 import ProgressBar from "@/components/shared/progress_bar";
 import "@fortawesome/fontawesome-free/css/all.min.css"
+import { SocketProvider } from "@/context/socket_context";
 
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Moment",
   description: "Nơi chia sẻ ảnh và theo dõi bạn bè",
@@ -29,12 +29,14 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ff0064"/>
       </head>
       <body className={`${inter.className}`}>
-      <div id="nprogress-overlay"></div>
-        <UserProvider>
-          <Header />
-          <ProgressBar />
-          {children}
-        </UserProvider>
+        <div id="nprogress-overlay"></div>
+        <SocketProvider>
+          <UserProvider>
+            <Header />
+            <ProgressBar />
+            {children}
+          </UserProvider>
+        </SocketProvider>
       </body>
     </html>
   );

@@ -12,7 +12,7 @@ import { startLoading, stopLoading } from "../shared/nprogress";
 import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
 import PostModal from "../post/post_modal";
-
+import { useSocketContext } from "@/context/socket_context";
 interface Props {
   photoResponses: IPhotoResponse[];
   time: string;
@@ -23,6 +23,15 @@ const VerticalSwiper = (props: Props) => {
   const [photoResponses, setPhotoResponses] = useState<IPhotoResponse[]>(
     props.photoResponses
   );
+
+  const { subscribe } = useSocketContext();
+  useEffect(() => {
+      subscribe('/user/queue/friend', (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          console.log('Notification received:', receivedMessage);
+      });
+  }, [])
+
   // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
   const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
