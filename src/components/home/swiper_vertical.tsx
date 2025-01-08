@@ -90,6 +90,9 @@ const VerticalSwiper = (props: Props) => {
       pageCurrent: 0,
       time: timeReload,
     };
+
+    console.log("time reload >>> ",timeReload)
+
     try {
       startLoading();
       const res = await FetchClientPostApi(API.PHOTO.LIST, dataBody);
