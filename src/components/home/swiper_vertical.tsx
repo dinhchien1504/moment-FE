@@ -80,19 +80,19 @@ const VerticalSwiper = (props: Props) => {
   }, []);
 
   // hàm xử lý tải mới lại list ảnh
-  const handleReloadPhoto = async () => {
+  const handleReloadPhoto = async (value:string) => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
-    const timeReload = getCurrentTime();
-    console.log("Thời gian khi gọi ham reload, thoi gian de fetch",timeReload)
-    setTime(timeReload);
+    // const timeReload = getCurrentTime();
+    console.log("Thời gian khi gọi ham reload, thoi gian de fetch",value)
+    setTime(value);
     setPageCurrent(0);
 
     const dataBody: IPhotoFilterRequest = {
       pageCurrent: 0,
-      time: timeReload,
+      time: value,
     };
 
-    console.log("time reload >>> ",timeReload)
+    console.log("time reload >>> ",value)
 
     try {
       startLoading();
@@ -158,7 +158,7 @@ const VerticalSwiper = (props: Props) => {
         >
           {
             <SwiperSlide>
-            <PostModal handleReloadPhoto={handleReloadPhoto}/>
+            <PostModal handleReloadPhoto={handleReloadPhoto }/>
             </SwiperSlide>
           }
           {photoResponses?.map((photoResponse, index) => (
@@ -227,7 +227,7 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div className="bg-primary p-2 rounded-2" onClick={handleReloadPhoto}>
+          <div className="bg-primary p-2 rounded-2" onClick={() => {handleReloadPhoto(getCurrentTime())}}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="25"
