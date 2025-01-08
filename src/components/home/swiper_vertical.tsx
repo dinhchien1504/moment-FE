@@ -83,6 +83,7 @@ const VerticalSwiper = (props: Props) => {
   const handleReloadPhoto = async () => {
     if (swiperRef.current) swiperRef.current.slideTo(0);
     const timeReload = getCurrentTime();
+    console.log("Thời gian khi gọi ham reload, thoi gian de fetch",timeReload)
     setTime(timeReload);
     setPageCurrent(0);
 
