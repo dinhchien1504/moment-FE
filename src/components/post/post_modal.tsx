@@ -16,6 +16,7 @@ import { FetchClientPostApi } from "@/api/fetch_client_api";
 import API from "@/api/api";
 import { startLoading, stopLoading } from "../shared/nprogress";
 import MobileDetect from "mobile-detect";
+import { getCurrentTime } from "@/utils/utils_time";
 
 
 
@@ -63,7 +64,7 @@ const PostModal = (props: IProps) => {
     }
 
     const handlePost = async () => {
-
+      console.log("thời gian khi bấm nút đăng",getCurrentTime())
         startLoading()
 
         if (filePreview) {
@@ -77,7 +78,7 @@ const PostModal = (props: IProps) => {
 
                 const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
                 if (resPost && resPost.status === 200) {
-                
+                console.log("thời gian khi status 200",getCurrentTime())
                     handleReloadPhoto()
                     setCaption("")
                     setFileRoot(null)

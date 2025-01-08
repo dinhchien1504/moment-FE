@@ -1,7 +1,6 @@
 import API from "@/api/api";
 import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
 import FriendAll from "@/components/friend/friend_all";
-import "@/styles/friend_card.css";
 import { getCurrentTime } from "@/utils/utils_time";
 import { Container } from "react-bootstrap";
 

@@ -60,29 +60,17 @@ body,html {
   min-height: 30px;
 }
 .container-navigation {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
   padding-bottom: 50px;
   margin-right: 5px;
+  height:100%
 }
 
 .modal-custom-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 1000;
 }
 
 .modal-custom-content {
-  position: relative;
   height: auto;
   width: auto;
 }
@@ -106,14 +94,6 @@ body,html {
   cursor: pointer;
 }
 
-.friend-card .img-avt{
-  height:60px;
-  width: 60px;
-  border-radius: 100%;;
-}
-.bg-hover:hover{
-  background-color: #e4e4e4;
-}
 .search-load{
   min-height:50px;
   min-width: 265px;
@@ -162,5 +142,8 @@ body,html {
   }
   .height-list-friend{
     overflow: auto;
+  }
+  .container-navigation {
+    height: auto;
   }
 }
