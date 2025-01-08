@@ -29,13 +29,13 @@ export default async function RootLayout({
       </head>
       <body className={`${inter.className}`}>
         <div id="nprogress-overlay"></div>
-        {/* <SocketProvider> */}
+        <SocketProvider>
           <UserProvider>
             <Header />
             <ProgressBar />
             {children}
           </UserProvider>
-        {/* </SocketProvider> */}
+        </SocketProvider>
       </body>
     </html>
   );

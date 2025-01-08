@@ -17,31 +17,33 @@ import Badge from 'react-bootstrap/Badge';
 import PostModal from '../post/post_modal';
 import LiveSearch from '../home/search';
 import { GetImage } from '@/utils/handle_images';
+import { useSocketContext } from '@/context/socket_context';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
-    const [showNoti,setShowNoti] = useState<boolean>(false)
-    const [showPost,setShowPost] = useState<boolean>(false)
+    const [showNoti, setShowNoti] = useState<boolean>(false)
+    const [showPost, setShowPost] = useState<boolean>(false)
 
-    const [numberOfNoti, setNumberOfNoti] = useState<number> (0)
-    
-  
+    const [numberOfNoti, setNumberOfNoti] = useState<number>(0)
+   const {disconnect} = useSocketContext()
+
+
 
 
 
     useEffect(() => {
         const fetchUser = async () => {
-            
+
             await fetchGetUser()
-         
+
         }
 
         if (pathname != "/login" && pathname != "/register") {
             startLoading()
             fetchUser()
             stopLoading()
- 
+
         }
 
     }, [])
@@ -49,7 +51,9 @@ const Header = () => {
     const handleLogout = () => {
         startLoading()
         cookie.remove("session-id");
+        disconnect()
         router.push("/login")
+
     }
 
     const hanlleShowNoti = () => {
@@ -66,6 +70,7 @@ const Header = () => {
         return (<></>);
     }
     else {
+
         return (
             <>
                 <Navbar className="bg-body-tertiary ctn-header">
@@ -77,26 +82,26 @@ const Header = () => {
                                 width={50}
                                 height={50}
                                 alt='error'
-                                onClick={()=>{setShowPost(true)}}
+                                onClick={() => { setShowPost(true) }}
                             />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        
+
                         <Navbar.Collapse id="basic-navbar-nav">
 
                             <Nav className="mx-auto">
-                            <LiveSearch></LiveSearch>
+                                <LiveSearch></LiveSearch>
 
                             </Nav>
 
                             <Nav>
                                 <Nav.Link type='div' className='d-flex align-items-center nav-noti'>
                                     <Button className='btn-noti'
-                                    onClick={()=>{hanlleShowNoti()}}
+                                        onClick={() => { hanlleShowNoti() }}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
-                                     {numberOfNoti > 0 && <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge> }  
-                                   </Button>
+                                        {numberOfNoti > 0 && <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge>}
+                                    </Button>
                                 </Nav.Link>
 
                                 <Nav.Link type='div' className='nav-profile'>
@@ -106,21 +111,21 @@ const Header = () => {
                                     >
                                         <Dropdown.Toggle as="div" id="dropdown-custom-components"
                                         >
-                                            <img 
+                                            <img
                                                 src={GetImage(user?.urlPhoto)}
                                                 alt="Không có ảnh"
                                                 className='img-avatar'
-                                                onClick={()=>{setShowNoti(false)}}
-                                            
+                                                onClick={() => { setShowNoti(false) }}
+
                                             />
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu  align="end">
+                                        <Dropdown.Menu align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
                                                     <img
-                                                       src={GetImage(user?.urlPhoto)}
-                                                       
+                                                        src={GetImage(user?.urlPhoto)}
+
                                                         alt="Dropdown Trigger"
                                                         className='img-avatar-item'
                                                     />
@@ -146,14 +151,14 @@ const Header = () => {
                     </Container>
                 </Navbar>
                 <NotiOffCanvas
-                showNoti = {showNoti}
-                setShowNoti={setShowNoti}
-                setNumberOfNoti = {setNumberOfNoti}
-                numberOfNoti = {numberOfNoti}
+                    showNoti={showNoti}
+                    setShowNoti={setShowNoti}
+                    setNumberOfNoti={setNumberOfNoti}
+                    numberOfNoti={numberOfNoti}
                 />
                 <PostModal
-                showPost = {showPost}
-                setShowPost= {setShowPost}
+                    showPost={showPost}
+                    setShowPost={setShowPost}
                 />
             </>
         )
