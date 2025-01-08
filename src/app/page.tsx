@@ -8,7 +8,7 @@ import { getCurrentTime } from "@/utils/utils_time";
 import { Col, Container, Row } from "react-bootstrap";
 const HomePage = async () => {
   const time= getCurrentTime()
-  const dataPhoto:IPhotoRequest = {
+  const dataPhoto:IPhotoFilterRequest = {
     pageCurrent: 0,
     time: time,
   };

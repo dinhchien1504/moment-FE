@@ -70,15 +70,15 @@ const Header = () => {
 
                     <Container fluid>
                         <Navbar.Brand type='button'>
-                            <Link href='/'>
+                            <a href='/'>
                             <Image
                                 src={"/images/logo-removebg.png"}
                                 width={50}
                                 height={50}
                                 alt='error'
-                                // onClick={()=>{setShowPost(true)}}
+                                //onClick={()=>{setShowPost(true)}}
                             />
-                            </Link>
+                            </a>
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         

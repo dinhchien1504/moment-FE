@@ -77,7 +77,7 @@ const VerticalSwiper = (props: Props) => {
     setTime(timeReload);
     setPageCurrent(0);
 
-    const dataBody: IPhotoRequest = {
+    const dataBody: IPhotoFilterRequest = {
       pageCurrent: 0,
       time: timeReload,
     };
@@ -96,7 +96,7 @@ const VerticalSwiper = (props: Props) => {
   // hàm xử lý tải thêm ảnh và list có sẵn
   const fetchAdditionalPhoto = async () => {
     setPageCurrent(pageCurrent + 1);
-    const data: IPhotoRequest = {
+    const data: IPhotoFilterRequest = {
       pageCurrent: pageCurrent + 1,
       time: time,
     };
