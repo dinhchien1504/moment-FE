@@ -13,7 +13,7 @@ interface Props {
 const FriendCard = (props: Props) => {
   const { name, urlPhoto, urlProfile, friendStatus, requestedAt, id } =
     props.accountResponse;
-  const getStatusMessage = (status: string) => {
+  const convertStatusMessage = (status: string) => {
     switch (status) {
       case "accepted":
         return (
@@ -81,7 +81,7 @@ const FriendCard = (props: Props) => {
       };
       const res = await FetchClientPostApi(API.ACCOUNT.ADD, dataChangeStatus);
       if (res.status === 200)
-        setStatusMessage(getStatusMessage(res?.result?.friendStatus));
+        setStatusMessage(convertStatusMessage(res?.result?.friendStatus));
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
@@ -90,7 +90,7 @@ const FriendCard = (props: Props) => {
   };
 
   const [statusMessage, setStatusMessage] = useState(
-    getStatusMessage(friendStatus)
+    convertStatusMessage(friendStatus)
   );
 
   const handleChangeStatus = async (status: string) => {
@@ -105,7 +105,7 @@ const FriendCard = (props: Props) => {
         dataChangeStatus
       );
       if (res.status === 200)
-        setStatusMessage(getStatusMessage(res?.result?.friendStatus));
+        setStatusMessage(convertStatusMessage(res?.result?.friendStatus));
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
