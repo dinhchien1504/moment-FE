@@ -16,6 +16,7 @@ import { FetchClientPostApi } from "@/api/fetch_client_api";
 import API from "@/api/api";
 import { startLoading, stopLoading } from "../shared/nprogress";
 import MobileDetect from "mobile-detect";
+import { getServerUTC } from "@/utils/utc_server_action";
 import { getCurrentTime } from "@/utils/utils_time";
 
 
@@ -79,6 +80,8 @@ const PostModal = (props: IProps) => {
                 const resPost = await FetchClientPostApi(API.POST.POST, postRequest)
                 if (resPost && resPost.status === 200) {
                 console.log("thời gian khi status 200",getCurrentTime())
+                const time = await getServerUTC(); // Gọi hàm Server Action
+                console.log("get time server vercel >>> ", time)
                     handleReloadPhoto()
                     setCaption("")
                     setFileRoot(null)
