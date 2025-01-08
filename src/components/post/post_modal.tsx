@@ -22,7 +22,7 @@ import { getCurrentTime } from "@/utils/utils_time";
 
 
 interface IProps {
-    handleReloadPhoto: () => void;
+    handleReloadPhoto: (value:string) => void;
 }
 
 const PostModal = (props: IProps) => {
@@ -82,7 +82,7 @@ const PostModal = (props: IProps) => {
                 console.log("thời gian khi status 200",getCurrentTime())
                 const time = await getServerUTC(); // Gọi hàm Server Action
                 console.log("get time server vercel >>> ", time)
-                    handleReloadPhoto()
+                    handleReloadPhoto(time)
                     setCaption("")
                     setFileRoot(null)
                     setFilePreview(null)
