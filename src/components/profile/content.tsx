@@ -5,6 +5,7 @@ import { FetchClientPostApi } from "@/api/fetch_client_api";
 import { GetImage } from "@/utils/handle_images";
 import API from "@/api/api";
 import "@/styles/profile_user.css";
+import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   profileRespone: IProfileResponse;
@@ -17,33 +18,53 @@ const ContentOfUser = (props: Props) => {
     props.profileRespone
   );
   const [pageCurrent, setPageCurrent] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { params, time } = props;
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastPhotoRef = useRef<HTMLDivElement | null>(null);
+  const [loadingPhotos, setLoadingPhotos] = useState<Record<string, boolean>>({});
 
   // Hàm tải thêm dữ liệu
   const handleLazyLoading = async () => {
+    if (isLoading ||
+       !hasMore) return; // Dừng nếu đang tải hoặc không còn dữ liệu
+    setIsLoading(true); // Bắt đầu tải
     const dataProfile: IProfileFillterRequest = {
       pageCurrent: pageCurrent,
       time: time,
       userName: params,
     };
 
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
+    
 
-    // console.log('profile photo 1 ' , profileRespone)
-
-    if (resPro.result.listPhotoProfile.length === 0) {
-      setHasMore(false);
-      return;
+    if (!resPro.result.listPhotoProfile || resPro.result.listPhotoProfile.length === 0) {
+      setHasMore(false); // Không còn dữ liệu
+      setIsLoading(false); // Kết thúc tải
+      return; // Dừng lại
     }
+
     // Append thêm ảnh mới vào danh sách
     setProfileRespone((prev) => {
       const newPhotos = resPro.result.listPhotoProfile.filter(
-        (newPhoto: IPhotoResponse) => 
-          !prev.listPhotoProfile.some((existingPhoto: IPhotoResponse) => existingPhoto.id === newPhoto.id)
+        (newPhoto: IPhotoResponse) =>
+          !prev.listPhotoProfile.some(
+            (existingPhoto: IPhotoResponse) => existingPhoto.id === newPhoto.id
+          )
       );
+
+      const newLoadingState = newPhotos.reduce((acc, photo) => {
+        acc[photo.id] = true; // Đặt trạng thái loading ban đầu là true
+        return acc;
+      }, {} as Record<string, boolean>);
+    
+      setLoadingPhotos((prevLoading) => ({
+        ...prevLoading,
+        ...newLoadingState,
+      }));
 
       return {
         ...prev,
@@ -51,7 +72,12 @@ const ContentOfUser = (props: Props) => {
       };
     });
     // console.log("profile photo 2 ", profileRespone);
+    setIsLoading(false); // Kết thúc tải
+
   };
+
+
+
 
   // Tăng `pageCurrent` khi phần tử cuối được cuộn vào vùng nhìn thấy
   useEffect(() => {
@@ -60,17 +86,17 @@ const ContentOfUser = (props: Props) => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const lastEntry = entries[0];
-        if (lastEntry.isIntersecting && hasMore) {
+        // if (lastEntry.isIntersecting && hasMore) {
+          if (lastEntry.isIntersecting && hasMore && !isLoading){
           setPageCurrent((prev) => prev + 1);
         }
       },
       {
         root: null,
         rootMargin: "0px",
-        threshold: 0.1,
+        threshold: 0.5,
       }
     );
-    console.log ( "PAge cur  ",pageCurrent)
 
     const element = lastPhotoRef.current;
     if (element) {
@@ -80,13 +106,15 @@ const ContentOfUser = (props: Props) => {
     return () => {
       if (element) observerRef.current?.unobserve(element);
     };
-  }, [profileRespone.listPhotoProfile, hasMore]);
+  }, [profileRespone.listPhotoProfile, hasMore,isLoading]);
 
   // Gọi API khi `pageCurrent` thay đổi
   useEffect(() => {
-    handleLazyLoading();
-  }, [pageCurrent]);
-
+    if (hasMore) {
+      handleLazyLoading();
+    }
+  }, [pageCurrent, hasMore]);
+  
   return (
     <Tabs
       defaultActiveKey="YourPost"
@@ -101,6 +129,7 @@ const ContentOfUser = (props: Props) => {
               const isLastPhoto =
                 index === profileRespone.listPhotoProfile.length - 1;
               return (
+
                 <Col
                   clas
                   key={photo.id}
@@ -122,6 +151,11 @@ const ContentOfUser = (props: Props) => {
               );
             })}
           </Row>
+          {isLoading && hasMore && (
+            <div className="loading-spinner d-flex justify-content-center align-items-center mt-3">
+              <SpinnerAnimation/>
+            </div>
+          )}
         </Container>
       </Tab>
       <Tab eventKey="profile" title="Favorite">
