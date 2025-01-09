@@ -13,25 +13,28 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ModalChangInfo from './modal_changeInfo';
 import FormChangePassword from './modal_changPassword';
+import ModelChangeUserName from './modal_changeUserName';
 
 const SettingSidebar = () => {
 
     const [accountInfo, setAccountInfo] = useState<IAccountResponse | null>(null);
 
+    //lấy các thông tin từ accoun
     useEffect(() => {
         const fetchAccountInfo = async () => {
             try {
                 const data = await FetchServerGetApi(API.SETTING.SETTING); // Gọi API từ Server
-                if (data) {
-                    setAccountInfo(data); // Lưu dữ liệu vào state
+                if (data && data.result) {
+                    setAccountInfo(data.result); // Lưu thuộc tính `result` vào state
                 }
             } catch (error) {
                 console.error('Error fetching account info:', error);
             }
         };
 
-        fetchAccountInfo(); // Gọi hàm bất đồng bộ trong useEffect
+        fetchAccountInfo();
     }, []); // Dependency array trống để gọi khi component mount
+
 
     if (!accountInfo) {
         return <p>Loading...</p>; // Hiển thị khi dữ liệu đang tải
@@ -59,19 +62,28 @@ const SettingSidebar = () => {
                             <Tab.Pane eventKey="second">
                                 <h3>Thông tin cá nhân</h3>
                                 <Card style={{ width: '45rem' }}>
-                                    <Card.Header>{accountInfo.name}</Card.Header>
                                     <ListGroup variant="flush">
                                         <ListGroup.Item>Email: {accountInfo.email}</ListGroup.Item>
-                                        <ListGroup.Item>Tên đăng nhập: {accountInfo.userName}</ListGroup.Item>
-                                        <ListGroup.Item>Ngày sinh: {accountInfo.birthday}</ListGroup.Item>
-                                        <ListGroup.Item>Giới tính: {accountInfo.sex}</ListGroup.Item>
-                                        <ListGroup.Item>Số điện thoại: {accountInfo.phoneNumber}</ListGroup.Item>
-                                        <ListGroup.Item>Địa chỉ: {accountInfo.address}</ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <ModalChangInfo/>
+                                        <ListGroup.Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <span>Tên đăng nhập: {accountInfo.userName}</span>
+                                            <ModelChangeUserName/>
                                         </ListGroup.Item>
+
+                                        <ListGroup.Item>Số điện thoại: {accountInfo.phoneNumber}</ListGroup.Item>
+
+                                        <Card.Header as="h5">{accountInfo.name}</Card.Header>
+                                        <Card.Body>
+                                            <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
+                                            <Card.Text>Giới tính: {accountInfo.sex}</Card.Text>
+                                            <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
+                                            <ModalChangInfo
+                                                accountInfo={accountInfo}
+                                                onSave={(updatedInfo: IAccountResponse | null) => setAccountInfo((prev) => updatedInfo ? { ...prev, ...updatedInfo } : prev)}
+                                            />
+                                        </Card.Body>
                                     </ListGroup>
                                 </Card>
+
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>
