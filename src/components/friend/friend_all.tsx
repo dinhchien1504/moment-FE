@@ -22,7 +22,7 @@ const FriendAll = (props: FriendAllProps) => {
   >(null);
 
   const time = props.time;
-  const [pageCurrent, setPageCurrent] = useState<number>(0);
+  const [pageCurrentAccepted, setPageCurrentAccepted] = useState<number>(0);
   const [pageCurrentInvited, setPageCurrentInvited] = useState<number>(0);
   const [pageCurrentSent, setPageCurrentSent] = useState<number>(0);
 
@@ -57,18 +57,17 @@ const FriendAll = (props: FriendAllProps) => {
       };
       fetchData();
     }
-    console.log("Chuyển sang tab:", key);
   };
 
   const addAccountFriendAccepted = async () => {
-    setPageCurrent(pageCurrent + 1);
+    setPageCurrentAccepted(pageCurrentAccepted + 1);
     try {
       const dataBody: IFriendFilterRequest = {
-        pageCurrent: pageCurrent + 1,
+        pageCurrent: pageCurrentAccepted + 1,
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
-      const newAccountResponses = res.result;
+      const newAccountResponses:IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountResponses((prevAccountResponses) => [
           ...prevAccountResponses,
@@ -106,7 +105,7 @@ const FriendAll = (props: FriendAllProps) => {
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST_SENT, dataBody);
-      const newAccountResponses = res.result;
+      const newAccountResponses:IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountSentResponses((prevAccountResponses) => [
           ...(prevAccountResponses ? prevAccountResponses : []),
@@ -135,7 +134,7 @@ const FriendAll = (props: FriendAllProps) => {
     const rows = [];
     for (let i = 0; i < accountResponses?.length; i += 2) {
       rows.push(
-        <Row key={i}>
+        <Row key={`row-${i}`}>
           <Col sm={6}>
             <div className="m-1 bg-hover p-2 rounded-2">
               <FriendCard accountResponse={accountResponses[i]} />
@@ -150,9 +149,13 @@ const FriendAll = (props: FriendAllProps) => {
           )}
         </Row>
       );
-    }
+    }    
 
-    rows.push(<Button onClick={()=>addAccountFriend(type)}>Xem thêm</Button>);
+    rows.push(
+      <Button key="load-more" onClick={() => addAccountFriend(type)}>
+        Xem thêm
+      </Button>
+    );
     return <>{rows}</>;
   };
   return (
@@ -163,44 +166,44 @@ const FriendAll = (props: FriendAllProps) => {
         onSelect={handleTabSelect}
       >
         <Row>
-          <Col sm={3} className="col-12">
-            <Nav variant="pills" className="flex-column">
+          <Col sm={3} className="col-12 ">
+            <Nav variant="pills" className="flex-column shadow round-2 border-2">
               <Row>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
                     <Nav.Link
-                      className="border-primary border text-center"
+                      className="text-center bg-hover"
                       eventKey="first"
                     >
-                      Bạn bè
+                    <i className="fa-solid fa-users"></i>  Bạn bè
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
                     <Nav.Link
-                      className="border-primary border text-center"
+                      className="text-center bg-hover"
                       eventKey="second"
                     >
-                      Lời mời
+                      <i className="fa-regular fa-envelope"></i><i className="fa-solid fa-arrow-left"></i> Lời mời
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
                     <Nav.Link
-                      className="border-primary border text-center"
+                      className="text-center bg-hover"
                       eventKey="third"
                     >
-                      Đã gửi
+                      <i className="fa-regular fa-envelope"></i><i className="fa-solid fa-arrow-right"></i> Đã gửi
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
               </Row>
             </Nav>
           </Col>
-          <Col sm={9}>
-            <Tab.Content>
+          <Col sm={9} >
+            <Tab.Content className="p-2 bg-light shadow rounded-2 border-2" >
               <Tab.Pane eventKey="first">
                 {renderCardFriend(accountResponses,'accepted')}
               </Tab.Pane>
