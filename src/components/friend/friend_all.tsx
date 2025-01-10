@@ -67,7 +67,7 @@ const FriendAll = (props: FriendAllProps) => {
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
-      const newAccountResponses:IAccountResponse[] = res.result;
+      const newAccountResponses: IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountResponses((prevAccountResponses) => [
           ...prevAccountResponses,
@@ -78,6 +78,7 @@ const FriendAll = (props: FriendAllProps) => {
     }
     return;
   };
+
   const addAccountFriendInvited = async () => {
     setPageCurrentInvited(pageCurrentInvited + 1);
     try {
@@ -97,6 +98,7 @@ const FriendAll = (props: FriendAllProps) => {
     }
     return;
   };
+
   const addAccountFriendSent = async () => {
     setPageCurrentSent(pageCurrentSent + 1);
     try {
@@ -105,7 +107,7 @@ const FriendAll = (props: FriendAllProps) => {
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST_SENT, dataBody);
-      const newAccountResponses:IAccountResponse[] = res.result;
+      const newAccountResponses: IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountSentResponses((prevAccountResponses) => [
           ...(prevAccountResponses ? prevAccountResponses : []),
@@ -116,48 +118,54 @@ const FriendAll = (props: FriendAllProps) => {
     }
     return;
   };
-  const addAccountFriend=(type:string)=>{
-    if(type=='accepted'){
-      addAccountFriendAccepted()
-    }
-    if(type=='invited'){
-      addAccountFriendInvited()
-    }
-    if(type=='sent'){
-      addAccountFriendSent()
-    }
 
-  }
+  const addAccountFriend = (type: string) => {
+    if (type == "accepted") {
+      addAccountFriendAccepted();
+    }
+    if (type == "invited") {
+      addAccountFriendInvited();
+    }
+    if (type == "sent") {
+      addAccountFriendSent();
+    }
+  };
 
-  const renderCardFriend = (accountResponses: IAccountResponse[] | null, type:string) => {
+  const renderCardFriend = (
+    accountResponses: IAccountResponse[] | null,
+    type: string
+  ) => {
     if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
     const rows = [];
     for (let i = 0; i < accountResponses?.length; i += 2) {
       rows.push(
         <Row key={`row-${i}`}>
           <Col sm={6}>
-            <div className="m-1 bg-hover p-2 rounded-2">
+            <div className="bg-hover p-2 rounded-2">
               <FriendCard accountResponse={accountResponses[i]} />
             </div>
           </Col>
           {i + 1 < accountResponses.length && (
             <Col sm={6}>
-              <div className="m-1 bg-hover p-2 rounded-2">
+              <div className="bg-hover p-2 rounded-2">
                 <FriendCard accountResponse={accountResponses[i + 1]} />
               </div>
             </Col>
           )}
         </Row>
       );
-    }    
+    }
 
     rows.push(
-      <Button key="load-more" onClick={() => addAccountFriend(type)}>
-        Xem thêm
-      </Button>
+      <div className="d-flex justify-content-center">
+        <Button key="load-more" onClick={() => addAccountFriend(type)}>
+          Xem thêm
+        </Button>
+      </div>
     );
     return <>{rows}</>;
   };
+
   return (
     <>
       <Tab.Container
@@ -165,53 +173,49 @@ const FriendAll = (props: FriendAllProps) => {
         activeKey={activeTab}
         onSelect={handleTabSelect}
       >
-        <Row>
-          <Col sm={3} className="col-12 ">
-            <Nav variant="pills" className="flex-column shadow round-2 border-2">
+        <Row className="mt-2">
+          <Col sm={3} className="col-12">
+            <Nav
+              variant="pills"
+              className="flex-column shadow round-2 border-2"
+            >
               <Row>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="text-center bg-hover"
-                      eventKey="first"
-                    >
-                    <i className="fa-solid fa-users"></i>  Bạn bè
+                    <Nav.Link className="text-center" eventKey="first">
+                      <i className="fa-solid fa-users"></i> Bạn bè
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="text-center bg-hover"
-                      eventKey="second"
-                    >
-                      <i className="fa-regular fa-envelope"></i><i className="fa-solid fa-arrow-left"></i> Lời mời
+                    <Nav.Link className="text-center" eventKey="second">
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-left"></i> Lời mời
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="text-center bg-hover"
-                      eventKey="third"
-                    >
-                      <i className="fa-regular fa-envelope"></i><i className="fa-solid fa-arrow-right"></i> Đã gửi
+                    <Nav.Link className="text-center" eventKey="third">
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-right"></i> Đã gửi
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
               </Row>
             </Nav>
           </Col>
-          <Col sm={9} >
-            <Tab.Content className="p-2 bg-light shadow rounded-2 border-2" >
+          <Col sm={9}>
+            <Tab.Content className="p-2 bg-light shadow rounded-2 border-2">
               <Tab.Pane eventKey="first">
-                {renderCardFriend(accountResponses,'accepted')}
+                {renderCardFriend(accountResponses, "accepted")}
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                {renderCardFriend(accountInvitedResponses,'invited')}
+                {renderCardFriend(accountInvitedResponses, "invited")}
               </Tab.Pane>
               <Tab.Pane eventKey="third">
-                {renderCardFriend(accountSentResponses,'sent')}
+                {renderCardFriend(accountSentResponses, "sent")}
               </Tab.Pane>
             </Tab.Content>
           </Col>
