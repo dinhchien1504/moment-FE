@@ -18,7 +18,10 @@ import ModelChangeUserName from './modal_changeUserName';
 const SettingSidebar = () => {
 
     const [accountInfo, setAccountInfo] = useState<IAccountResponse | null>(null);
-
+    
+      const handleSaveUserName = (newUserName: string) => {
+        setAccountInfo((prev) => prev ? { ...prev, userName: newUserName } : prev); // Cập nhật tên đăng nhập trên giao diện
+      };
     //lấy các thông tin từ accoun
     useEffect(() => {
         const fetchAccountInfo = async () => {
@@ -66,7 +69,10 @@ const SettingSidebar = () => {
                                         <ListGroup.Item>Email: {accountInfo.email}</ListGroup.Item>
                                         <ListGroup.Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span>Tên đăng nhập: {accountInfo.userName}</span>
-                                            <ModelChangeUserName/>
+                                            <ModelChangeUserName
+                                                currentUserName={accountInfo.userName}
+                                                onSave={handleSaveUserName}
+                                            />
                                         </ListGroup.Item>
 
                                         <ListGroup.Item>Số điện thoại: {accountInfo.phoneNumber}</ListGroup.Item>

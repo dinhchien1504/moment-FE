@@ -118,7 +118,6 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
       </Modal>
     </>
   );
-
 }
 
 export default ModalChangInfo;
