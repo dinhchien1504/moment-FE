@@ -26,17 +26,65 @@ const ContentOfUser = (props: Props) => {
   const [loadingPhotos, setLoadingPhotos] = useState<Record<string, boolean>>({});
 
   // Hàm tải thêm dữ liệu
+  // const handleLazyLoading = async () => {
+  //   if (isLoading ||
+  //      !hasMore) return; // Dừng nếu đang tải hoặc không còn dữ liệu
+  //   setIsLoading(true); // Bắt đầu tải
+  //   const dataProfile: IProfileFillterRequest = {
+  //     pageCurrent: pageCurrent,
+  //     time: time,
+  //     userName: params,
+  //   };
+
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  //   const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
+    
+
+  //   if (!resPro.result.listPhotoProfile || resPro.result.listPhotoProfile.length === 0) {
+  //     setHasMore(false); // Không còn dữ liệu
+  //     setIsLoading(false); // Kết thúc tải
+  //     return; // Dừng lại
+  //   }
+
+  //   // Append thêm ảnh mới vào danh sách
+  //   setProfileRespone((prev) => {
+  //     const newPhotos = resPro.result.listPhotoProfile.filter(
+  //       (newPhoto: IPhotoResponse) =>
+  //         !prev.listPhotoProfile.some(
+  //           (existingPhoto: IPhotoResponse) => existingPhoto.id === newPhoto.id
+  //         )
+  //     );
+
+  //     const newLoadingState = newPhotos.reduce((acc, photo) => {
+  //       acc[photo.id] = true; // Đặt trạng thái loading ban đầu là true
+  //       return acc;
+  //     }, {} as Record<string, boolean>);
+    
+  //     setLoadingPhotos((prevLoading) => ({
+  //       ...prevLoading,
+  //       ...newLoadingState,
+  //     }));
+
+  //     return {
+  //       ...prev,
+  //       listPhotoProfile: [...prev.listPhotoProfile, ...newPhotos],
+  //     };
+  //   });
+  //   // console.log("profile photo 2 ", profileRespone);
+  //   setIsLoading(false); // Kết thúc tải
+
+  // };
+
+  
   const handleLazyLoading = async () => {
-    if (isLoading ||
-       !hasMore) return; // Dừng nếu đang tải hoặc không còn dữ liệu
+    if (isLoading || !hasMore) return; // Dừng nếu đang tải hoặc không còn dữ liệu
     setIsLoading(true); // Bắt đầu tải
     const dataProfile: IProfileFillterRequest = {
       pageCurrent: pageCurrent,
       time: time,
       userName: params,
     };
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
     
@@ -56,16 +104,6 @@ const ContentOfUser = (props: Props) => {
           )
       );
 
-      const newLoadingState = newPhotos.reduce((acc, photo) => {
-        acc[photo.id] = true; // Đặt trạng thái loading ban đầu là true
-        return acc;
-      }, {} as Record<string, boolean>);
-    
-      setLoadingPhotos((prevLoading) => ({
-        ...prevLoading,
-        ...newLoadingState,
-      }));
-
       return {
         ...prev,
         listPhotoProfile: [...prev.listPhotoProfile, ...newPhotos],
@@ -74,8 +112,7 @@ const ContentOfUser = (props: Props) => {
     // console.log("profile photo 2 ", profileRespone);
     setIsLoading(false); // Kết thúc tải
 
-  };
-
+  }; 
 
 
 
