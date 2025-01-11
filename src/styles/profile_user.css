@@ -35,7 +35,7 @@
 }
 .nav-tabs .nav-link.active {
     color: white;
-    background-color: black; 
+    /* background-color: black;  */
 
 }
 .nav-tabs .nav-link:hover {
