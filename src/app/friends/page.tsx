@@ -12,11 +12,13 @@ const PageFriend = async () => {
   };
   const res = await FetchServerPostApi(API.ACCOUNT.LIST, dataBody);
   const accountAcceptedResponses: IAccountResponse[] = res.result;
+  const totalItems:number =res.totalPages
   return (
     <Container>
       <FriendAll
         accountAcceptedResponses={accountAcceptedResponses}
         time={time}
+        totalItems={totalItems}
       ></FriendAll>
     </Container>
   );

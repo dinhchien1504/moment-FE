@@ -9,17 +9,24 @@ import SpinnerAnimation from "../shared/spiner_animation";
 interface FriendAllProps {
   accountAcceptedResponses: IAccountResponse[];
   time: string;
+  totalItems: number;
 }
 const FriendAll = (props: FriendAllProps) => {
   const [accountResponses, setAccountResponses] = useState<IAccountResponse[]>(
     props.accountAcceptedResponses
   );
+  const totalItemsAccepted = props.totalItems;
+  const [totalItemsSent, settotalItemsSent] = useState<number>(0);
+  const [totalItemsInvited, settotalItemsInvited] = useState<number>(0);
+
   const [accountInvitedResponses, setAccountInvitedResponses] = useState<
     IAccountResponse[] | null
   >(null);
   const [accountSentResponses, setAccountSentResponses] = useState<
     IAccountResponse[] | null
   >(null);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const time = props.time;
   const [pageCurrentAccepted, setPageCurrentAccepted] = useState<number>(0);
@@ -43,6 +50,7 @@ const FriendAll = (props: FriendAllProps) => {
           dataBody
         );
         setAccountInvitedResponses(res.result);
+        settotalItemsInvited(res.totalItems);
       };
       fetchData();
     }
@@ -54,6 +62,7 @@ const FriendAll = (props: FriendAllProps) => {
         };
         const res = await FetchClientPostApi(API.ACCOUNT.LIST_SENT, dataBody);
         setAccountSentResponses(res.result);
+        settotalItemsSent(res.totalItems);
       };
       fetchData();
     }
@@ -62,6 +71,7 @@ const FriendAll = (props: FriendAllProps) => {
   const addAccountFriendAccepted = async () => {
     setPageCurrentAccepted(pageCurrentAccepted + 1);
     try {
+      setLoading(true);
       const dataBody: IFriendFilterRequest = {
         pageCurrent: pageCurrentAccepted + 1,
         time: time,
@@ -75,6 +85,8 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
@@ -82,6 +94,8 @@ const FriendAll = (props: FriendAllProps) => {
   const addAccountFriendInvited = async () => {
     setPageCurrentInvited(pageCurrentInvited + 1);
     try {
+      setLoading(true);
+
       const dataBody: IFriendFilterRequest = {
         pageCurrent: pageCurrentInvited + 1,
         time: time,
@@ -95,6 +109,8 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
@@ -102,6 +118,8 @@ const FriendAll = (props: FriendAllProps) => {
   const addAccountFriendSent = async () => {
     setPageCurrentSent(pageCurrentSent + 1);
     try {
+      setLoading(true);
+
       const dataBody: IFriendFilterRequest = {
         pageCurrent: pageCurrentSent + 1,
         time: time,
@@ -115,6 +133,8 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
@@ -131,10 +151,24 @@ const FriendAll = (props: FriendAllProps) => {
     }
   };
 
-  const renderCardFriend = (
-    accountResponses: IAccountResponse[] | null,
-    type: string
-  ) => {
+  const renderLoadMore = (type: string) => {
+    if (
+      totalItemsAccepted > (pageCurrentAccepted + 1) * 10 ||
+      totalItemsInvited > (pageCurrentInvited + 1) * 10 ||
+      totalItemsSent > (pageCurrentSent + 1) * 10
+    )
+      return (
+        <Button
+          variant="primary"
+          disabled={loading} // Disable button khi đang loading
+          onClick={() => addAccountFriend(type)}
+        >
+          Xem thêm
+        </Button>
+      );
+  };
+
+  const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
     if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
     const rows = [];
     for (let i = 0; i < accountResponses?.length; i += 2) {
@@ -155,14 +189,6 @@ const FriendAll = (props: FriendAllProps) => {
         </Row>
       );
     }
-
-    rows.push(
-      <div className="d-flex justify-content-center">
-        <Button key="load-more" onClick={() => addAccountFriend(type)}>
-          Xem thêm
-        </Button>
-      </div>
-    );
     return <>{rows}</>;
   };
 
@@ -209,13 +235,22 @@ const FriendAll = (props: FriendAllProps) => {
           <Col sm={9}>
             <Tab.Content className="p-2 bg-light shadow rounded-2 border-2">
               <Tab.Pane eventKey="first">
-                {renderCardFriend(accountResponses, "accepted")}
+                {renderCardFriend(accountResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("accepted")}
+                </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                {renderCardFriend(accountInvitedResponses, "invited")}
+                {renderCardFriend(accountInvitedResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("invited")}
+                </div>
               </Tab.Pane>
               <Tab.Pane eventKey="third">
-                {renderCardFriend(accountSentResponses, "sent")}
+                {renderCardFriend(accountSentResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("sent")}
+                </div>
               </Tab.Pane>
             </Tab.Content>
           </Col>
