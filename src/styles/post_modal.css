@@ -61,24 +61,27 @@
 .div-btn-capture{
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    
 }
 
 /* btn screen  */
 .btn-screen-shot{
-    background-color:  black !important;
-    border: 0px;
+    background-color:  black;
+    border:0;
     color: white;
-    width: 100%;
     font-size: 15px;
-    border-radius: 100px;
-    height: 100% !important;
+    border-radius: 100%;
     margin-right: 10px;
+    height:50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
 .btn-screen-shot:hover {
-    background-color:  black;
+    background-color:  rgb(137, 137, 137);
 }
 .btn-screen-shot:active {
     background-color:  black !important;
