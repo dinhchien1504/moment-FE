@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
 import { useRouter } from "next/navigation";
-import { Button } from "react-bootstrap";
-
 import { getServerUTC } from "@/utils/utc_server_action";
 import Link from "next/link";
 const FriendList = () => {

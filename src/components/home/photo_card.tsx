@@ -2,9 +2,6 @@
 import { GetImage } from "@/utils/handle_images";
 import { formatDate } from "@/utils/utils_time";
 import Link from "next/link";
-import { Button } from "react-bootstrap";
-import { startLoading } from "../shared/nprogress";
-import { useRouter } from "next/navigation";
 
 interface IProps {
   photoResponse: IPhotoResponse;
@@ -15,7 +12,6 @@ const PhotoCard = (props: IProps) => {
     props.photoResponse;
   const setUrlImageModal = props.setUrlImageModal;
 
-  const router = useRouter();
   return (
     <>
       <div className="d-flex h-100 flex-column w-100 border border-2 shadow-sm rounded-2 m-2 bg-light">
@@ -30,16 +26,7 @@ const PhotoCard = (props: IProps) => {
             <div className="swiper-lazy-preloader"></div>
           </div>
           <div className="d-block">
-            <Button
-              variant="link"
-              className="p-0 mb-1 d-block text-black text-decoration-none"
-              onClick={() => {
-                startLoading();
-                router.push(`/`+userName);
-              }}
-            >
-              {name}
-            </Button>
+          <Link className="text-black" href={`/${userName}`}>{name}</Link>
             <p className="m-0 fs-6">{formatDate(createdAt)}</p>
           </div>
         </div>

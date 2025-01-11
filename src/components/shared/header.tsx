@@ -140,9 +140,14 @@ const Header = () => {
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
                                             <Dropdown.Item eventKey="2" className='font-item' as='div'>
-                                                <i className="fa-solid "></i> Cài đặt
+                                                <Link href={user?.userName+''} className='text-decoration-none text-dark'>
+                                                    <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
+                                                </Link>
                                             </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
+                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
+                                                    <i className="fa-solid fa-gear"></i> Cài đặt
+                                                </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất

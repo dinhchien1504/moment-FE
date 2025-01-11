@@ -7,8 +7,6 @@ import { Button } from "react-bootstrap";
 import { useState } from "react";
 import "@/styles/friend_card.css";
 import SpinnerAnimation from "../shared/spiner_animation";
-import { startLoading } from "../shared/nprogress";
-import { useRouter } from "next/navigation";
 
 interface Props {
   accountResponse: IAccountResponse;
@@ -19,9 +17,6 @@ const FriendCard = (props: Props) => {
 
   const [loading ,setLoading]=useState<boolean>(false);
 
-  const router = useRouter();
-
-  
   const timeDifference=(targetDate:string) =>{
     // Thời gian hiện tại
     const currentDate = new Date();
@@ -159,7 +154,7 @@ const FriendCard = (props: Props) => {
   return (
     <>
       <div className="friend-card bg-hover p-2 rounded-2 d-flex"
-      title={name}>
+        title={name}>
           <img
             src={
               urlPhoto
@@ -170,12 +165,9 @@ const FriendCard = (props: Props) => {
             className="img-avt d-flex flex-column mx-2"
           />
           <div className="info-friend">
-            <Button variant="link" className="text-decoration-none p-0 mb-1 d-block text-black" onClick={() => {
-              startLoading()
-              router.push(urlProfile)
-            }}>
+          <Link className=" mb-1 d-block text-black" href={urlProfile}>
               {name}
-            </Button>
+            </Link>
             <span>{loading ?<SpinnerAnimation/>:statusMessage}</span>
         </div>
       </div>
