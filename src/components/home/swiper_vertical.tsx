@@ -25,13 +25,13 @@ const VerticalSwiper = (props: Props) => {
     props.photoResponses
   );
 
-  const { subscribe } = useSocketContext();
-  useEffect(() => {
-      subscribe('/user/queue/friend', (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          console.log('Notification received:', receivedMessage);
-      });
-  }, [])
+  // const { subscribe } = useSocketContext();
+  // useEffect(() => {
+  //     subscribe('/user/queue/friend', (message) => {
+  //         const receivedMessage = JSON.parse(message.body);
+  //         console.log('Notification received:', receivedMessage);
+  //     });
+  // }, [])
 
   // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
   const [time, setTime] = useState<string>(props.time);
