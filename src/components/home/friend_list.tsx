@@ -62,7 +62,7 @@ const FriendList = () => {
             ) : (
               Array.isArray(accountAcceptedResponses) &&
               accountAcceptedResponses?.map((accountResponse, index) => (
-                <div key={index} className="m-1 bg-hover p-2 rounded-2">
+                <div key={index} className="m-1">
                   <FriendCard accountResponse={accountResponse}></FriendCard>
                 </div>
               ))

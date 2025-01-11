@@ -7,6 +7,8 @@ import { Button } from "react-bootstrap";
 import { useState } from "react";
 import "@/styles/friend_card.css";
 import SpinnerAnimation from "../shared/spiner_animation";
+import { startLoading } from "../shared/nprogress";
+import { useRouter } from "next/navigation";
 
 interface Props {
   accountResponse: IAccountResponse;
@@ -16,6 +18,45 @@ const FriendCard = (props: Props) => {
     props.accountResponse;
 
   const [loading ,setLoading]=useState<boolean>(false);
+
+  const router = useRouter();
+
+  
+  const timeDifference=(targetDate:string) =>{
+    // Thời gian hiện tại
+    const currentDate = new Date();
+  
+    // Tính chênh lệch thời gian
+    const diffInMs = currentDate.getTime() - new Date(targetDate).getTime();
+  
+    // Chuyển đổi mili giây thành các đơn vị thời gian
+    const seconds = Math.floor(diffInMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const years = Math.floor(days / 365);
+    const months = Math.floor((days % 365) / 30);
+  
+    // Tạo kết quả tuỳ thuộc vào các đơn vị thời gian
+    let result = '';
+
+    if (years > 0) {
+      result = `${years} năm trước`;
+    } else if (months > 0) {
+      result = `${months} tháng trước`;
+    } else if (days > 0) {
+      result = `${days} ngày trước`;
+    } else if (hours > 0) {
+      result = `${hours} giờ trước`;
+    } else if (minutes > 0) {
+      result = `${minutes} phút trước`;
+    } else {
+      result = `${seconds} giây trước`;
+    }
+  
+    return result.trim();
+  }
+
   const convertStatusMessage = (status: string) => {
     switch (status) {
       case "accepted":
@@ -48,7 +89,7 @@ const FriendCard = (props: Props) => {
         );
       case "invited":
         return (
-          <>
+          <div title={'Yêu cầu vào '+timeDifference(requestedAt)}>
             <Button
               className="btn-sm m-1 btn btn-primary"
               onClick={() => handleChangeStatus("accepted")}
@@ -62,7 +103,7 @@ const FriendCard = (props: Props) => {
             >
               Từ chối
             </Button>
-          </>
+          </div>
         );
       default:
         return (
@@ -117,8 +158,8 @@ const FriendCard = (props: Props) => {
   };
   return (
     <>
-      <div className="friend-card">
-        <div className="d-flex " title={name}>
+      <div className="friend-card bg-hover p-2 rounded-2 d-flex"
+      title={name}>
           <img
             src={
               urlPhoto
@@ -129,11 +170,13 @@ const FriendCard = (props: Props) => {
             className="img-avt d-flex flex-column mx-2"
           />
           <div className="info-friend">
-            <Link className=" mb-1 d-block text-black" href={urlProfile}>
+            <Button variant="link" className="text-decoration-none p-0 mb-1 d-block text-black" onClick={() => {
+              startLoading()
+              router.push(urlProfile)
+            }}>
               {name}
-            </Link>
+            </Button>
             <span>{loading ?<SpinnerAnimation/>:statusMessage}</span>
-          </div>
         </div>
       </div>
     </>
