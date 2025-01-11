@@ -5,7 +5,6 @@
 }
 
 body,html {
-  overflow: hidden;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -21,7 +20,7 @@ body,html {
   position: relative;
 }
 .container-home > .row{
-  height: calc(100vh - 66px);
+  height: calc(100vh - 82px);
 }
 .wrapper-swiper {
   padding-right: 41px;
@@ -123,7 +122,7 @@ body,html {
   }
 
   .container-home > .row{
-    height: calc(100vh - 116px);
+    height: calc(100vh - 132px);
   }
   .position-sm-fixed {
     position: fixed;
@@ -142,5 +141,8 @@ body,html {
   }
   .container-navigation {
     height: auto;
+  }
+  body{
+    min-width: 300px;
   }
 }

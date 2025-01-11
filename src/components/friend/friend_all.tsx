@@ -170,26 +170,18 @@ const FriendAll = (props: FriendAllProps) => {
 
   const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
     if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
-    const rows = [];
-    for (let i = 0; i < accountResponses?.length; i += 2) {
-      rows.push(
-        <Row key={`row-${i}`}>
-          <Col sm={6}>
-            <div className="bg-hover p-2 rounded-2">
-              <FriendCard accountResponse={accountResponses[i]} />
+
+    return (
+      <div >
+        <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-1">
+          {accountResponses.map((accountResponse, index) => (
+            <div className="col" key={index}>
+              <FriendCard accountResponse={accountResponse} />
             </div>
-          </Col>
-          {i + 1 < accountResponses.length && (
-            <Col sm={6}>
-              <div className="bg-hover p-2 rounded-2">
-                <FriendCard accountResponse={accountResponses[i + 1]} />
-              </div>
-            </Col>
-          )}
-        </Row>
-      );
-    }
-    return <>{rows}</>;
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
