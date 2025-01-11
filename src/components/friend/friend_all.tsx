@@ -9,11 +9,16 @@ import SpinnerAnimation from "../shared/spiner_animation";
 interface FriendAllProps {
   accountAcceptedResponses: IAccountResponse[];
   time: string;
+  totalItems: number;
 }
 const FriendAll = (props: FriendAllProps) => {
   const [accountResponses, setAccountResponses] = useState<IAccountResponse[]>(
     props.accountAcceptedResponses
   );
+  const totalItemsAccepted = props.totalItems;
+  const [totalItemsSent, settotalItemsSent] = useState<number>(0);
+  const [totalItemsInvited, settotalItemsInvited] = useState<number>(0);
+
   const [accountInvitedResponses, setAccountInvitedResponses] = useState<
     IAccountResponse[] | null
   >(null);
@@ -21,8 +26,10 @@ const FriendAll = (props: FriendAllProps) => {
     IAccountResponse[] | null
   >(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const time = props.time;
-  const [pageCurrent, setPageCurrent] = useState<number>(0);
+  const [pageCurrentAccepted, setPageCurrentAccepted] = useState<number>(0);
   const [pageCurrentInvited, setPageCurrentInvited] = useState<number>(0);
   const [pageCurrentSent, setPageCurrentSent] = useState<number>(0);
 
@@ -43,6 +50,7 @@ const FriendAll = (props: FriendAllProps) => {
           dataBody
         );
         setAccountInvitedResponses(res.result);
+        settotalItemsInvited(res.totalItems);
       };
       fetchData();
     }
@@ -54,21 +62,22 @@ const FriendAll = (props: FriendAllProps) => {
         };
         const res = await FetchClientPostApi(API.ACCOUNT.LIST_SENT, dataBody);
         setAccountSentResponses(res.result);
+        settotalItemsSent(res.totalItems);
       };
       fetchData();
     }
-    console.log("Chuyển sang tab:", key);
   };
 
   const addAccountFriendAccepted = async () => {
-    setPageCurrent(pageCurrent + 1);
+    setPageCurrentAccepted(pageCurrentAccepted + 1);
     try {
+      setLoading(true);
       const dataBody: IFriendFilterRequest = {
-        pageCurrent: pageCurrent + 1,
+        pageCurrent: pageCurrentAccepted + 1,
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
-      const newAccountResponses = res.result;
+      const newAccountResponses: IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountResponses((prevAccountResponses) => [
           ...prevAccountResponses,
@@ -76,12 +85,17 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
+
   const addAccountFriendInvited = async () => {
     setPageCurrentInvited(pageCurrentInvited + 1);
     try {
+      setLoading(true);
+
       const dataBody: IFriendFilterRequest = {
         pageCurrent: pageCurrentInvited + 1,
         time: time,
@@ -95,18 +109,23 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
+
   const addAccountFriendSent = async () => {
     setPageCurrentSent(pageCurrentSent + 1);
     try {
+      setLoading(true);
+
       const dataBody: IFriendFilterRequest = {
         pageCurrent: pageCurrentSent + 1,
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST_SENT, dataBody);
-      const newAccountResponses = res.result;
+      const newAccountResponses: IAccountResponse[] = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
         setAccountSentResponses((prevAccountResponses) => [
           ...(prevAccountResponses ? prevAccountResponses : []),
@@ -114,36 +133,55 @@ const FriendAll = (props: FriendAllProps) => {
         ]);
     } catch (error) {
       console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
     return;
   };
-  const addAccountFriend=(type:string)=>{
-    if(type=='accepted'){
-      addAccountFriendAccepted()
-    }
-    if(type=='invited'){
-      addAccountFriendInvited()
-    }
-    if(type=='sent'){
-      addAccountFriendSent()
-    }
 
-  }
+  const addAccountFriend = (type: string) => {
+    if (type == "accepted") {
+      addAccountFriendAccepted();
+    }
+    if (type == "invited") {
+      addAccountFriendInvited();
+    }
+    if (type == "sent") {
+      addAccountFriendSent();
+    }
+  };
 
-  const renderCardFriend = (accountResponses: IAccountResponse[] | null, type:string) => {
+  const renderLoadMore = (type: string) => {
+    if (
+      totalItemsAccepted > (pageCurrentAccepted + 1) * 10 ||
+      totalItemsInvited > (pageCurrentInvited + 1) * 10 ||
+      totalItemsSent > (pageCurrentSent + 1) * 10
+    )
+      return (
+        <Button
+          variant="primary"
+          disabled={loading} // Disable button khi đang loading
+          onClick={() => addAccountFriend(type)}
+        >
+          Xem thêm
+        </Button>
+      );
+  };
+
+  const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
     if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
     const rows = [];
     for (let i = 0; i < accountResponses?.length; i += 2) {
       rows.push(
-        <Row key={i}>
+        <Row key={`row-${i}`}>
           <Col sm={6}>
-            <div className="m-1 bg-hover p-2 rounded-2">
+            <div className="bg-hover p-2 rounded-2">
               <FriendCard accountResponse={accountResponses[i]} />
             </div>
           </Col>
           {i + 1 < accountResponses.length && (
             <Col sm={6}>
-              <div className="m-1 bg-hover p-2 rounded-2">
+              <div className="bg-hover p-2 rounded-2">
                 <FriendCard accountResponse={accountResponses[i + 1]} />
               </div>
             </Col>
@@ -151,10 +189,9 @@ const FriendAll = (props: FriendAllProps) => {
         </Row>
       );
     }
-
-    rows.push(<Button onClick={()=>addAccountFriend(type)}>Xem thêm</Button>);
     return <>{rows}</>;
   };
+
   return (
     <>
       <Tab.Container
@@ -162,37 +199,33 @@ const FriendAll = (props: FriendAllProps) => {
         activeKey={activeTab}
         onSelect={handleTabSelect}
       >
-        <Row>
+        <Row className="mt-2">
           <Col sm={3} className="col-12">
-            <Nav variant="pills" className="flex-column">
+            <Nav
+              variant="pills"
+              className="flex-column shadow round-2 border-2"
+            >
               <Row>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="border-primary border text-center"
-                      eventKey="first"
-                    >
-                      Bạn bè
+                    <Nav.Link className="text-center" eventKey="first">
+                      <i className="fa-solid fa-users"></i> Bạn bè
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="border-primary border text-center"
-                      eventKey="second"
-                    >
-                      Lời mời
+                    <Nav.Link className="text-center" eventKey="second">
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-left"></i> Lời mời
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4 p-1">
                   <Nav.Item>
-                    <Nav.Link
-                      className="border-primary border text-center"
-                      eventKey="third"
-                    >
-                      Đã gửi
+                    <Nav.Link className="text-center" eventKey="third">
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-right"></i> Đã gửi
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
@@ -200,15 +233,24 @@ const FriendAll = (props: FriendAllProps) => {
             </Nav>
           </Col>
           <Col sm={9}>
-            <Tab.Content>
+            <Tab.Content className="p-2 bg-light shadow rounded-2 border-2">
               <Tab.Pane eventKey="first">
-                {renderCardFriend(accountResponses,'accepted')}
+                {renderCardFriend(accountResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("accepted")}
+                </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                {renderCardFriend(accountInvitedResponses,'invited')}
+                {renderCardFriend(accountInvitedResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("invited")}
+                </div>
               </Tab.Pane>
               <Tab.Pane eventKey="third">
-                {renderCardFriend(accountSentResponses,'sent')}
+                {renderCardFriend(accountSentResponses)}
+                <div className="d-flex justify-content-center">
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("sent")}
+                </div>
               </Tab.Pane>
             </Tab.Content>
           </Col>

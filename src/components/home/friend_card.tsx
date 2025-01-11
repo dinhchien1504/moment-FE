@@ -4,9 +4,9 @@ import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
-import { startLoading, stopLoading } from "../shared/nprogress";
 import { useState } from "react";
 import "@/styles/friend_card.css";
+import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   accountResponse: IAccountResponse;
@@ -14,6 +14,8 @@ interface Props {
 const FriendCard = (props: Props) => {
   const { name, urlPhoto, urlProfile, friendStatus, requestedAt, id } =
     props.accountResponse;
+
+  const [loading ,setLoading]=useState<boolean>(false);
   const convertStatusMessage = (status: string) => {
     switch (status) {
       case "accepted":
@@ -76,7 +78,7 @@ const FriendCard = (props: Props) => {
 
   const handleSend = async () => {
     try {
-      startLoading();
+      setLoading(true);
       const dataChangeStatus = {
         accountFriendId: id,
       };
@@ -86,7 +88,7 @@ const FriendCard = (props: Props) => {
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
-      stopLoading();
+      setLoading(false);
     }
   };
 
@@ -96,7 +98,7 @@ const FriendCard = (props: Props) => {
 
   const handleChangeStatus = async (status: string) => {
     try {
-      startLoading();
+      setLoading(true);
       const dataChangeStatus: FriendStatusRequest = {
         accountFriendId: id,
         status: status,
@@ -110,7 +112,7 @@ const FriendCard = (props: Props) => {
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
-      stopLoading();
+      setLoading(false);
     }
   };
   return (
@@ -130,7 +132,7 @@ const FriendCard = (props: Props) => {
             <Link className=" mb-1 d-block text-black" href={urlProfile}>
               {name}
             </Link>
-            <span>{statusMessage}</span>
+            <span>{loading ?<SpinnerAnimation/>:statusMessage}</span>
           </div>
         </div>
       </div>
