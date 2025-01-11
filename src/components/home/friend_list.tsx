@@ -7,17 +7,15 @@ import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
-import { startLoading } from "../shared/nprogress";
+
 import { getServerUTC } from "@/utils/utc_server_action";
+import Link from "next/link";
 const FriendList = () => {
   const  [accountAcceptedResponses  ,setAccountAcceptedResponse]= useState<IAccountResponse[]|null>(null);
   const [show, setShow] = useState(false);
 
   const router = useRouter();
-  const handleRedirect = () => {
-      startLoading()
-      router.push("/friends")
-  }
+
 
   const handleShow = () => {
     if(show)
@@ -52,7 +50,7 @@ const FriendList = () => {
             <div className="title d-flex justify-content-between p-2">
               <h4>Bạn bè</h4>
 
-              <Button variant="link" onClick={handleRedirect} className="text-decoration-none">Xem tất cả</Button>
+              <Link href={"/friends"} className="text-decoration-none">Xem tất cả</Link>
             </div>
           <div className="height-list-friend">
             {accountAcceptedResponses === null ? (

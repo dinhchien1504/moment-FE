@@ -5,7 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
 import { useEffect, useState } from 'react';
-import { startLoading, stopLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
 import { Button, Form } from 'react-bootstrap';
@@ -19,22 +18,19 @@ import LiveSearch from '../home/search';
 import { GetImage } from '@/utils/handle_images';
 import Link from 'next/link';
 import { useSocketContext } from '@/context/socket_context';
+import { useLoadingContext } from '@/context/loading_context';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
     const [showNoti, setShowNoti] = useState<boolean>(false)
-    // const [showPost, setShowPost] = useState<boolean>(false)
-
+    const [showPost, setShowPost] = useState<boolean>(false)
+    const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext()
     const [numberOfNoti, setNumberOfNoti] = useState<number>(0)
-   const {disconnect} = useSocketContext()
+    const { disconnect } = useSocketContext()
 
 
-   const handleRedirect = () => {
-       startLoading()
-       router.push("/")
-       stopLoading()
-   }
+
 
 
     useEffect(() => {
@@ -45,18 +41,19 @@ const Header = () => {
         }
 
         if (pathname != "/login" && pathname != "/register") {
-            startLoading()
+            startLoadingSpiner()
             fetchUser()
-            stopLoading()
+            stopLoadingSpiner()
 
         }
 
     }, [])
 
     const handleLogout = () => {
-        startLoading()
+        startLoadingSpiner()
         cookie.remove("session-id");
         disconnect()
+        setNumberOfNoti(0)
         router.push("/login")
 
     }
@@ -81,15 +78,19 @@ const Header = () => {
                 <Navbar className="bg-body-tertiary ctn-header">
 
                     <Container fluid>
-                        <Navbar.Brand type='button'>
-                            <Image
-                                src={"/images/logo-removebg.png"}
-                                width={50}
-                                height={50}
-                                alt='error'
-                                onClick={handleRedirect}
-                            />
-                        </Navbar.Brand>
+
+                        <Link href={"/"}>
+                            <Navbar.Brand type='button'>
+                                <Image
+                                    src={"/images/logo-removebg.png"}
+                                    width={50}
+                                    height={50}
+                                    alt='error'
+
+                                />
+                            </Navbar.Brand>
+                        </Link>
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
                         <Navbar.Collapse id="basic-navbar-nav">
@@ -100,16 +101,16 @@ const Header = () => {
                             </Nav>
 
                             <Nav>
-                                <Nav.Link type='div' className='d-flex align-items-center nav-noti'>
+                                <Nav className='d-flex align-items-center nav-noti'>
                                     <Button className='btn-noti'
                                         onClick={() => { hanlleShowNoti() }}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
                                         {numberOfNoti > 0 && <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge>}
                                     </Button>
-                                </Nav.Link>
+                                </Nav>
 
-                                <Nav.Link type='div' className='nav-profile'>
+                                <Nav className='nav-profile'>
 
                                     <Dropdown
                                         drop='down'
@@ -138,17 +139,10 @@ const Header = () => {
                                                 </div>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item eventKey="2" className='font-item' as='div' 
-                                            onClick={() => { 
-                                                startLoading()
-                                                router.push(user?.userName+'') 
-                                                stopLoading()}}>
-                                                    <i className="fa-solid fa-user"></i> Trang cá nhân
+                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
+                                                <i className="fa-solid "></i> Cài đặt
                                             </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'>
-                                            <i className="fa-solid fa-gear"></i> Cài đặt
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="4" className='font-item' as='div'
+                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
@@ -156,7 +150,7 @@ const Header = () => {
                                         </Dropdown.Menu>
                                     </Dropdown>
 
-                                </Nav.Link>
+                                </Nav>
 
                             </Nav>
                         </Navbar.Collapse>

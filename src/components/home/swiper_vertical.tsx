@@ -8,12 +8,12 @@ import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { startLoading, stopLoading } from "../shared/nprogress";
 import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
 import PostModal from "../post/post_modal";
 import { useSocketContext } from "@/context/socket_context";
 import { getServerUTC } from "@/utils/utc_server_action";
+import { useLoadingContext } from "@/context/loading_context";
 interface Props {
   photoResponses: IPhotoResponse[];
   time: string;
@@ -46,6 +46,8 @@ const VerticalSwiper = (props: Props) => {
 
   // useRef cho swiper
   const swiperRef = useRef<SwiperCore | null>(null);
+
+    const { startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext()
 
   // hàm đóng mở modal ảnh
   const openModal = (src: string) => {
@@ -93,14 +95,14 @@ const VerticalSwiper = (props: Props) => {
     };
 
     try {
-      startLoading();
+      startLoadingSpiner()
       const res = await FetchClientPostApi(API.PHOTO.LIST, dataBody);
       const newPhotoResponses = res.result;
       setPhotoResponses(newPhotoResponses);
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
-      stopLoading();
+      stopLoadingSpiner()
     }
   };
 

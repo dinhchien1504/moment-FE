@@ -7,7 +7,8 @@ import { useState } from "react";
 import { Slider, Typography } from "@mui/material";
 import "@/styles/crop_modal.css"
 import { blobUrlToFile,  handlePreviewImg } from "@/utils/handle_images";
-import { startLoading, stopLoading } from "../shared/nprogress";
+import { useLoadingContext } from "@/context/loading_context";
+
 
 interface IProps {
     showCrop: boolean;
@@ -25,13 +26,14 @@ const CropModal = (props: IProps) => {
     const [rotation, setRotation] = useState(0)
     const [zoom, setZoom] = useState(1)
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+    const {startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext() 
 
     const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels)
     }
 
     const showCroppedImage = async () => {
-        startLoading()
+        startLoadingSpiner()
 
         try {
             if (fileRoot === null) {
@@ -51,7 +53,7 @@ const CropModal = (props: IProps) => {
             console.error(e)
         }
         
-        stopLoading()
+        stopLoadingSpiner()
     }
 
 
