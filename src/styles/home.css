@@ -94,10 +94,7 @@ body,html {
   cursor: pointer;
 }
 
-.search-load{
-  min-height:50px;
-  min-width: 265px;
-}
+
 .top-calc-100vh-126px{
   top:calc(100vh - 126px)
 }

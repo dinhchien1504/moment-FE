@@ -24,13 +24,17 @@ const Header = () => {
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
     const [showNoti, setShowNoti] = useState<boolean>(false)
-    const [showPost, setShowPost] = useState<boolean>(false)
+    // const [showPost, setShowPost] = useState<boolean>(false)
 
     const [numberOfNoti, setNumberOfNoti] = useState<number>(0)
    const {disconnect} = useSocketContext()
 
 
-
+   const handleRedirect = () => {
+       startLoading()
+       router.push("/")
+       stopLoading()
+   }
 
 
     useEffect(() => {
@@ -53,7 +57,6 @@ const Header = () => {
         startLoading()
         cookie.remove("session-id");
         disconnect()
-        setNumberOfNoti(0)
         router.push("/login")
 
     }
@@ -84,7 +87,7 @@ const Header = () => {
                                 width={50}
                                 height={50}
                                 alt='error'
-                                //onClick={()=>{setShowPost(true)}}
+                                onClick={handleRedirect}
                             />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -135,10 +138,17 @@ const Header = () => {
                                                 </div>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
-                                                <i className="fa-solid "></i> Cài đặt
+                                            <Dropdown.Item eventKey="2" className='font-item' as='div' 
+                                            onClick={() => { 
+                                                startLoading()
+                                                router.push(user?.userName+'') 
+                                                stopLoading()}}>
+                                                    <i className="fa-solid fa-user"></i> Trang cá nhân
                                             </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
+                                            <Dropdown.Item eventKey="3" className='font-item' as='div'>
+                                            <i className="fa-solid fa-gear"></i> Cài đặt
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất

@@ -75,7 +75,7 @@ const FriendList = () => {
 
       <div className="top-calc-100vh-126px position-fixed z-1 d-flex d-sm-none">
         <div
-          className="bg-dark-subtle p-2 rounded-2"
+          className="bg-dark-subtle p-2 rounded-2 ms-1"
           onClick={() => {
             handleShow();
           }}
