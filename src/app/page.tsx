@@ -4,10 +4,11 @@ import FriendList from "@/components/home/friend_list";
 import VerticalSwiper from "@/components/home/swiper_vertical";
 import "@/styles/home.css";
 import "@/styles/post_modal.css";
+import { getServerUTC } from "@/utils/utc_server_action";
 import { getCurrentTime } from "@/utils/utils_time";
 import { Col, Container, Row } from "react-bootstrap";
 const HomePage = async () => {
-  const time= getCurrentTime()
+  const time= await getServerUTC()
   const dataPhoto:IPhotoFilterRequest = {
     pageCurrent: 0,
     time: time,

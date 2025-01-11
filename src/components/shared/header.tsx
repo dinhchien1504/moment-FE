@@ -53,6 +53,7 @@ const Header = () => {
         startLoading()
         cookie.remove("session-id");
         disconnect()
+        setNumberOfNoti(0)
         router.push("/login")
 
     }
