@@ -20,7 +20,7 @@ body,html {
   position: relative;
 }
 .container-home{
-  height: calc(100vh - 82px);
+  height: calc(100vh - 60px);
 }
 .wrapper-swiper {
   padding-right: 41px;
@@ -95,15 +95,11 @@ body,html {
 
 
 .top-calc-100vh-126px{
-  top:calc(100vh - 126px)
+  top:calc(100vh - 142px)
 }
 .height-list-friend{
-  height: calc(100vh - 160px);
-  overflow: hidden;
-}
-.height-list-friend:hover{
+  height: calc(100vh - 150px);
   overflow: auto;
-  margin-right:0;
 }
 .height-list-friend::-webkit-scrollbar-thumb {
   background: #9a9a9a45;
@@ -122,7 +118,7 @@ body,html {
   }
 
   .container-home{
-    height: calc(100vh - 132px);
+    height: calc(100vh - 110px);
   }
   .position-sm-fixed {
     position: fixed;
