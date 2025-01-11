@@ -8,6 +8,7 @@ import FriendCard from "./friend_card";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import { startLoading } from "../shared/nprogress";
+import { getServerUTC } from "@/utils/utc_server_action";
 const FriendList = () => {
   const  [accountAcceptedResponses  ,setAccountAcceptedResponse]= useState<IAccountResponse[]|null>(null);
   const [show, setShow] = useState(false);
@@ -27,9 +28,10 @@ const FriendList = () => {
 
   useEffect(() => {
       const fetchData = async () => {
+        const time = await getServerUTC()
         const dataBody:IFriendFilterRequest={
           pageCurrent:0,
-          time:getCurrentTime()
+          time:time
         }
         const res = await FetchClientPostApi(API.ACCOUNT.LIST,dataBody);
         setAccountAcceptedResponse(res.result);

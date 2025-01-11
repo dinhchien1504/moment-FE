@@ -13,6 +13,7 @@ import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
 import PostModal from "../post/post_modal";
 import { useSocketContext } from "@/context/socket_context";
+import { getServerUTC } from "@/utils/utc_server_action";
 interface Props {
   photoResponses: IPhotoResponse[];
   time: string;
@@ -80,19 +81,16 @@ const VerticalSwiper = (props: Props) => {
   }, []);
 
   // hàm xử lý tải mới lại list ảnh
-  const handleReloadPhoto = async (value:string) => {
+  const handleReloadPhoto = async () => {
+    const time = await getServerUTC()
     if (swiperRef.current) swiperRef.current.slideTo(0);
-    // const timeReload = getCurrentTime();
-    console.log("Thời gian khi gọi ham reload, thoi gian de fetch",value)
-    setTime(value);
+    setTime(time);
     setPageCurrent(0);
 
     const dataBody: IPhotoFilterRequest = {
       pageCurrent: 0,
-      time: value,
+      time: time,
     };
-
-    console.log("time reload >>> ",value)
 
     try {
       startLoading();
@@ -227,7 +225,7 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div className="bg-primary p-2 rounded-2" onClick={() => {handleReloadPhoto(getCurrentTime())}}>
+          <div className="bg-primary p-2 rounded-2" onClick={() => {handleReloadPhoto()}}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="25"

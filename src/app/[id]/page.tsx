@@ -7,12 +7,13 @@ import "@/styles/profile_user.css";
 import API from "@/api/api";
 import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
 import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
+import { getServerUTC } from "@/utils/utc_server_action";
 
 
 const ProfileUser = async (props: any ) => {
   const { params } = props;
   // console.log ('para',params.id);
-  const timestamp= getCurrentTime()
+  const timestamp= await getServerUTC()
 
   const dataProfile: IProfileFillterRequest  = {
     pageCurrent: 0,

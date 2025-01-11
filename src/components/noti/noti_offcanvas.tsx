@@ -11,6 +11,7 @@ import API from '@/api/api';
 import { FetchClientPostApi } from '@/api/fetch_client_api';
 import Badge from 'react-bootstrap/Badge';
 import { useSocketContext } from '@/context/socket_context';
+import { getServerUTC } from '@/utils/utc_server_action';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -25,7 +26,7 @@ const NotiOffCanvas = (props: IProps) => {
     const [notiUnread, setNotiUnread] = useState<INotiResponse[]>([])
     const [notiAll, setNotiAll] = useState<INotiResponse[]>([])
 
-    const [timeCurrent, setTimeCurrent] = useState<string>(getCurrentTime())
+    const [timeCurrent, setTimeCurrent] = useState<string>("")
 
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
@@ -37,6 +38,8 @@ const NotiOffCanvas = (props: IProps) => {
     const [notiNew, setNotiNew] = useState<any>("unknow")
 
     const { subscribe } = useSocketContext();
+
+
 
     useEffect(() => {
 
@@ -60,6 +63,7 @@ const NotiOffCanvas = (props: IProps) => {
     }, [notiNew])
 
     const fetchGetNotiUnread = async (pageCurrent: number) => {
+      
         setIsloadingNotiUnread(true)
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
@@ -98,6 +102,8 @@ const NotiOffCanvas = (props: IProps) => {
         setIsloadingNotiUnread(false)
     }
 
+    
+
     const fetchGetNotiAll = async (pageCurrent: number) => {
         setIsloadingNotiAll(true)
         const req: NotiFilterRequest = {
@@ -129,6 +135,14 @@ const NotiOffCanvas = (props: IProps) => {
     }
 
 
+    useEffect ( () => {
+        const getTimeUTC = async () => {
+            const time = await getServerUTC()
+            setTimeCurrent(time)
+        }
+        getTimeUTC ()
+    }, [])
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -143,8 +157,11 @@ const NotiOffCanvas = (props: IProps) => {
 
         }
 
-        fetchData()
-    }, [])
+        if (timeCurrent != "") {
+            fetchData()
+        }
+
+    }, [timeCurrent])
 
 
 
