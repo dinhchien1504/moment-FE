@@ -115,3 +115,6 @@
 .dropdown-toggle::after  {
     display:  none;
 }
+.bg-body-tertiary.ctn-header.navbar.navbar-expand.navbar-light{
+    height: 60px;
+}
