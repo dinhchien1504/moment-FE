@@ -18,8 +18,8 @@ const HomePage = async () => {
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
   return (
     <>
-      <Container fluid className="container-home h-100">
-        <Row>
+      <Container fluid className="container-home">
+        <Row className="h-100">
           <Col md={5} lg={3}  className="d-block p-0">
             <FriendList />
           </Col>

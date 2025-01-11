@@ -19,7 +19,7 @@ body,html {
   background-color: #f2f4f7;
   position: relative;
 }
-.container-home > .row{
+.container-home{
   height: calc(100vh - 82px);
 }
 .wrapper-swiper {
@@ -121,7 +121,7 @@ body,html {
     padding-right: 0;
   }
 
-  .container-home > .row{
+  .container-home{
     height: calc(100vh - 132px);
   }
   .position-sm-fixed {

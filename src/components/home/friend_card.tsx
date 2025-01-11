@@ -165,7 +165,7 @@ const FriendCard = (props: Props) => {
             className="img-avt d-flex flex-column mx-2"
           />
           <div className="info-friend">
-          <Link className=" mb-1 d-block text-black" href={urlProfile}>
+          <Link className="mb-1 d-block text-black text-decoration-none" href={urlProfile}>
               {name}
             </Link>
             <span>{loading ?<SpinnerAnimation/>:statusMessage}</span>
