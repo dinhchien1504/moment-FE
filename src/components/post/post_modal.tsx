@@ -102,21 +102,21 @@ const PostModal = (props: IProps) => {
     setFileRoot(file)
   }
 
-  return (
-    <>
-      <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
-        <div className="flex-grow-1 flex-shrink-1 flex-basis-auto">
-          <div className="div-info-capture">
-            <div>
-              <Image
-                src="/images/avatar.jpg"
-                width={50}
-                height={50}
-                alt="Dropdown Trigger"
-                className="img-avatar-item"
-              />
-              {user?.name}
-            </div>
+    return (
+        <>
+             <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
+                <div className="flex-grow-1 flex-shrink-1 flex-basis-auto">
+                  <div className="div-info-capture">
+                    <div className="d-flex align-items-center">
+                      <Image
+                        src="/images/avatar.jpg"
+                        width={50}
+                        height={50}
+                        alt="Dropdown Trigger"
+                        className="img-avatar-item"
+                      />
+                      <span>{user?.name}</span>
+                    </div>
 
             <div className="div-btn-capture">
               {md !== null && md.mobile() ? (

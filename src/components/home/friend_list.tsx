@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
 import { useRouter } from "next/navigation";
-import { Button } from "react-bootstrap";
-
 import { getServerUTC } from "@/utils/utc_server_action";
 import Link from "next/link";
 const FriendList = () => {
@@ -60,7 +58,7 @@ const FriendList = () => {
             ) : (
               Array.isArray(accountAcceptedResponses) &&
               accountAcceptedResponses?.map((accountResponse, index) => (
-                <div key={index} className="m-1 bg-hover p-2 rounded-2">
+                <div key={index} className="m-1">
                   <FriendCard accountResponse={accountResponse}></FriendCard>
                 </div>
               ))
@@ -73,7 +71,7 @@ const FriendList = () => {
 
       <div className="top-calc-100vh-126px position-fixed z-1 d-flex d-sm-none">
         <div
-          className="bg-dark-subtle p-2 rounded-2"
+          className="bg-dark-subtle p-2 rounded-2 ms-1"
           onClick={() => {
             handleShow();
           }}

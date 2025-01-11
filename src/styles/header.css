@@ -92,7 +92,10 @@
 
 
 /* end noti */
-
+.search-load{
+    min-height:50px;
+    min-width: 265px;
+  }
 
 @media (max-width: 550px) {
     .nav-profile{
