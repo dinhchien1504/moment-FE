@@ -1,51 +1,197 @@
+import API from '@/api/api';
+import { FetchClientPutApi } from '@/api/fetch_client_api';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
 function FormChangePassword() {
-  const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [isHiddenOld, setIsHiddenOld] = useState(true);
+    const [isHiddenNew, setIsHiddenNew] = useState(true);
+    const [isHiddenConfirm, setIsHiddenConfirm] = useState(true);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+        resetForm();
+    };
 
-  return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Thay đổi mật khẩu
-      </Button>
+    const handleShow = () => setShow(true);
 
-      <Modal show={show} onHide={handleClose}>
+    const resetForm = () => {
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setErrorMessage("");
+        setSuccessMessage("");
+    };
+
+
+    const handleSave = async () => {
+        // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
+        if (newPassword !== confirmPassword) {
+            alert("Mật khẩu mới và xác nhận mật khẩu không khớp!");
+            return;
+        }
+
+        // Kiểm tra mật khẩu mới có hợp lệ không (có thể thêm vào các quy tắc kiểm tra)
+        if (!newPassword.trim()) {
+            alert("Mật khẩu mới không được để trống!");
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+            const response = await FetchClientPutApi(API.SETTING.CHANGE_PASSWORD, {
+                oldPassword,
+                newPassword,
+            });
+
+            if (response.status === 200) {
+                alert("Đổi mật khẩu thành công!");
+                handleClose(); // Đóng modal
+            } else if (response.status === 400) {
+                // Xử lý lỗi từ backend, ví dụ như mật khẩu cũ không chính xác
+                const error = response.errors?.find((err: any) => err.code === "OLD_PASSWORD_INCORRECT");
+                if (!error) {
+                    alert("Mật khẩu cũ không chính xác! Vui lòng kiểm tra lại.");
+                } else {
+                    alert("Đã xảy ra lỗi: " + response.message);
+                }
+            } else {
+                alert("Thay đổi mật khẩu thất bại! Vui lòng thử lại.");
+            }
+        } catch (error) {
+            console.error("Error changing password:", error);
+            alert("Đã xảy ra lỗi trong quá trình thay đổi mật khẩu!");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const toggleVisibilityOld = () => setIsHiddenOld(!isHiddenOld);
+    const toggleVisibilityNew = () => setIsHiddenNew(!isHiddenNew);
+    const toggleVisibilityConfirm = () => setIsHiddenConfirm(!isHiddenConfirm);
+
+    return (
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                Thay đổi mật khẩu
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Đổi mật khẩu</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        {/* Old Password Field */}
+                        <Form.Group className="mb-3" controlId="oldPassword">
                             <Form.Label>Nhập mật khẩu cũ</Form.Label>
-                            <Form.Control type="password" autoFocus />
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={isHiddenOld ? "password" : "text"}
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                    autoFocus
+                                />
+                                <span
+                                    onClick={toggleVisibilityOld}
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {isHiddenOld ? (
+                                        <i className="fa fa-eye-slash"></i>
+                                    ) : (
+                                        <i className="fa fa-eye"></i>
+                                    )}
+                                </span>
+                            </div>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+
+                        {/* New Password Field */}
+                        <Form.Group className="mb-3" controlId="newPassword">
                             <Form.Label>Nhập mật khẩu mới</Form.Label>
-                            <Form.Control type="password" />
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={isHiddenNew ? "password" : "text"}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                                <span
+                                    onClick={toggleVisibilityNew}
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {isHiddenNew ? (
+                                        <i className="fa fa-eye-slash"></i>
+                                    ) : (
+                                        <i className="fa fa-eye"></i>
+                                    )}
+                                </span>
+                            </div>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+
+                        {/* Confirm Password Field */}
+                        <Form.Group className="mb-3" controlId="confirmPassword">
                             <Form.Label>Nhập lại mật khẩu mới</Form.Label>
-                            <Form.Control type="password" />
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={isHiddenConfirm ? "password" : "text"}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                />
+                                <span
+                                    onClick={toggleVisibilityConfirm}
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {isHiddenConfirm ? (
+                                        <i className="fa fa-eye-slash"></i>
+                                    ) : (
+                                        <i className="fa fa-eye"></i>
+                                    )}
+                                </span>
+                            </div>
                         </Form.Group>
+
+                        {errorMessage && (
+                            <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
+                        )}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Đóng
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleSave}>
                         Lưu thay đổi
                     </Button>
                 </Modal.Footer>
             </Modal>
-    </>
-  );
+        </>
+    );
 }
 
 export default FormChangePassword;
