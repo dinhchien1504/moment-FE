@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function FormChangePassword() {
     const [show, setShow] = useState(false);
@@ -36,40 +38,48 @@ function FormChangePassword() {
     const handleSave = async () => {
         // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
         if (newPassword !== confirmPassword) {
-            alert("Mật khẩu mới và xác nhận mật khẩu không khớp!");
+            toast.error("Mật khẩu mới và xác nhận mật khẩu không khớp!", { autoClose: 3000 });
             return;
         }
-
+    
         // Kiểm tra mật khẩu mới có hợp lệ không (có thể thêm vào các quy tắc kiểm tra)
         if (!newPassword.trim()) {
-            alert("Mật khẩu mới không được để trống!");
+            toast.error("Mật khẩu không được để trống!", { autoClose: 3000 });
             return;
         }
-
+        if (!oldPassword.trim()) {
+            toast.error("Mật khẩu không được để trống!", { autoClose: 3000 });
+            return;
+        }
+        if (oldPassword === newPassword) {
+            toast.error("Mật khẩu cũ và mật khẩu mới không được trùng nhau!", { autoClose: 3000 });
+            return;
+        }
+    
         try {
             setIsSaving(true);
             const response = await FetchClientPutApi(API.SETTING.CHANGE_PASSWORD, {
                 oldPassword,
                 newPassword,
             });
-
+    
             if (response.status === 200) {
-                alert("Đổi mật khẩu thành công!");
+                toast.success("Đổi mật khẩu thành công!", { autoClose: 3000 });
                 handleClose(); // Đóng modal
             } else if (response.status === 400) {
                 // Xử lý lỗi từ backend, ví dụ như mật khẩu cũ không chính xác
                 const error = response.errors?.find((err: any) => err.code === "OLD_PASSWORD_INCORRECT");
                 if (!error) {
-                    alert("Mật khẩu cũ không chính xác! Vui lòng kiểm tra lại.");
+                    toast.error("Mật khẩu cũ không chính xác! Vui lòng kiểm tra lại.", { autoClose: 3000 });
                 } else {
-                    alert("Đã xảy ra lỗi: " + response.message);
+                    toast.error(`Đã xảy ra lỗi: ${response.message}`, { autoClose: 3000 });
                 }
             } else {
-                alert("Thay đổi mật khẩu thất bại! Vui lòng thử lại.");
+                toast.error("Thay đổi mật khẩu thất bại! Vui lòng thử lại.", { autoClose: 3000 });
             }
         } catch (error) {
             console.error("Error changing password:", error);
-            alert("Đã xảy ra lỗi trong quá trình thay đổi mật khẩu!");
+            toast.error("Đã xảy ra lỗi trong quá trình thay đổi mật khẩu!", { autoClose: 3000 });
         } finally {
             setIsSaving(false);
         }

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ModalChangInfoProps {
   accountInfo: IAccountResponse;
@@ -24,6 +25,24 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
   };
 
   const handleSave = async () => {
+
+    // Kiểm tra các trường thông tin
+    if (!updatedInfo.name.trim()) {
+      toast.error("Họ tên không được để trống!", { autoClose: 3000 });
+      return;
+    }
+    if (!updatedInfo.birthday.trim()) {
+      toast.error("Ngày sinh không được để trống!", { autoClose: 3000 });
+      return;
+    }
+    if (!updatedInfo.sex) {
+      toast.error("Vui lòng chọn giới tính!", { autoClose: 3000 });
+      return;
+    }
+    if (!updatedInfo.address.trim()) {
+      toast.error("Địa chỉ không được để trống!", { autoClose: 3000 });
+      return;
+    }
     try {
       setIsSaving(true); // Bật trạng thái đang lưu
       const response = await FetchClientPutApi(API.SETTING.SETTING, updatedInfo); // Gọi API PUT
