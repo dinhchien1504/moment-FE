@@ -15,7 +15,6 @@ const RequestFriend = () => {
   useEffect(() => {
       subscribe('/user/queue/friend', (message) => {
           const receivedMessage:IAccountResponse = JSON.parse(message.body);
-          console.log('Notification received:', receivedMessage);
           setFriendRequests((prevFriendRequests) => [receivedMessage, ...prevFriendRequests?prevFriendRequests:[]]);
       });
   }, [])
