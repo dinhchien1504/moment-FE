@@ -110,6 +110,9 @@ body,html {
   height: 5px;
 }
 
+.badge-home{
+  top:-5px;
+}
 
 /* trong mobile */
 @media (max-width: 768px) {

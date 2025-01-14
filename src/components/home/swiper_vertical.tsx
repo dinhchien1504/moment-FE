@@ -25,14 +25,6 @@ const VerticalSwiper = (props: Props) => {
     props.photoResponses
   );
 
-  // const { subscribe } = useSocketContext();
-  // useEffect(() => {
-  //     subscribe('/user/queue/friend', (message) => {
-  //         const receivedMessage = JSON.parse(message.body);
-  //         console.log('Notification received:', receivedMessage);
-  //     });
-  // }, [])
-
   // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
   const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
@@ -46,8 +38,6 @@ const VerticalSwiper = (props: Props) => {
 
   // useRef cho swiper
   const swiperRef = useRef<SwiperCore | null>(null);
-
-    const { startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext()
 
   // hàm đóng mở modal ảnh
   const openModal = (src: string) => {
@@ -84,7 +74,7 @@ const VerticalSwiper = (props: Props) => {
 
   // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
-    const time = await getServerUTC()
+    const time = await getServerUTC();
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(time);
     setPageCurrent(0);
@@ -95,14 +85,14 @@ const VerticalSwiper = (props: Props) => {
     };
 
     try {
-      startLoadingSpiner()
+      setLoading(true);
       const res = await FetchClientPostApi(API.PHOTO.LIST, dataBody);
       const newPhotoResponses = res.result;
       setPhotoResponses(newPhotoResponses);
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
-      stopLoadingSpiner()
+      setLoading(false);
     }
   };
 
@@ -156,31 +146,35 @@ const VerticalSwiper = (props: Props) => {
           }}
           freeMode={false}
         >
-          {
-            <SwiperSlide>
-            <PostModal handleReloadPhoto={handleReloadPhoto }/>
-            </SwiperSlide>
-          }
-          {photoResponses?.map((photoResponse, index) => (
-            <SwiperSlide key={index}>
-              <PhotoCard
-                photoResponse={photoResponse}
-                setUrlImageModal={setUrlImageModal}
-              ></PhotoCard>
-            </SwiperSlide>
-          ))}
-          {loading && (
+          {loading ? (
             <SwiperSlide>
               <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
                 <SpinnerAnimation />
               </div>
             </SwiperSlide>
+          ) : (
+            <>
+            <SwiperSlide>
+                <PostModal handleReloadPhoto={handleReloadPhoto} />
+              </SwiperSlide>
+              {photoResponses?.map((photoResponse, index) => (
+                <SwiperSlide key={index}>
+                  <PhotoCard
+                    photoResponse={photoResponse}
+                    setUrlImageModal={setUrlImageModal}
+                  ></PhotoCard>
+                </SwiperSlide>
+              ))}
+            </>
           )}
         </Swiper>
 
         {/* popup image */}
         {isModalOpen && (
-          <div className="modal-custom-overlay position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center" onClick={closeModal}>
+          <div
+            className="modal-custom-overlay position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center"
+            onClick={closeModal}
+          >
             <div
               className="modal-custom-content position-relative"
               onClick={(e) => e.stopPropagation()}
@@ -227,7 +221,13 @@ const VerticalSwiper = (props: Props) => {
               </svg>
             </div>
           </div>
-          <div className="bg-primary p-2 rounded-2" onClick={() => {handleReloadPhoto()}}>
+          <div
+            className="bg-primary p-2 rounded-2"
+            onClick={() => {
+              setPhotoResponses([]);
+              handleReloadPhoto();
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="25"

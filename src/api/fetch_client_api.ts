@@ -81,7 +81,6 @@ export const FetchClientGetApiWithSignal = async (api: string, signal: AbortSign
   } catch (error: any) {
     // Nếu yêu cầu bị hủy (AbortError)
     if (error.name === "AbortError") {
-      console.log("Yêu cầu search đã được dừng");
     } else if (error.message === "Unauthorized") {
       window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập nếu Unauthorized
     } else {
