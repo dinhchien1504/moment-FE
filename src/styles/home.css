@@ -49,7 +49,7 @@ body,html {
   min-height: 60px;
 }
 .post-info .img-avt img {
-  width: auto;
+  width: 50px;
   height: 50px;
 }
 .post-caption {
