@@ -1,19 +1,22 @@
 "use client";
+
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { getCurrentTime } from "@/utils/utils_time";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
-import { getCurrentTime } from "@/utils/utils_time";
-import { startLoading, stopLoading } from "../shared/nprogress";
-
+import PostModal from "../post/post_modal";
+import { useSocketContext } from "@/context/socket_context";
+import { getServerUTC } from "@/utils/utc_server_action";
+import { useLoadingContext } from "@/context/loading_context";
 interface Props {
   photoResponses: IPhotoResponse[];
-  timezone: string;
-  timestamp:string;
+  time: string;
 }
 
 const VerticalSwiper = (props: Props) => {
@@ -21,23 +24,35 @@ const VerticalSwiper = (props: Props) => {
   const [photoResponses, setPhotoResponses] = useState<IPhotoResponse[]>(
     props.photoResponses
   );
-  // taoj cacs useState
-  const [time, setTime] = useState<string>(props.timestamp);
-  const timezone =props.timezone;
+
+  // useState thực hiện lưu các giá trị để fetch các ảnh tiếp theo
+  const [time, setTime] = useState<string>(props.time);
   const [pageCurrent, setPageCurrent] = useState<number>(0);
+
+  // useState cho modal ảnh
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("");
+
+  // useState cho loading
+  const [loading, setLoading] = useState(false);
+
+  // useRef cho swiper
   const swiperRef = useRef<SwiperCore | null>(null);
-  // xu ly dong mo modal
+
+  // hàm đóng mở modal ảnh
   const openModal = (src: string) => {
     setImageSrc(src);
     setIsModalOpen(true);
+  };
+  const setUrlImageModal = (src: string) => {
+    openModal(src);
   };
   const closeModal = () => {
     setIsModalOpen(false);
     setImageSrc("");
   };
 
+  // useEffect cho sự kiện keydown cho swiper
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!swiperRef.current) return;
@@ -57,58 +72,52 @@ const VerticalSwiper = (props: Props) => {
     };
   }, []);
 
+  // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
-    startLoading();
+    const time = await getServerUTC();
     if (swiperRef.current) swiperRef.current.slideTo(0);
-    setTime(getCurrentTime());
+    setTime(time);
     setPageCurrent(0);
-    try {
-      await fetchReloadPhoto();
-    } catch (error) {
-      console.error("Error fetching additional images:", error);
-    } finally {
-      stopLoading();
-    }
-  };
 
-  const fetchReloadPhoto = async () => {
-    const dataBody = {
-      pageCurrent: pageCurrent,
-      timeStamp: time,
-      timezone:timezone
-    };
-    try {
-      const res = await FetchClientPostApi(API.HOME.PHOTO, dataBody);
-      const newPhotoResponses = res.result;
-      setPhotoResponses(newPhotoResponses);
-    } catch (error) {
-      console.error("Error fetching additional images:", error);
-    }
-  };
-
-  const handleAdditionalPhoto = () => {
-    setPageCurrent(pageCurrent + 1);
-    fetchAdditionalPhoto();
-  };
-
-  const fetchAdditionalPhoto = async () => {
-    const data = {
-      pageCurrent: pageCurrent,
+    const dataBody: IPhotoFilterRequest = {
+      pageCurrent: 0,
       time: time,
     };
 
     try {
-      const res = await FetchClientPostApi(API.HOME.PHOTO, data);
-
+      setLoading(true);
+      const res = await FetchClientPostApi(API.PHOTO.LIST, dataBody);
       const newPhotoResponses = res.result;
-      if(newPhotoResponses!=null && newPhotoResponses!= undefined)
-      setPhotoResponses((prevPhotoResponses) => [
-        ...prevPhotoResponses,
-        ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
-      ]);
+      setPhotoResponses(newPhotoResponses);
     } catch (error) {
       console.error("Error fetching additional images:", error);
     } finally {
+      setLoading(false);
+    }
+  };
+
+  // hàm xử lý tải thêm ảnh và list có sẵn
+  const fetchAdditionalPhoto = async () => {
+    setPageCurrent(pageCurrent + 1);
+    const data: IPhotoFilterRequest = {
+      pageCurrent: pageCurrent + 1,
+      time: time,
+    };
+
+    try {
+      setLoading(true);
+      const res = await FetchClientPostApi(API.PHOTO.LIST, data);
+
+      const newPhotoResponses = res.result;
+      if (newPhotoResponses != null && newPhotoResponses != undefined)
+        setPhotoResponses((prevPhotoResponses) => [
+          ...prevPhotoResponses,
+          ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
+        ]);
+    } catch (error) {
+      console.error("Error fetching additional images:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,41 +134,52 @@ const VerticalSwiper = (props: Props) => {
           }}
           mousewheel={true}
           modules={[Navigation, Mousewheel]}
-          className="h-100"
+          className="h-100 z-0"
           autoHeight={true}
-          zoom={{
-            maxRatio: 3, // Kích thước tối đa khi zoom
-            minRatio: 1, // Kích thước tối thiểu khi zoom
-          }}
           lazyPreloadPrevNext={2}
+          // loop={false}
+          // speed={1000}
           onSlideChange={(swiper) => {
             if (swiper.activeIndex === 5 * pageCurrent + 3) {
-              handleAdditionalPhoto();
+              fetchAdditionalPhoto();
             }
-            const slideIndex = swiper.activeIndex;
-            const currentPhoto = photoResponses[slideIndex];
-            console.log(currentPhoto.caption);
-            
           }}
+          freeMode={false}
         >
-          {photoResponses?.map((photoResponse, index) => (
-            <SwiperSlide key={index}>
-              <PhotoCard
-                photoResponse={photoResponse}
-                openModal={openModal}
-              ></PhotoCard>
+          {loading ? (
+            <SwiperSlide>
+              <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
+                <SpinnerAnimation />
+              </div>
             </SwiperSlide>
-          ))}
+          ) : (
+            <>
+            <SwiperSlide>
+                <PostModal handleReloadPhoto={handleReloadPhoto} />
+              </SwiperSlide>
+              {photoResponses?.map((photoResponse, index) => (
+                <SwiperSlide key={index}>
+                  <PhotoCard
+                    photoResponse={photoResponse}
+                    setUrlImageModal={setUrlImageModal}
+                  ></PhotoCard>
+                </SwiperSlide>
+              ))}
+            </>
+          )}
         </Swiper>
 
         {/* popup image */}
         {isModalOpen && (
-          <div className="modal-custom-overlay" onClick={closeModal}>
+          <div
+            className="modal-custom-overlay position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center"
+            onClick={closeModal}
+          >
             <div
-              className="modal-custom-content"
+              className="modal-custom-content position-relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={imageSrc} alt="Zoomed" className="zoomed-image" />
+              <img src={imageSrc} alt="" className="zoomed-image" />
               <div className="modal-close" onClick={closeModal}>
                 X
               </div>
@@ -168,8 +188,8 @@ const VerticalSwiper = (props: Props) => {
         )}
 
         {/* navigation swiper */}
-        <div className="container-navigation d-flex flex-column z-1">
-          <div className="d-none flex-column m-auto d-sm-flex justify-content-center flex-grow-1">
+        <div className="container-navigation position-absolute bottom-0 end-0 d-flex flex-column z-1 ">
+          <div className="d-none flex-column m-auto d-md-flex justify-content-center flex-grow-1">
             <div className="swiper-button-up p-2 rounded-5 bg-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -202,8 +222,11 @@ const VerticalSwiper = (props: Props) => {
             </div>
           </div>
           <div
-            className="bg-primary ms-auto p-2 rounded-2 mt-auto"
-            onClick={handleReloadPhoto}
+            className="bg-primary p-2 rounded-2"
+            onClick={() => {
+              setPhotoResponses([]);
+              handleReloadPhoto();
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

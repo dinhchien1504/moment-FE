@@ -8,8 +8,8 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateSuccessUserName from './update_success';
-import { startLoading } from '../shared/nprogress';
 import { useRouter } from 'next/navigation';
+import { useLoadingContext } from '@/context/loading_context';
 
 
 function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: string; onSave: (newUserName: string) => void }) {
@@ -18,6 +18,7 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
   const [newUserName, setNewUserName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const {startLoadingSpiner} = useLoadingContext()
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setNewUserName(""); // Reset tên đăng nhập mới mỗi khi mở modal
@@ -25,7 +26,7 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
   };
 
   const handleLogout = () => {
-    startLoading()
+    startLoadingSpiner()
         cookie.remove("session-id");
         router.push("/login")
   };

@@ -2,11 +2,9 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useUserContext } from '@/context/user_context';
 import { useEffect, useState } from 'react';
-import { startLoading } from './nprogress';
 import "@/styles/header.css"
 import Image from 'next/image';
 import { Button, Form } from 'react-bootstrap';
@@ -16,28 +14,48 @@ import cookie from "js-cookie";
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import Badge from 'react-bootstrap/Badge';
 import PostModal from '../post/post_modal';
+import LiveSearch from '../home/search';
+import { GetImage } from '@/utils/handle_images';
+import Link from 'next/link';
+import { useSocketContext } from '@/context/socket_context';
+import { useLoadingContext } from '@/context/loading_context';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
     const router = useRouter()
     const [showNoti, setShowNoti] = useState<boolean>(false)
     const [showPost, setShowPost] = useState<boolean>(false)
+    const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext()
+    const [numberOfNoti, setNumberOfNoti] = useState<number>(0)
+    const { disconnect } = useSocketContext()
+
+
+
+
 
     useEffect(() => {
         const fetchUser = async () => {
+
             await fetchGetUser()
+
         }
 
         if (pathname != "/login" && pathname != "/register") {
+            startLoadingSpiner()
             fetchUser()
+            stopLoadingSpiner()
+
         }
 
     }, [])
 
     const handleLogout = () => {
-        startLoading()
+        startLoadingSpiner()
         cookie.remove("session-id");
+        disconnect()
+        setNumberOfNoti(0)
         router.push("/login")
+
     }
 
     const hanlleShowNoti = () => {
@@ -50,81 +68,70 @@ const Header = () => {
 
 
 
-
-
-
     if (pathname === "/login" || pathname === "/register") {
         return (<></>);
     }
     else {
+
         return (
             <>
                 <Navbar className="bg-body-tertiary ctn-header">
 
                     <Container fluid>
-                        <Navbar.Brand type='button'>
-                            <Image
-                                src={"/images/logo-removebg.png"}
-                                width={50}
-                                height={50}
-                                alt='error'
-                                onClick={() => { setShowPost(true) }}
-                            />
-                        </Navbar.Brand>
+
+                        <Link href={"/"}>
+                            <Navbar.Brand type='button'>
+                                <Image
+                                    src={"/images/logo-removebg.png"}
+                                    width={50}
+                                    height={50}
+                                    alt='error'
+
+                                />
+                            </Navbar.Brand>
+                        </Link>
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
                         <Navbar.Collapse id="basic-navbar-nav">
 
                             <Nav className="mx-auto">
-                                <InputGroup className="d-flex justify-content-center">
-
-                                    <InputGroup.Text id="basic-addon1" className='icon-search'>
-                                        <i className="fa fa-magnifying-glass inp-search"></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Tìm kiếm bạn"
-                                        aria-label="Search"
-                                        aria-describedby="basic-addon1"
-                                        className='inp-search'
-                                    />
-                                </InputGroup>
+                                <LiveSearch></LiveSearch>
 
                             </Nav>
 
                             <Nav>
-                                <Nav.Link type='div' className='d-flex align-items-center nav-noti'>
+                                <Nav className='d-flex align-items-center nav-noti'>
                                     <Button className='btn-noti'
                                         onClick={() => { hanlleShowNoti() }}
                                     >
                                         <i className="fa-solid fa-bell icon-bell"></i>
-                                        <Badge bg="secondary" className='badge-custom'>9</Badge>
+                                        {numberOfNoti > 0 && <Badge bg="secondary" className='badge-custom bg-noti'>{numberOfNoti}</Badge>}
                                     </Button>
-                                </Nav.Link>
+                                </Nav>
 
-                                <Nav.Link type='div' className='nav-profile'>
+                                <Nav className='nav-profile'>
 
                                     <Dropdown
                                         drop='down'
                                     >
                                         <Dropdown.Toggle as="div" id="dropdown-custom-components"
                                         >
-                                            <Image
-                                                src="/images/avatar.jpg"
-                                                width={50}
-                                                height={50}
-                                                alt="Dropdown Trigger"
+                                            <img
+                                                src={GetImage(user?.urlPhoto)}
+                                                alt="Không có ảnh"
                                                 className='img-avatar'
                                                 onClick={() => { setShowNoti(false) }}
+
                                             />
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
                                                 <div className='text-center font-item'>
-                                                    <Image
-                                                        src="/images/avatar.jpg"
-                                                        width={50}
-                                                        height={50}
+                                                    <img
+                                                        src={GetImage(user?.urlPhoto)}
+
                                                         alt="Dropdown Trigger"
                                                         className='img-avatar-item'
                                                     />
@@ -132,14 +139,19 @@ const Header = () => {
                                                 </div>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item as="div" className='font-item' eventKey="2">
+                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
+                                                <Link href={user?.userName+''} className='text-decoration-none text-dark'>
+                                                    <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
+                                                </Link>
+                                            </Dropdown.Item>
+                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
                                                 <Link href="/setting" passHref legacyBehavior>
                                                     <div>
                                                         <i className="fa-solid fa-gear"></i> Cài đặt
                                                     </div>
                                                 </Link>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
+                                                </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
@@ -147,7 +159,7 @@ const Header = () => {
                                         </Dropdown.Menu>
                                     </Dropdown>
 
-                                </Nav.Link>
+                                </Nav>
 
                             </Nav>
                         </Navbar.Collapse>
@@ -156,11 +168,13 @@ const Header = () => {
                 <NotiOffCanvas
                     showNoti={showNoti}
                     setShowNoti={setShowNoti}
+                    setNumberOfNoti={setNumberOfNoti}
+                    numberOfNoti={numberOfNoti}
                 />
-                <PostModal
-                    showPost={showPost}
-                    setShowPost={setShowPost}
-                />
+                {/* <PostModal
+                showPost = {showPost}
+                setShowPost= {setShowPost}
+                /> */}
             </>
         )
     }

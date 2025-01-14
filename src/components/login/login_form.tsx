@@ -6,27 +6,28 @@ import { Button } from 'react-bootstrap';
 import Link from 'next/link'
 import { useState } from 'react';
 import { LoginServerActions } from './login_server_actions';
-import { startLoading, stopLoading } from '../shared/nprogress';
 import { useUserContext } from '@/context/user_context';
 import { useRouter } from 'next/navigation';
 import { validNoEmpty } from '@/validation/valid';
 import AuthErrorCode from '@/exception/auth_error_code';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { useLoadingContext } from '@/context/loading_context';
 
 const LoginForm = () => {
     const [userName, setUserName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [isvalid, setIsValid] = useState<boolean>(false) // luc dau tat valid
-    
+
     const [isvalidItem, setIsvalidItem] = useState<boolean[]>(Array(2).fill(false));
 
 
     const [messagePassword, setMessagePassword] = useState<string>("Vui lòng điền mật khẩu")
-    const [isHidden, setIsHidden] = useState<boolean> (true)
+    const [isHidden, setIsHidden] = useState<boolean>(true)
 
-    const { setUser,fetchGetUser } = useUserContext();
+    const { setUser, fetchGetUser } = useUserContext();
     const router = useRouter()
 
+    const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext()
 
     const handleLogin = async () => {
         //bat dau validation
@@ -38,7 +39,7 @@ const LoginForm = () => {
         }
 
         // bat dau thanh tien trinh
-        startLoading()
+        startLoadingSpiner()
 
         // khoi tao du lieu
         const authenticationRequest: AuthenticationRequest = {
@@ -48,7 +49,7 @@ const LoginForm = () => {
         const res = await LoginServerActions(authenticationRequest)
 
         // login  thanh cong
-        if ( res && res.status === 200) {
+        if (res && res.status === 200) {
 
             // lay thong tin user
             await fetchGetUser()
@@ -59,12 +60,12 @@ const LoginForm = () => {
         // login khong thanh cong
         else {
 
-            const newArray = [...isvalidItem]; 
+            const newArray = [...isvalidItem];
             newArray[1] = false
             setIsvalidItem(newArray)
 
             setMessagePassword(AuthErrorCode.AUTH_1)
-            stopLoading()
+            stopLoadingSpiner()
         }
 
     }
@@ -78,10 +79,7 @@ const LoginForm = () => {
     }
 
     // router
-    const handleRouterRegister = () => {
-        startLoading()
-        router.push("/register")
-    }
+
 
     const onKeyDown = (e: any) => {
         if (e.key == "Enter") {
@@ -122,12 +120,12 @@ const LoginForm = () => {
                 </div>
 
                 <FloatingLabel
-  
+
                     label="Tài khoản"
                     className="fl-val-inp"
                 >
                     <Form.Control type="text" placeholder="Tài khoản" className='input-user-name'
-                        autoComplete="username" 
+                        autoComplete="username"
                         isInvalid={isvalid && !isvalidItem[0]}
                         onChange={(e) => { handleUserName(e.target.value) }}
                         onKeyDown={(e) => onKeyDown(e)}
@@ -144,11 +142,11 @@ const LoginForm = () => {
                         label="Mật khẩu"
                     >
                         <Form.Control type={isHidden ? "password" : "text"} placeholder="Mật khẩu" className='input-password'
-                        autoComplete="current-password" 
+                            autoComplete="current-password"
                             isInvalid={isvalid && !isvalidItem[1]}
                             onChange={(e) => { handlePassword(e.target.value) }}
                             onKeyDown={(e) => onKeyDown(e)}
-                            
+
                         />
                         <Form.Control.Feedback type="invalid">
                             {messagePassword}
@@ -157,10 +155,10 @@ const LoginForm = () => {
 
                     <InputGroup.Text id="basic-addon2" className='hidden-pass'>
                         <button className='btn-eye' type='button'
-                        onClick={() => {handlleHiddenPass()}}
+                            onClick={() => { handlleHiddenPass() }}
                         >
-                                 {isHidden ?  <i className="fa-regular fa-eye-slash"></i>
-                                : <i className="fa-regular fa-eye"> </i> }
+                            {isHidden ? <i className="fa-regular fa-eye-slash"></i>
+                                : <i className="fa-regular fa-eye"> </i>}
                         </button>
                     </InputGroup.Text>
                 </InputGroup>
@@ -178,10 +176,13 @@ const LoginForm = () => {
             </Form>
 
             <Form className='form-login mt-2'>
-                <Button className='btn-register'
-                    onClick={() => { handleRouterRegister() }}
-                >Đăng ký</Button>
-            </Form>
+                <Link className='btn-register'
+                    href={"/register"} >
+                    <Button className='btn-register' >
+                        Đăng ký
+                    </Button>
+                </Link>
+            </Form >
         </>
     )
 }

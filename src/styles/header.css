@@ -7,11 +7,17 @@
 
 .img-avatar{
     border-radius: 100px;
+    width: 50px;
+    height: 50px;
+    object-fit:cover ;
 }
 
 .img-avatar-item{
    margin-right: 20px;
    border-radius: 100px;
+   width: 50px;
+   height: 50px;
+   object-fit:cover ;
 }
 
 .font-item{
@@ -58,7 +64,6 @@
     color: #ff0066;
     border: 0px;
     padding: 0px;
-    width: 50px;
 }
 
 .btn-noti:hover{
@@ -81,16 +86,35 @@
 
 }
 
-/* end noti */
+.btn-noti{
+    width: 70px;
+}
 
+
+/* end noti */
+.search-load{
+    min-height:50px;
+    min-width: 290px;
+  }
 
 @media (max-width: 550px) {
     .nav-profile{
         padding-right: 0px !important;
     }
     
-    .nav-noti{
-        padding-right: 0px !important;
-    }
+   
+
 }
 
+
+
+.bg-noti{
+    background-color: #ff0066 !important;
+}
+
+.dropdown-toggle::after  {
+    display:  none;
+}
+.bg-body-tertiary.ctn-header.navbar.navbar-expand.navbar-light{
+    height: 60px;
+}

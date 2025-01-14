@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
-import { startLoading, stopLoading } from '../shared/nprogress';
 import { useState } from 'react';
 import InvalidErrorCode from '@/exception/invalid_error_code';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -12,6 +11,8 @@ import { validBirthday, validName, validNoEmpty, validPassword, validUserName } 
 import { useUserContext } from '@/context/user_context';
 import { RegisterServerActions } from './register_server_actions';
 import AccountErrorCode from '@/exception/account_error_code';
+import { useLoadingContext } from '@/context/loading_context';
+import Link from 'next/link';
 const RegisterForm = () => {
     const [isvalidItem, setIsvalidItem] = useState<boolean[]>(Array(4).fill(false));
     const [isValid, setIsValid] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const RegisterForm = () => {
     const { fetchGetUser } = useUserContext();
     const [messageUserName,setMessageUserName] = useState<string> (InvalidErrorCode.INVALID_1)
 
+    const {startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext() 
 
     // input
     const [name, setName] = useState<string>("");
@@ -40,10 +42,7 @@ const RegisterForm = () => {
     // router
     const router = useRouter()
 
-    const handleRouterLogin = () => {
-        startLoading()
-        router.push("/login")
-    }
+
     // end router
 
     // change input
@@ -92,7 +91,7 @@ const RegisterForm = () => {
         }
 
         // bat dau thanh tien trinh
-        startLoading()
+        startLoadingSpiner()
 
         const registerRequest:RegisterRequest  = {
             name:name,
@@ -102,7 +101,6 @@ const RegisterForm = () => {
             password:password,
         }
 
-        console.log("request >>> ",registerRequest)
 
         const res = await RegisterServerActions(registerRequest);
         if (res && res.status === 200) {
@@ -116,7 +114,7 @@ const RegisterForm = () => {
             setIsvalidItem(newArray)
 
             setMessageUserName(AccountErrorCode.ACCOUNT_2)
-            stopLoading()
+            stopLoadingSpiner()
         }
 
     }
@@ -236,9 +234,15 @@ const RegisterForm = () => {
             </Form>
 
             <Form className='form-register mt-2'>
-                <Button className='btn-login-new'
-                    onClick={() => { handleRouterLogin() }}
-                >Đăng nhập</Button>
+            
+                
+                <Link 
+                   href={"/login"}
+                >
+                    <Button className='btn-login-new' >
+                            Đăng nhập
+                    </Button>
+                </Link>
             </Form>
         </>
     )

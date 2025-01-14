@@ -1,34 +1,33 @@
 import API from "@/api/api";
 import { FetchServerPostApi } from "@/api/fetch_server_api";
-import PhotoCard from "@/components/home/photo_card";
+import OffcanvasFriend from "@/components/home/offcanvas_friend";
 import VerticalSwiper from "@/components/home/swiper_vertical";
 import "@/styles/home.css";
-import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
+import "@/styles/post_modal.css";
+import { getServerUTC } from "@/utils/utc_server_action";
 import { Col, Container, Row } from "react-bootstrap";
 const HomePage = async () => {
-  const timestamp= getCurrentTime()
-  const timezone = getTimeZone()
-  const data = {
+  const time= await getServerUTC()
+  const dataPhoto:IPhotoFilterRequest = {
     pageCurrent: 0,
-    time: timestamp,
-    timezone:timezone
+    time: time,
   };
-  const res = await FetchServerPostApi(API.HOME.PHOTO, data);
+
+  const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
   return (
     <>
-      <Container fluid className="container-home h-100">
-        <Row>
-          <Col sm={3} className="d-none d-sm-block">
-            col 1
+      <Container fluid className="container-home">
+        <Row className="h-100">
+          <Col md={5} lg={3}  className="d-block p-0">
+            <OffcanvasFriend />
           </Col>
-          <Col sm={6} className="h-100 p-0">
+          <Col md={7} lg={6} className="h-100 p-0">
             <VerticalSwiper
-              photoResponses={res.result}
-              timezone={timezone}
-              timestamp={timestamp}
+              photoResponses={resPhoto.result}
+              time={time}
             ></VerticalSwiper>
           </Col>
-          <Col sm={3} className="d-none d-sm-block">col 3</Col>
+          <Col md={0} lg={3} className="d-none d-md-block">col-3</Col>
         </Row>
       </Container>
       
