@@ -57,6 +57,38 @@ export const FetchClientGetApi = async (api: string) => {
     }
 }
 
+export const FetchClientPutApi = async (api: string,bodyData: any) => {
+  try {
+    if (cookie.get("session-id") === undefined) { 
+      throw new Error("Session ID is undefined"); 
+    }
+
+      const res = await fetch(api, {
+        method: "PUT", // Đúng phương thức PUT
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json", // Đặt Content-Type là JSON
+          Authorization: `Bearer ${cookie.get("session-id")}`, // Set Authorization header
+        },
+        body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
+      });
+
+  
+      const data = await res.json();
+      if (data.status === 401) {
+        throw new Error("Unauthorize"); 
+   
+      }
+      return data;
+    } catch (error) {
+      window.location.href= "/login"
+    }
+}
+
+
+
+
+
 export const FetchClientGetApiWithSignal = async (api: string, signal: AbortSignal) => {
   try {
     // Kiểm tra nếu session-id không có trong cookie
