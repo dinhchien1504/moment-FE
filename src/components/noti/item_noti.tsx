@@ -3,16 +3,29 @@ import "@/styles/item_noti.css"
 import { GetImage } from "@/utils/handle_images"
 import { formatDate } from "@/utils/utils_time"
 import Image from "next/image"
-
+import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 interface Props {
     noti:INotiResponse
 }
 
 const ItemNoti = ( props:Props) => {
     const {noti} = props
+
+    const router = useRouter()
+    const pathName  = usePathname()
+
+    const searchParams = useSearchParams();
+    const post = searchParams.get('post')
+
+    const handleShowPostDetail = (slug:string) => {
+        router.push(`${pathName}?post=${slug}`)
+    }
+
     return (
         <>
-            <div className="div-item mb-1">
+            <div className="div-item mb-1"
+            onClick={ ()  => {handleShowPostDetail (noti.slug)}}
+            >
                 <img
                     src={GetImage(noti.urlAvt)}
                     width={70}

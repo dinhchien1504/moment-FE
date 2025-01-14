@@ -7,4 +7,5 @@ interface INotiResponse {
      urlAvt:string;
      urlPhoto:string;
      status:string;
+     slug:string;
 }

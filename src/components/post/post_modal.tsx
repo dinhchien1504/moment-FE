@@ -9,7 +9,7 @@ import { captureScreen } from "./screen_shot";
 import CropModal from "./crop_modal";
 import Form from 'react-bootstrap/Form';
 import TakePhotoModal from "./take_photo_modal";
-import { handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
+import { GetImage, handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
 import Image from "next/image";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FetchClientPostApi } from "@/api/fetch_client_api";
@@ -108,8 +108,8 @@ const PostModal = (props: IProps) => {
         <div className="flex-grow-1 flex-shrink-1 flex-basis-auto">
           <div className="div-info-capture">
             <div>
-              <Image
-                src="/images/avatar.jpg"
+              <img
+                src={GetImage(user?.urlPhoto)}
                 width={50}
                 height={50}
                 alt="Dropdown Trigger"

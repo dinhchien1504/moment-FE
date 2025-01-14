@@ -12,6 +12,7 @@ import { FetchClientPostApi } from '@/api/fetch_client_api';
 import Badge from 'react-bootstrap/Badge';
 import { useSocketContext } from '@/context/socket_context';
 import { getServerUTC } from '@/utils/utc_server_action';
+import PostDetailModal from '../post_detail/post_detail_modal';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -45,14 +46,17 @@ const NotiOffCanvas = (props: IProps) => {
 
         subscribe('/user/queue/noti', (message) => {
             const receivedMessage = JSON.parse(message.body);
-            setNotiNew(receivedMessage)
+            
+                setNotiNew(receivedMessage)
+          
             console.log('Notification received:', receivedMessage);
         });
 
     }, [])
 
     useEffect(() => {
-        if (notiNew != "unknow") {
+        if (notiNew != "unknow" && ( JSON.stringify(notiNew) !=  JSON.stringify (notiUnread[0]) ))
+        {
             const notiNewConvert: INotiResponse = notiNew
             setNumberOfNoti(numberOfNoti + 1)
             setNotiUnread((prevMessages) => [notiNewConvert, ...prevMessages]);
@@ -214,6 +218,7 @@ const NotiOffCanvas = (props: IProps) => {
                     </Tabs>
                 </Offcanvas.Body>
             </Offcanvas>
+            <PostDetailModal/>
         </>
     )
 }
