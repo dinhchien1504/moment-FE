@@ -168,7 +168,7 @@ const ContentOfUser = (props: Props) => {
               return (
 
                 <Col
-                  clas
+                  
                   key={photo.id}
                   ref={isLastPhoto ? lastPhotoRef : null}
                   className="col-12 gap-3 col-sm-6 col-md-4"

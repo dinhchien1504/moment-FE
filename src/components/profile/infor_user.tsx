@@ -35,6 +35,12 @@ const InforUser = (props: Props) => {
 
           </div>
           <div className="flex gap-2" >
+            <Button variant="dark" size="sm" >Thêm bạnbạn </Button>
+            
+
+            <Button variant="dark" >Nhắn tin</Button>
+          </div>
+          <div className="flex gap-2" >
             <Button variant="dark" size="sm" >Edit Profile </Button>
             <Button variant="dark" >Posting</Button>
             <Button variant="dark">  <i className="fa-solid fa-gear"></i></Button>
