@@ -3,15 +3,17 @@ import SettingSidebar from '@/components/setting/setting_sidebar';
 import Button from 'react-bootstrap/Button';
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styles from '@/styles/setting.module.css';
 const SettingPage = () => {
 
     return (
         <>
-            Đây là trang cài đặt
-            <Button href="/" variant="secondary" size="lg">
-                Link
-            </Button>
-            <SettingSidebar />
+            <div className={styles.buttonContainer}>
+                <Button href="/" variant="secondary" size="lg" className={styles.customButton}>
+                    Home
+                </Button>
+                <SettingSidebar />
+            </div>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -25,7 +27,6 @@ const SettingPage = () => {
                 theme="light"
                 transition={Bounce}
             />
-
         </>
     )
 }

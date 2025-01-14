@@ -14,14 +14,15 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import ModalChangInfo from './modal_changeInfo';
 import FormChangePassword from './modal_changPassword';
 import ModelChangeUserName from './modal_changeUserName';
+import styles from '@/styles/setting.module.css';
 
 const SettingSidebar = () => {
 
     const [accountInfo, setAccountInfo] = useState<IAccountResponse | null>(null);
-    
-      const handleSaveUserName = (newUserName: string) => {
+
+    const handleSaveUserName = (newUserName: string) => {
         setAccountInfo((prev) => prev ? { ...prev, userName: newUserName } : prev); // Cập nhật tên đăng nhập trên giao diện
-      };
+    };
     //lấy các thông tin từ accoun
     useEffect(() => {
         const fetchAccountInfo = async () => {
@@ -45,55 +46,69 @@ const SettingSidebar = () => {
     return (
         <>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                <Row>
-                    <Col sm={3}>
-                        <Nav variant="pills" className="flex-column">
-                            <Nav.Item>
-                                <Nav.Link eventKey="first">Mật khẩu và bảo mật</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="second">Thông tin cá nhân</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                    </Col>
-                    <Col sm={9}>
-                        <Tab.Content>
-                            <Tab.Pane eventKey="first">
-                                <h3> Mật khẩu và bảo mật</h3>
-                                <FormChangePassword />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="second">
-                                <h3>Thông tin cá nhân</h3>
-                                <Card style={{ width: '45rem' }}>
-                                    <ListGroup variant="flush">
-                                        <ListGroup.Item>Email: {accountInfo.email}</ListGroup.Item>
-                                        <ListGroup.Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <span>Tên đăng nhập: {accountInfo.userName}</span>
-                                            <ModelChangeUserName
-                                                currentUserName={accountInfo.userName}
-                                                onSave={handleSaveUserName}
-                                            />
-                                        </ListGroup.Item>
+                <div className={styles.tabContainer}>
+                    <Row>
+                        <Col sm={3}>
+                            <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link eventKey="first" className={styles.customNavLink}>
+                                        Mật khẩu và bảo mật
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link eventKey="second" className={styles.customNavLink}>
+                                        Thông tin cá nhân
+                                    </Nav.Link>
+                                </Nav.Item>
 
-                                        <ListGroup.Item>Số điện thoại: {accountInfo.phoneNumber}</ListGroup.Item>
-
-                                        <Card.Header as="h5">{accountInfo.name}</Card.Header>
-                                        <Card.Body>
-                                            <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
-                                            <Card.Text>Giới tính: {accountInfo.sex}</Card.Text>
-                                            <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
-                                            <ModalChangInfo
-                                                accountInfo={accountInfo}
-                                                onSave={(updatedInfo: IAccountResponse | null) => setAccountInfo((prev) => updatedInfo ? { ...prev, ...updatedInfo } : prev)}
-                                            />
-                                        </Card.Body>
-                                    </ListGroup>
-                                </Card>
-
-                            </Tab.Pane>
-                        </Tab.Content>
-                    </Col>
-                </Row>
+                            </Nav>
+                        </Col>
+                        <Col sm={9}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                    <h3>Mật khẩu và bảo mật</h3>
+                                    <FormChangePassword />
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="second">
+                                    <h3>Thông tin cá nhân</h3>
+                                    <Card className={styles.card}>
+                                        <Card.Header as="h5" className={styles.cardHeader}>
+                                            {accountInfo.name}
+                                        </Card.Header>
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item className={styles.listGroupItem}>
+                                                Email: {accountInfo.email}
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className={styles.listGroupItem}>
+                                                <span>Tên đăng nhập: {accountInfo.userName}</span>
+                                                <ModelChangeUserName
+                                                    currentUserName={accountInfo.userName}
+                                                    onSave={handleSaveUserName}
+                                                />
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className={styles.listGroupItem}>
+                                                Số điện thoại: {accountInfo.phoneNumber}
+                                            </ListGroup.Item>
+                                            <Card.Body className={styles.cardBody}>
+                                                <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
+                                                <Card.Text>Giới tính: {accountInfo.sex}</Card.Text>
+                                                <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
+                                                <ModalChangInfo
+                                                    accountInfo={accountInfo}
+                                                    onSave={(updatedInfo) =>
+                                                        setAccountInfo((prev) =>
+                                                            updatedInfo ? { ...prev, ...updatedInfo } : prev
+                                                        )
+                                                    }
+                                                />
+                                            </Card.Body>
+                                        </ListGroup>
+                                    </Card>
+                                </Tab.Pane>
+                            </Tab.Content>
+                        </Col>
+                    </Row>
+                </div>
             </Tab.Container>
 
 
