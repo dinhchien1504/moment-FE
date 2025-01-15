@@ -7,12 +7,9 @@ import { useEffect, useState } from "react";
 import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
 
-interface Props{
-  setTotalFriend: (value:number)=> void;
-}
 
-const FriendList = (props:Props) => {
-  const setTotalFriendProps=props.setTotalFriend;
+
+const FriendList = () => {
 
   const [accountAcceptedResponses, setAccountAcceptedResponse] = useState<
     IAccountResponse[] | null
@@ -30,7 +27,6 @@ const FriendList = (props:Props) => {
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
       setAccountAcceptedResponse(res.result);
       setCountTotalFriend(res.totalItems);
-      setTotalFriendProps(res.totalItems);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách bạn bè:", error);
     }

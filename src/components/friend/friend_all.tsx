@@ -1,6 +1,6 @@
 "use client";
 import API from "@/api/api";
-import { FetchClientGetApi, FetchClientPostApi } from "@/api/fetch_client_api";
+import { FetchClientPostApi } from "@/api/fetch_client_api";
 import { useState } from "react";
 import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
 import FriendCard from "../home/friend_card";
@@ -174,7 +174,7 @@ const FriendAll = (props: FriendAllProps) => {
     return (
       <div >
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-xl-3 g-1">
-          {accountResponses.map((accountResponse, index) => (
+          {Array.isArray(accountResponses) && accountResponses.map((accountResponse, index) => (
             <div className="col" key={index}>
               <FriendCard accountResponse={accountResponse} />
             </div>

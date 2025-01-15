@@ -94,7 +94,7 @@ const LiveSearch = () => {
             <div className="align-items-center bg-dark bg-opacity-25 bottom-0 d-flex end-0 justify-content-center position-absolute start-0 top-0 z-3">
               <SpinnerAnimation />
             </div>
-            {suggestions.map((item, index) => (
+            {Array.isArray(suggestions) && suggestions.map((item, index) => (
               <FriendCard accountResponse={item} key={index} />
             ))}
           </div>
