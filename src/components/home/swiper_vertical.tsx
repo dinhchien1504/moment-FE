@@ -146,6 +146,19 @@ const VerticalSwiper = (props: Props) => {
           }}
           freeMode={false}
         >
+          <SwiperSlide>
+            <PostModal handleReloadPhoto={handleReloadPhoto} />
+          </SwiperSlide>
+
+          {photoResponses?.map((photoResponse, index) => (
+            <SwiperSlide key={index}>
+              <PhotoCard
+                photoResponse={photoResponse}
+                setUrlImageModal={setUrlImageModal}
+              ></PhotoCard>
+            </SwiperSlide>
+          ))}
+          
           {loading ? (
             <SwiperSlide>
               <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">
@@ -154,17 +167,6 @@ const VerticalSwiper = (props: Props) => {
             </SwiperSlide>
           ) : (
             <>
-            <SwiperSlide>
-                <PostModal handleReloadPhoto={handleReloadPhoto} />
-              </SwiperSlide>
-              {photoResponses?.map((photoResponse, index) => (
-                <SwiperSlide key={index}>
-                  <PhotoCard
-                    photoResponse={photoResponse}
-                    setUrlImageModal={setUrlImageModal}
-                  ></PhotoCard>
-                </SwiperSlide>
-              ))}
             </>
           )}
         </Swiper>
