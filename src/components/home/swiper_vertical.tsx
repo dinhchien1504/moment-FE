@@ -150,7 +150,7 @@ const VerticalSwiper = (props: Props) => {
             <PostModal handleReloadPhoto={handleReloadPhoto} />
           </SwiperSlide>
 
-          {photoResponses?.map((photoResponse, index) => (
+          {Array.isArray(photoResponses) && photoResponses?.map((photoResponse, index) => (
             <SwiperSlide key={index}>
               <PhotoCard
                 photoResponse={photoResponse}
@@ -158,7 +158,7 @@ const VerticalSwiper = (props: Props) => {
               ></PhotoCard>
             </SwiperSlide>
           ))}
-          
+
           {loading ? (
             <SwiperSlide>
               <div className="d-flex justify-content-center align-items-center shadow-sm rounded-2 m-2 p-2 bg-light h-100 w-100">

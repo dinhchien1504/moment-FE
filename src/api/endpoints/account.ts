@@ -5,6 +5,7 @@ const ACCOUNT_API = {
     LIST:  `${API_HOST}/api/account/friend`,
     LIST_SENT:  `${API_HOST}/api/account/friend/sent`,
     LIST_INVITED:  `${API_HOST}/api/account/friend/invited`,
+    LIST_INVITED_RECENT: `${API_HOST}/api/account/friend/invited-recent`,
     CHANGE_STATUS: `${API_HOST}/api/account/friend/status`,
     ADD: `${API_HOST}/api/account/friend/add`,
   };

@@ -4,6 +4,8 @@ import { useSocketContext } from "@/context/socket_context";
 import { useEffect, useState } from "react";
 import FriendCard from "../home/friend_card";
 import sendPushNotification from "../shared/send_push_notification";
+import { FetchClientGetApi } from "@/api/fetch_client_api";
+import API from "@/api/api";
 
 interface Props {
   setFriendRequest: (value: number) => void;
@@ -16,6 +18,19 @@ const RequestFriend = (props: Props) => {
   >(null);
 
   const { subscribe } = useSocketContext();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await FetchClientGetApi(API.ACCOUNT.LIST_INVITED_RECENT);
+        setFriendRequests(res.result);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách bạn bè:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     subscribe("/user/queue/friend", (message) => {
       const receivedMessage: IAccountResponse = JSON.parse(message.body);
@@ -24,7 +39,7 @@ const RequestFriend = (props: Props) => {
         const isExisting = updatedRequests.some(
           (friend) => friend.urlProfile === receivedMessage.urlProfile
         );
-  
+
         const newRequests = isExisting
           ? updatedRequests.map((friend) =>
               friend.friendStatus === receivedMessage.friendStatus
@@ -32,18 +47,18 @@ const RequestFriend = (props: Props) => {
                 : friend
             )
           : [receivedMessage, ...updatedRequests];
-  
+
         // Trả về danh sách bạn mới
         return newRequests;
       });
-  
+
       // Tính toán số lượng lời mời mới và cập nhật cha
       setFriendRequests((prevFriendRequests) => {
         const count = prevFriendRequests ? prevFriendRequests.length : 0;
         setFriendRequestProp(count);
         return prevFriendRequests;
       });
-  
+
       // Gửi thông báo nếu có lời mời mới
       sendPushNotification(
         `${receivedMessage.name} gửi lời mời kết bạn`,
@@ -61,7 +76,7 @@ const RequestFriend = (props: Props) => {
         </div>
       )}
 
-      {friendRequests?.map((friendRequest, index) => (
+      { Array.isArray(friendRequests) &&friendRequests?.map((friendRequest, index) => (
         <FriendCard key={index} accountResponse={friendRequest} />
       ))}
     </>
