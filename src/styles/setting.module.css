@@ -1,0 +1,117 @@
+.buttonContainer {
+    display: flex;
+    flex-direction: column; /* Sắp xếp theo cột */
+    gap: 20px; /* Khoảng cách giữa các phần tử */
+    margin: 20px 0 0 100px; /* Khoảng cách trên cùng */
+  }
+  
+  .customButton {
+    background-color: #ff0066; /* Màu nền */
+    width: 200px; /* Chiều rộng */
+    color: #fff; /* Màu chữ */
+    border: none; /* Xóa viền */
+    border-radius: 8px; /* Góc bo tròn */
+    padding: 10px 20px; /* Khoảng cách trong */
+    font-size: 18px; /* Kích thước chữ */
+    font-weight: bold; /* Đậm chữ */
+    text-decoration: none; /* Xóa gạch dưới */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+    transition: transform 0.2s, background-color 0.3s; /* Hiệu ứng chuyển đổi */
+  }
+  
+  .customButton:hover {
+    background-color: #b40048; /* Màu nền khi hover */
+    transform: translateY(-3px); /* Hiệu ứng nâng khi hover */
+  }
+  
+  .customButton:active {
+    transform: translateY(0); /* Giữ nguyên vị trí khi bấm */
+  }
+  .tabContainer {
+    margin: -20px auto;
+    padding: 10px;
+    width: 70%;
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+  }
+  
+  .navPills {
+    border-right: 2px solid #ddd; /* Đường viền phân cách */
+    padding-right: 15px; /* Khoảng cách nội dung bên phải */
+  }
+  
+  .navItem {
+    margin-bottom: 10px; /* Khoảng cách giữa các mục */
+  }
+  
+  /* styles.module.css */
+.customNavLink {
+    color: #555; /* Màu chữ mặc định */
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .customNavLink:hover {
+    color: #6c63ff;
+    background-color: rgba(108, 99, 255, 0.1);
+  }
+  
+  .customNavLink.active {
+    color: #fff;
+    background-color: #6c63ff;
+    border-radius: 5px;
+  }
+  
+  .card {
+    border: none; /* Xóa viền mặc định */
+    background-color: #ffffff; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    padding: 20px; /* Khoảng cách trong */
+  }
+  
+  .cardHeader {
+    background-color: #ff0066; /* Màu nền header */
+    color: #fff; /* Màu chữ */
+    text-align: center; /* Căn giữa chữ */
+    border-radius: 10px 10px 0 0; /* Bo góc chỉ ở phần trên */
+    padding: 15px; /* Khoảng cách trong */
+  }
+  
+  .cardBody {
+    padding: 20px; /* Khoảng cách trong */
+  }
+  
+  .listGroupItem {
+    font-size: 16px; /* Kích thước chữ */
+    color: #555; /* Màu chữ */
+    display: flex; /* Hiển thị linh hoạt */
+    justify-content: space-between; /* Căn giữa khoảng cách */
+    align-items: center; /* Căn giữa dọc */
+    padding: 15px 20px; /* Khoảng cách nội dung */
+  }
+  
+  .listGroupItem:not(:last-child) {
+    border-bottom: 1px solid #ddd; /* Đường viền giữa các mục */
+  }
+  
+  .listGroupItem span {
+    font-weight: bold; /* Đậm chữ */
+  }
+  
+  .modalButton {
+    background-color: #ff0066; /* Màu nền nút */
+    color: #fff; /* Màu chữ */
+    border: none; /* Xóa viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 5px 10px; /* Khoảng cách nội dung */
+    cursor: pointer; /* Con trỏ chuột */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi */
+  }
+  
+  .modalButton:hover {
+    background-color: #ff0066; /* Màu nền khi hover */
+  }
+  
+  

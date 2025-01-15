@@ -165,7 +165,11 @@ const Header = () => {
                                                 </Link>
                                             </Dropdown.Item>
                                                 <Dropdown.Item eventKey="3" className='font-item' as='div'>
-                                                    <i className="fa-solid fa-gear"></i> Cài đặt
+                                                <Link href="/setting" passHref legacyBehavior>
+                                                    <div>
+                                                        <i className="fa-solid fa-gear"></i> Cài đặt
+                                                    </div>
+                                                </Link>
                                                 </Dropdown.Item>
                                             <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
