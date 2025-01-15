@@ -12,7 +12,10 @@ const SettingPage = () => {
                 <Button href="/" variant="secondary" size="lg" className={styles.customButton}>
                     Home
                 </Button>
-                <SettingSidebar />
+                <div className={styles.settingSidebar}>
+                    <SettingSidebar/>
+                </div>
+                
             </div>
             <ToastContainer
                 position="top-right"

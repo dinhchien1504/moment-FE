@@ -66,7 +66,7 @@ const SettingSidebar = () => {
                         <Col sm={9}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <h3>Mật khẩu và bảo mật</h3>
+                                    <h3 className={styles.title}>Mật khẩu và bảo mật</h3>
                                     <FormChangePassword />
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
@@ -76,17 +76,17 @@ const SettingSidebar = () => {
                                             {accountInfo.name}
                                         </Card.Header>
                                         <ListGroup variant="flush">
-                                            <ListGroup.Item className={styles.listGroupItem}>
+                                            <ListGroup.Item className={styles.listGroupItemEmail}>
                                                 Email: {accountInfo.email}
                                             </ListGroup.Item>
                                             <ListGroup.Item className={styles.listGroupItem}>
-                                                <span>Tên đăng nhập: {accountInfo.userName}</span>
+                                                <span className={styles.listGroupItemUserName}>Tên đăng nhập: {accountInfo.userName}</span>
                                                 <ModelChangeUserName
                                                     currentUserName={accountInfo.userName}
                                                     onSave={handleSaveUserName}
                                                 />
                                             </ListGroup.Item>
-                                            <ListGroup.Item className={styles.listGroupItem}>
+                                            <ListGroup.Item className={styles.listGroupItemEmail}>
                                                 Số điện thoại: {accountInfo.phoneNumber}
                                             </ListGroup.Item>
                                             <Card.Body className={styles.cardBody}>
