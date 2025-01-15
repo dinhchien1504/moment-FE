@@ -12,7 +12,7 @@ const OffcanvasFriend = () => {
     else setShow(true);
   };
   const handleClose = () => setShow(false);
-  const setFriendRequest = (value: number) => {
+  const setTotalFriendRequest = (value: number) => {
     setValueBadge(value);
     setIsRequest(true);
   };
@@ -28,7 +28,7 @@ const OffcanvasFriend = () => {
         ></div>
         <div className="d-flex flex-column position-sm-fixed">
           <div className="height-list-friend">
-            <RequestFriend setFriendRequest={setFriendRequest} />
+            <RequestFriend setTotalFriendRequest={setTotalFriendRequest} />
             <FriendList />
           </div>
         </div>

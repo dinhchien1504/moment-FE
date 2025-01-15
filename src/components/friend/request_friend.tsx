@@ -8,11 +8,11 @@ import { FetchClientGetApi } from "@/api/fetch_client_api";
 import API from "@/api/api";
 
 interface Props {
-  setFriendRequest: (value: number) => void;
+  setTotalFriendRequest: (value: number) => void;
 }
 
 const RequestFriend = (props: Props) => {
-  const setFriendRequestProp = props.setFriendRequest;
+  const setTotalFriendRequest = props.setTotalFriendRequest;
   const [friendRequests, setFriendRequests] = useState<
     IAccountResponse[] | null
   >(null);
@@ -32,39 +32,25 @@ const RequestFriend = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    subscribe("/user/queue/friend", (message) => {
+    const unsubscribe = subscribe("/user/queue/friend", (message) => {
       const receivedMessage: IAccountResponse = JSON.parse(message.body);
+  
       setFriendRequests((prevFriendRequests) => {
         const updatedRequests = prevFriendRequests || [];
-        const isExisting = updatedRequests.some(
-          (friend) => friend.urlProfile === receivedMessage.urlProfile
+        const filteredRequests = updatedRequests.filter(
+          (friend) => friend.urlProfile !== receivedMessage.urlProfile
         );
-
-        const newRequests = isExisting
-          ? updatedRequests.map((friend) =>
-              friend.friendStatus === receivedMessage.friendStatus
-                ? receivedMessage
-                : friend
-            )
-          : [receivedMessage, ...updatedRequests];
-
-        // Trả về danh sách bạn mới
+        const newRequests = [...filteredRequests, receivedMessage];
+        setTotalFriendRequest(newRequests.length);
         return newRequests;
       });
-
-      // Tính toán số lượng lời mời mới và cập nhật cha
-      setFriendRequests((prevFriendRequests) => {
-        const count = prevFriendRequests ? prevFriendRequests.length : 0;
-        setFriendRequestProp(count);
-        return prevFriendRequests;
-      });
-
-      // Gửi thông báo nếu có lời mời mới
+  
       sendPushNotification(
         `${receivedMessage.name} gửi lời mời kết bạn`,
         `/friends`
       );
     });
+    
   }, []);
   
 
@@ -76,9 +62,10 @@ const RequestFriend = (props: Props) => {
         </div>
       )}
 
-      { Array.isArray(friendRequests) &&friendRequests?.map((friendRequest, index) => (
-        <FriendCard key={index} accountResponse={friendRequest} />
-      ))}
+      {Array.isArray(friendRequests) &&
+        friendRequests?.map((friendRequest, index) => (
+          <FriendCard key={index} accountResponse={friendRequest} />
+        ))}
     </>
   );
 };
