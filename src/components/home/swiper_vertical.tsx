@@ -2,18 +2,15 @@
 
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
-import { getCurrentTime } from "@/utils/utils_time";
+import { getServerUTC } from "@/utils/utc_server_action";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import PostModal from "../post/post_modal";
 import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
-import PostModal from "../post/post_modal";
-import { useSocketContext } from "@/context/socket_context";
-import { getServerUTC } from "@/utils/utc_server_action";
-import { useLoadingContext } from "@/context/loading_context";
 interface Props {
   photoResponses: IPhotoResponse[];
   time: string;
@@ -74,6 +71,7 @@ const VerticalSwiper = (props: Props) => {
 
   // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
+    setPhotoResponses([])
     const time = await getServerUTC();
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(time);
@@ -109,7 +107,7 @@ const VerticalSwiper = (props: Props) => {
       const res = await FetchClientPostApi(API.PHOTO.LIST, data);
 
       const newPhotoResponses = res.result;
-      if (newPhotoResponses != null && newPhotoResponses != undefined)
+      if (newPhotoResponses != null && newPhotoResponses != undefined && photoResponses.length<=0)
         setPhotoResponses((prevPhotoResponses) => [
           ...prevPhotoResponses,
           ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại

@@ -56,7 +56,7 @@ const RequestFriend = (props: Props) => {
 
   return (
     <>
-      {friendRequests != null && (
+      {Array.isArray(friendRequests) && friendRequests.length > 0 && (
         <div className="title d-flex justify-content-between p-2">
           <h5>Lời mời kết bạn </h5>
         </div>

@@ -1,24 +1,21 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 // import "@/styles/post_modal.css";
+import API from "@/api/api";
+import { FetchClientPostApi } from "@/api/fetch_client_api";
 import { useUserContext } from "@/context/user_context";
-import { captureScreen } from "./screen_shot";
-import CropModal from "./crop_modal";
-import Form from 'react-bootstrap/Form';
-import TakePhotoModal from "./take_photo_modal";
 import { handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
 import Image from "next/image";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { FetchClientPostApi } from "@/api/fetch_client_api";
-import API from "@/api/api";
+import Form from 'react-bootstrap/Form';
+import CropModal from "./crop_modal";
+import { captureScreen } from "./screen_shot";
+import TakePhotoModal from "./take_photo_modal";
 // import { startLoading, stopLoading } from "../shared/nprogress";
-import MobileDetect from "mobile-detect";
-import { getServerUTC } from "@/utils/utc_server_action";
-import { getCurrentTime } from "@/utils/utils_time";
 import { useLoadingContext } from "@/context/loading_context";
+import MobileDetect from "mobile-detect";
 
 
 interface IProps {
@@ -91,6 +88,7 @@ const PostModal = (props: IProps) => {
       }
 
     }
+    stopLoadingSpiner()
 
 
   }
