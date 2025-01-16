@@ -1,7 +1,10 @@
 "use client";
 
 import API from "@/api/api";
-import { FetchClientPostApi,FetchClientPostApiWithSignal} from "@/api/fetch_client_api";
+import {
+  FetchClientPostApi,
+  FetchClientPostApiWithSignal,
+} from "@/api/fetch_client_api";
 import { getServerUTC } from "@/utils/utc_server_action";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
@@ -249,13 +252,17 @@ const VerticalSwiper = (props: Props) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              className="bi bi-arrow-repeat text-secondary"
+              viewBox="0 0 16 16"
               width="25"
               height="25"
-              className="text-secondary bi bi-caret-up-fill"
-              viewBox="0 0 16 16"
-              fill="currentColor"
             >
-              <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
+              <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+              <path
+                fillRule="evenodd"
+                d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+              />
             </svg>
           </div>
         </div>

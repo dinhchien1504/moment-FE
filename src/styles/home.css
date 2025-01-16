@@ -93,7 +93,7 @@ body,html {
 }
 
 .button-show-friend{
-  bottom:50px;
+  top:calc(100vh - 88px)
 }
 
 .height-list-friend{
