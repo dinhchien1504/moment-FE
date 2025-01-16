@@ -38,9 +38,9 @@ const FriendList = () => {
     <>
       <div className="title d-flex justify-content-between p-2">
         <div className="d-flex align-items-center">
-          <h4>
-            Bạn bè
-          </h4><span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+          <h5>
+            Bạn bè <span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+          </h5>
         </div>
 
         <Link href={"/friends"} className="text-decoration-none">

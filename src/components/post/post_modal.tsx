@@ -91,6 +91,7 @@ const PostModal = (props: IProps) => {
       }
 
     }
+    stopLoadingSpiner()
 
 
   }

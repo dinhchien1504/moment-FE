@@ -74,6 +74,7 @@ const VerticalSwiper = (props: Props) => {
 
   // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
+    setPhotoResponses([])
     const time = await getServerUTC();
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(time);
@@ -109,7 +110,7 @@ const VerticalSwiper = (props: Props) => {
       const res = await FetchClientPostApi(API.PHOTO.LIST, data);
 
       const newPhotoResponses = res.result;
-      if (newPhotoResponses != null && newPhotoResponses != undefined)
+      if (newPhotoResponses != null && newPhotoResponses != undefined && photoResponses.length<=0)
         setPhotoResponses((prevPhotoResponses) => [
           ...prevPhotoResponses,
           ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
