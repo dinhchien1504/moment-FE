@@ -4,8 +4,8 @@ const ACCOUNT_API = {
     REGISTER: `${API_HOST}/api/account/register`,
     LIST:  `${API_HOST}/api/account/friend`,
     LIST_SENT:  `${API_HOST}/api/account/friend/sent`,
-    LIST_INVITED:  `${API_HOST}/api/account/friend/invited`,
-    LIST_INVITED_RECENT: `${API_HOST}/api/account/friend/invited-recent`,
+    LIST_RECEIVED:  `${API_HOST}/api/account/friend/received`,
+    LIST_RECEIVED_RECENT: `${API_HOST}/api/account/friend/received-recent`,
     CHANGE_STATUS: `${API_HOST}/api/account/friend/status`,
     ADD: `${API_HOST}/api/account/friend/add`,
   };
