@@ -39,7 +39,7 @@ export default async function RootLayout({
             <UserProvider>
               <Header />
               <NextTopLoader
-                color="linear-gradient(268deg, #ec3d04 0%, #FF2A69 100%)"
+                color="linear-gradient(268deg,rgb(12, 147, 250) 0%,rgb(206, 230, 249) 100%)"
                 initialPosition={0.08}
                 crawlSpeed={50}
                 height={3}
