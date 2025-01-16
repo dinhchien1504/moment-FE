@@ -8,6 +8,8 @@ import { SocketProvider } from "@/context/socket_context";
 import NextTopLoader from "nextjs-toploader";
 import { LoadingProvider } from "@/context/loading_context";
 import LoadingSpiner from "@/components/shared/loading_spiner";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -55,7 +57,19 @@ export default async function RootLayout({
           </SocketProvider>
         </LoadingProvider>
 
-
+        <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+            />
       </body>
     </html>
   );
