@@ -2,18 +2,15 @@
 
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
-import { getCurrentTime } from "@/utils/utils_time";
+import { getServerUTC } from "@/utils/utc_server_action";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
 import "swiper/css";
 import { Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import PostModal from "../post/post_modal";
 import SpinnerAnimation from "../shared/spiner_animation";
 import PhotoCard from "./photo_card";
-import PostModal from "../post/post_modal";
-import { useSocketContext } from "@/context/socket_context";
-import { getServerUTC } from "@/utils/utc_server_action";
-import { useLoadingContext } from "@/context/loading_context";
 interface Props {
   photoResponses: IPhotoResponse[];
   time: string;
