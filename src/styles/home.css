@@ -111,6 +111,7 @@ body,html {
 
 .badge-home{
   top:-5px;
+  border-radius: 100%;
 }
 
 /* trong mobile */
