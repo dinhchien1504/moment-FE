@@ -8,11 +8,11 @@ import { FetchClientGetApi } from "@/api/fetch_client_api";
 import API from "@/api/api";
 
 interface Props {
-  setTotalFriendRequest: (value: number) => void;
+  setHasRequest: (value: boolean) => void;
 }
 
 const RequestFriend = (props: Props) => {
-  const setTotalFriendRequest = props.setTotalFriendRequest;
+  const setHasRequest = props.setHasRequest;
   const [friendRequests, setFriendRequests] = useState<
     IAccountResponse[] | null
   >(null);
@@ -22,7 +22,7 @@ const RequestFriend = (props: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await FetchClientGetApi(API.ACCOUNT.LIST_INVITED_RECENT);
+        const res = await FetchClientGetApi(API.ACCOUNT.LIST_RECEIVED_RECENT);
         setFriendRequests(res.result);
       } catch (error) {
         console.error("Lỗi khi lấy danh sách bạn bè:", error);
@@ -32,7 +32,7 @@ const RequestFriend = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = subscribe("/user/queue/friend", (message) => {
+    subscribe("/user/queue/friend", (message) => {
       const receivedMessage: IAccountResponse = JSON.parse(message.body);
   
       setFriendRequests((prevFriendRequests) => {
@@ -41,10 +41,10 @@ const RequestFriend = (props: Props) => {
           (friend) => friend.urlProfile !== receivedMessage.urlProfile
         );
         const newRequests = [...filteredRequests, receivedMessage];
-        setTotalFriendRequest(newRequests.length);
         return newRequests;
       });
   
+      setHasRequest(true);
       sendPushNotification(
         `${receivedMessage.name} gửi lời mời kết bạn`,
         `/friends`
