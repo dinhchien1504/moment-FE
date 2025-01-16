@@ -1,7 +1,7 @@
 "use client";
 
 import API from "@/api/api";
-import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { FetchClientPostApi,FetchClientPostApiWithSignal} from "@/api/fetch_client_api";
 import { getServerUTC } from "@/utils/utc_server_action";
 import { useEffect, useRef, useState } from "react";
 import SwiperCore from "swiper";
@@ -35,6 +35,7 @@ const VerticalSwiper = (props: Props) => {
 
   // useRef cho swiper
   const swiperRef = useRef<SwiperCore | null>(null);
+  const controllerRef = useRef<AbortController | null>(null);
 
   // hàm đóng mở modal ảnh
   const openModal = (src: string) => {
@@ -71,6 +72,12 @@ const VerticalSwiper = (props: Props) => {
 
   // hàm xử lý tải mới lại list ảnh
   const handleReloadPhoto = async () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort(); // Cancel any previous fetch if still pending
+    }
+
+    controllerRef.current = new AbortController();
+
     const time = await getServerUTC();
     if (swiperRef.current) swiperRef.current.slideTo(0);
     setTime(time);
@@ -96,6 +103,13 @@ const VerticalSwiper = (props: Props) => {
   // hàm xử lý tải thêm ảnh và list có sẵn
   const fetchAdditionalPhoto = async () => {
     setPageCurrent(pageCurrent + 1);
+
+    if (controllerRef.current) {
+      controllerRef.current.abort(); // Cancel any previous fetch if still pending
+    }
+
+    controllerRef.current = new AbortController();
+
     const data: IPhotoFilterRequest = {
       pageCurrent: pageCurrent + 1,
       time: time,
@@ -103,10 +117,18 @@ const VerticalSwiper = (props: Props) => {
 
     try {
       setLoading(true);
-      const res = await FetchClientPostApi(API.PHOTO.LIST, data);
+      const res = await FetchClientPostApiWithSignal(
+        API.PHOTO.LIST,
+        data,
+        controllerRef.current.signal
+      );
 
       const newPhotoResponses = res.result;
-      if (newPhotoResponses != null && newPhotoResponses != undefined && photoResponses.length>0)
+      if (
+        newPhotoResponses != null &&
+        newPhotoResponses != undefined &&
+        photoResponses.length > 0
+      )
         setPhotoResponses((prevPhotoResponses) => [
           ...prevPhotoResponses,
           ...newPhotoResponses, // Thêm ảnh mới vào danh sách ảnh hiện tại
@@ -147,14 +169,15 @@ const VerticalSwiper = (props: Props) => {
             <PostModal handleReloadPhoto={handleReloadPhoto} />
           </SwiperSlide>
 
-          {Array.isArray(photoResponses) && photoResponses?.map((photoResponse, index) => (
-            <SwiperSlide key={index}>
-              <PhotoCard
-                photoResponse={photoResponse}
-                setUrlImageModal={setUrlImageModal}
-              ></PhotoCard>
-            </SwiperSlide>
-          ))}
+          {Array.isArray(photoResponses) &&
+            photoResponses?.map((photoResponse, index) => (
+              <SwiperSlide key={index}>
+                <PhotoCard
+                  photoResponse={photoResponse}
+                  setUrlImageModal={setUrlImageModal}
+                ></PhotoCard>
+              </SwiperSlide>
+            ))}
 
           {loading && (
             <SwiperSlide>
