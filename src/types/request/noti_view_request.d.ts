@@ -1,0 +1,3 @@
+interface INotiViewRequest {
+    notiIds: number[]
+}

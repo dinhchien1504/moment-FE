@@ -44,7 +44,7 @@ const ItemNoti = ( props:Props) => {
                     </div>
                 </div>
                 <div className="icon-unread">
-                  {noti.status === "unread" &&  <i className="fa-solid fa-rss"></i> } 
+                  {noti.status === "read" ? "" : <i className="fa-solid fa-rss"></i> } 
                 </div>
 
             </div>
