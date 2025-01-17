@@ -1,8 +1,7 @@
 import API from "@/api/api";
-import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
+import { FetchServerPostApi } from "@/api/fetch_server_api";
 import FriendAll from "@/components/friend/friend_all";
 import { getServerUTC } from "@/utils/utc_server_action";
-import { getCurrentTime } from "@/utils/utils_time";
 import { Container } from "react-bootstrap";
 
 const PageFriend = async () => {

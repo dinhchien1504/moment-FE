@@ -30,7 +30,27 @@ const Header = () => {
     const { disconnect } = useSocketContext()
 
 
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker đã đăng ký', registration);
+            })
+            .catch((error) => {
+              console.log('Đăng ký Service Worker thất bại:', error);
+            });
+        }
 
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(permission => {
+              if (permission === 'granted') {
+                console.log('Quyền nhận thông báo đã được cấp!');
+              } else {
+                console.log('Quyền nhận thông báo bị từ chối');
+              }
+            });
+          }
+      }, []);
 
 
     useEffect(() => {
@@ -140,9 +160,18 @@ const Header = () => {
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
                                             <Dropdown.Item eventKey="2" className='font-item' as='div'>
-                                                <i className="fa-solid "></i> Cài đặt
+                                                <Link href={user?.userName+''} className='text-decoration-none text-dark'>
+                                                    <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
+                                                </Link>
                                             </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'
+                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
+                                                <Link href="/setting" passHref legacyBehavior>
+                                                    <div>
+                                                        <i className="fa-solid fa-gear"></i> Cài đặt
+                                                    </div>
+                                                </Link>
+                                                </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
                                                 <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất

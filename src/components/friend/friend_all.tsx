@@ -1,6 +1,6 @@
 "use client";
 import API from "@/api/api";
-import { FetchClientGetApi, FetchClientPostApi } from "@/api/fetch_client_api";
+import { FetchClientPostApi } from "@/api/fetch_client_api";
 import { useState } from "react";
 import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
 import FriendCard from "../home/friend_card";
@@ -17,9 +17,9 @@ const FriendAll = (props: FriendAllProps) => {
   );
   const totalItemsAccepted = props.totalItems;
   const [totalItemsSent, settotalItemsSent] = useState<number>(0);
-  const [totalItemsInvited, settotalItemsInvited] = useState<number>(0);
+  const [totalItemsReceived, settotalItemsReceived] = useState<number>(0);
 
-  const [accountInvitedResponses, setAccountInvitedResponses] = useState<
+  const [accountReceivedResponses, setAccountReceivedResponses] = useState<
     IAccountResponse[] | null
   >(null);
   const [accountSentResponses, setAccountSentResponses] = useState<
@@ -30,7 +30,7 @@ const FriendAll = (props: FriendAllProps) => {
 
   const time = props.time;
   const [pageCurrentAccepted, setPageCurrentAccepted] = useState<number>(0);
-  const [pageCurrentInvited, setPageCurrentInvited] = useState<number>(0);
+  const [pageCurrentReceived, setPageCurrentReceived] = useState<number>(0);
   const [pageCurrentSent, setPageCurrentSent] = useState<number>(0);
 
   const [activeTab, setActiveTab] = useState<string>("first");
@@ -39,18 +39,18 @@ const FriendAll = (props: FriendAllProps) => {
     if (key !== null) {
       setActiveTab(key);
     }
-    if (key === "second" && accountInvitedResponses === null) {
+    if (key === "second" && accountReceivedResponses === null) {
       const fetchData = async () => {
         const dataBody: IFriendFilterRequest = {
-          pageCurrent: pageCurrentInvited,
+          pageCurrent: pageCurrentReceived,
           time: time,
         };
         const res = await FetchClientPostApi(
-          API.ACCOUNT.LIST_INVITED,
+          API.ACCOUNT.LIST_RECEIVED,
           dataBody
         );
-        setAccountInvitedResponses(res.result);
-        settotalItemsInvited(res.totalItems);
+        setAccountReceivedResponses(res.result);
+        settotalItemsReceived(res.totalItems);
       };
       fetchData();
     }
@@ -91,19 +91,19 @@ const FriendAll = (props: FriendAllProps) => {
     return;
   };
 
-  const addAccountFriendInvited = async () => {
-    setPageCurrentInvited(pageCurrentInvited + 1);
+  const addAccountFriendReceived = async () => {
+    setPageCurrentReceived(pageCurrentReceived + 1);
     try {
       setLoading(true);
 
       const dataBody: IFriendFilterRequest = {
-        pageCurrent: pageCurrentInvited + 1,
+        pageCurrent: pageCurrentReceived + 1,
         time: time,
       };
-      const res = await FetchClientPostApi(API.ACCOUNT.LIST_INVITED, dataBody);
+      const res = await FetchClientPostApi(API.ACCOUNT.LIST_RECEIVED, dataBody);
       const newAccountResponses = res.result;
       if (newAccountResponses != null && newAccountResponses != undefined)
-        setAccountInvitedResponses((prevAccountResponses) => [
+        setAccountReceivedResponses((prevAccountResponses) => [
           ...(prevAccountResponses ? prevAccountResponses : []),
           ...newAccountResponses,
         ]);
@@ -143,8 +143,8 @@ const FriendAll = (props: FriendAllProps) => {
     if (type == "accepted") {
       addAccountFriendAccepted();
     }
-    if (type == "invited") {
-      addAccountFriendInvited();
+    if (type == "received") {
+      addAccountFriendReceived();
     }
     if (type == "sent") {
       addAccountFriendSent();
@@ -154,7 +154,7 @@ const FriendAll = (props: FriendAllProps) => {
   const renderLoadMore = (type: string) => {
     if (
       totalItemsAccepted > (pageCurrentAccepted + 1) * 10 ||
-      totalItemsInvited > (pageCurrentInvited + 1) * 10 ||
+      totalItemsReceived > (pageCurrentReceived + 1) * 10 ||
       totalItemsSent > (pageCurrentSent + 1) * 10
     )
       return (
@@ -170,26 +170,18 @@ const FriendAll = (props: FriendAllProps) => {
 
   const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
     if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
-    const rows = [];
-    for (let i = 0; i < accountResponses?.length; i += 2) {
-      rows.push(
-        <Row key={`row-${i}`}>
-          <Col sm={6}>
-            <div className="bg-hover p-2 rounded-2">
-              <FriendCard accountResponse={accountResponses[i]} />
+
+    return (
+      <div >
+        <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-xl-3 g-1">
+          {Array.isArray(accountResponses) && accountResponses.map((accountResponse, index) => (
+            <div className="col" key={index}>
+              <FriendCard accountResponse={accountResponse} />
             </div>
-          </Col>
-          {i + 1 < accountResponses.length && (
-            <Col sm={6}>
-              <div className="bg-hover p-2 rounded-2">
-                <FriendCard accountResponse={accountResponses[i + 1]} />
-              </div>
-            </Col>
-          )}
-        </Row>
-      );
-    }
-    return <>{rows}</>;
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -241,9 +233,9 @@ const FriendAll = (props: FriendAllProps) => {
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                {renderCardFriend(accountInvitedResponses)}
+                {renderCardFriend(accountReceivedResponses)}
                 <div className="d-flex justify-content-center">
-                  {loading ? <SpinnerAnimation /> : renderLoadMore("invited")}
+                  {loading ? <SpinnerAnimation /> : renderLoadMore("received")}
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="third">

@@ -6,11 +6,12 @@ import Tabs from 'react-bootstrap/Tabs';
 import UnReadNotiTab from './unread_noti_tab';
 import AllNotiTab from './all_noti_tab';
 import { useEffect, useRef, useState } from "react"
-import { getCurrentTime } from '@/utils/utils_time';
+// import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
 import { FetchClientGetApi, FetchClientPostApi } from '@/api/fetch_client_api';
 import Badge from 'react-bootstrap/Badge';
 import { useSocketContext } from '@/context/socket_context';
+import "@/styles/noti_offcanvas.css";
 import { getServerUTC } from '@/utils/utc_server_action';
 import PostDetailModal from '../post_detail/post_detail_modal';
 interface IProps {
@@ -110,6 +111,8 @@ const NotiOffCanvas = (props: IProps) => {
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiUnread(updatedNotis);
             setNumberOfItemRemove(0)
+            console.log("numberOfNotiUnread trong fetch >>> ", numberOfNotiUnread.current)
+            console.log("numberOfNotiUnread trong fetch >>> ", notis.length)
             numberOfNotiUnread.current =  numberOfNotiUnread.current - notis.length
         }
         setIsloadingNotiUnread(false)
@@ -143,8 +146,8 @@ const NotiOffCanvas = (props: IProps) => {
 
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiAll(updatedNotis);
-            console.log("numberOfNotiAll trong fetch >>> ", numberOfNotiAll)
-            console.log("updatedNotis trong fetch >>> ",  updatedNotis.length)
+            console.log("numberOfNotiAll trong fetch >>> ", numberOfNotiAll.current)
+            console.log("updatedNotis trong fetch >>> ",  notis.length)
             numberOfNotiAll.current =  numberOfNotiAll.current - notis.length
         }
         setIsloadingNotiAll(false)
@@ -174,8 +177,8 @@ const NotiOffCanvas = (props: IProps) => {
 
 
     useEffect(() => {
-
-        if (   numberOfNotiUnread.current  === 0) {
+        console.log("numberOfNotiUnread.current trong useEffect >>> ", numberOfNotiUnread.current)
+        if (   numberOfNotiUnread.current + numberOfItemRemove  == 0) {
             setLockViewMoreNotiUnread(true);
         } else {
             setLockViewMoreNotiUnread(false);

@@ -5,6 +5,7 @@ import PHOTO_API from "./endpoints/photo";
 import POST_API from "./endpoints/post";
 import SEARCH_API from "./endpoints/search";
 import PROFILE_API from "./endpoints/profile";
+import SETTING_API from "./endpoints/setting";
 import NOTI_VIEW_API from "./endpoints/noti_view";
 
 const API = {
@@ -15,6 +16,7 @@ const API = {
   SEARCH: SEARCH_API,
   PROFILE:PROFILE_API,
   NOTI: NOTI_API,
+  SETTING:SETTING_API,
   NOTI_VIEW : NOTI_VIEW_API
 };
 
