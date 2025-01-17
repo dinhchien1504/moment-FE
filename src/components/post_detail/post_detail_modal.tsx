@@ -27,17 +27,16 @@ const PostDetailModal = () => {
 
         const getPhoto = async () => {
             setIsLoading(true)
+            setShowPostDetail(true)
             const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
             if (res && res.status === 200) {
-                setShowPostDetail(true)
-
+               
                 const photo: IPhotoResponse = res.result
                 setPhotoResponse(photo)
                 console.log("post >>> ", photo)
                 setPostIsExist(true)
 
             } else {
-                setShowPostDetail(true)
                 setPostIsExist(false)
             }
             setIsLoading(false)
