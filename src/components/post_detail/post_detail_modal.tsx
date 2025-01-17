@@ -23,7 +23,7 @@ const PostDetailModal = (props : IProps) => {
     // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
 
     const [photoResponse, setPhotoResponse] = useState<IPhotoResponse>()
-    const [postIsExist, setPostIsExist] = useState<boolean>(false)
+    const [postIsExist, setPostIsExist] = useState<boolean>(true)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const searchParams = useSearchParams();
