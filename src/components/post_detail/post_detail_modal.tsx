@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { GetImage } from '@/utils/handle_images';
 import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
+import { useLoadingContext } from '@/context/loading_context';
 
 const PostDetailModal = () => {
     const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
@@ -22,10 +23,12 @@ const PostDetailModal = () => {
     const post = searchParams.get('post')
     const router = useRouter()
     const pathName = usePathname()
+    const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
 
     useEffect(() => {
 
         const getPhoto = async () => {
+            stopLoadingSpiner()
             setIsLoading(true)
             setShowPostDetail(true)
             const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)

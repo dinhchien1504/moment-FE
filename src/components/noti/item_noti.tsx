@@ -1,4 +1,5 @@
 "use client"
+import { useLoadingContext } from "@/context/loading_context"
 import "@/styles/item_noti.css"
 import { GetImage } from "@/utils/handle_images"
 import { formatDate } from "@/utils/utils_time"
@@ -17,7 +18,10 @@ const ItemNoti = ( props:Props) => {
     const searchParams = useSearchParams();
     const post = searchParams.get('post')
 
+    const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
+
     const handleShowPostDetail = (slug:string) => {
+        startLoadingSpiner ()
         router.push(`${pathName}?post=${slug}`)
     }
 
