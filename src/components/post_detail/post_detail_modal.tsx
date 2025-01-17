@@ -55,7 +55,7 @@ const PostDetailModal = (props : IProps) => {
         if (post != null) {
             getPhoto()
         }
-    }, [post])
+    }, [showPostDetail])
 
     const handleClosePostDetail = () => {
         setShowPostDetail(false)
