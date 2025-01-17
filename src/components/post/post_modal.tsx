@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import API from "@/api/api";
 import { FetchClientPostApi } from "@/api/fetch_client_api";
 import { useUserContext } from "@/context/user_context";
-import { handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
+import { GetImage, handlePreviewImg, handleUploadImg } from "@/utils/handle_images";
 import Image from "next/image";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
@@ -106,8 +106,8 @@ const PostModal = (props: IProps) => {
                 <div className="flex-grow-1 flex-shrink-1 flex-basis-auto">
                   <div className="div-info-capture">
                     <div className="d-flex align-items-center">
-                      <Image
-                        src="/images/avatar.jpg"
+                      <img
+                        src={GetImage(user?.urlPhoto)}
                         width={50}
                         height={50}
                         alt="Dropdown Trigger"
