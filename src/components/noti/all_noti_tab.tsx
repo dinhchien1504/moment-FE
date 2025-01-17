@@ -15,12 +15,23 @@ interface Props {
 
     numberOfItemRemove:number;
     setNumberOfItemRemove: (value : number) => void
+
+    setShowPostDetail : (value :boolean) => void
 }
 
 
 
 const AllNotiTab = (props: Props) => {
-    const { notiAll, fetchGetNotiAll, lockViewMoreNotiAll, isLoadingNotiAll, setNotiUnread, notiUnread, numberOfItemRemove, setNumberOfItemRemove } = props
+    const { notiAll, 
+        fetchGetNotiAll, 
+        lockViewMoreNotiAll, 
+        isLoadingNotiAll, 
+        setNotiUnread, 
+        notiUnread, 
+        numberOfItemRemove, 
+        setNumberOfItemRemove, 
+        setShowPostDetail,
+     } = props
 
 
 
@@ -37,6 +48,7 @@ const AllNotiTab = (props: Props) => {
     }
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
+        setShowPostDetail(true)
         if (notiRes.status != "read") {
             setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"

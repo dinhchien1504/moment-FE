@@ -5,6 +5,7 @@ import { GetImage } from "@/utils/handle_images"
 import { formatDate } from "@/utils/utils_time"
 import Image from "next/image"
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
+import { useState } from "react"
 interface Props {
     noti:INotiResponse
 }
@@ -18,10 +19,12 @@ const ItemNoti = ( props:Props) => {
     const searchParams = useSearchParams();
     const post = searchParams.get('post')
 
+
+
     const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
 
     const handleShowPostDetail = (slug:string) => {
-        startLoadingSpiner ()
+        // startLoadingSpiner ()
         router.push(`${pathName}?post=${slug}`)
     }
 

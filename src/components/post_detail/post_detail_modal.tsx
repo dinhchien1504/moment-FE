@@ -12,8 +12,15 @@ import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
 import { useLoadingContext } from '@/context/loading_context';
 
-const PostDetailModal = () => {
-    const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
+interface IProps {
+    setShowPostDetail : (value :boolean) => void
+    showPostDetail :boolean
+}
+
+const PostDetailModal = (props : IProps) => {
+    const {setShowPostDetail, showPostDetail} = props
+    
+    // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
 
     const [photoResponse, setPhotoResponse] = useState<IPhotoResponse>()
     const [postIsExist, setPostIsExist] = useState<boolean>(false)
@@ -28,7 +35,7 @@ const PostDetailModal = () => {
     useEffect(() => {
 
         const getPhoto = async () => {
-            stopLoadingSpiner()
+            // stopLoadingSpiner()
             setIsLoading(true)
             setShowPostDetail(true)
             const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
