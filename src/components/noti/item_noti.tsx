@@ -25,7 +25,7 @@ const ItemNoti = ( props:Props) => {
 
     const handleShowPostDetail = (slug:string) => {
         // startLoadingSpiner ()
-        router.push(`${pathName}?post=${slug}`)
+        router.replace(`${pathName}?post=${slug}`)
     }
 
     return (
