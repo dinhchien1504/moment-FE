@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import cookie from "js-cookie";
 import Modal from 'react-bootstrap/Modal';
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateSuccessUserName from './update_success';
 import { useRouter } from 'next/navigation';
