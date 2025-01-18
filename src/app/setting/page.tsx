@@ -1,8 +1,6 @@
 "use server"
 import SettingSidebar from '@/components/setting/setting_sidebar';
 import Button from 'react-bootstrap/Button';
-import { ToastContainer, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import styles from '@/styles/setting.module.css';
 const SettingPage = () => {
 
@@ -17,19 +15,7 @@ const SettingPage = () => {
                 </div>
                 
             </div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Bounce}
-            />
+            
         </>
     )
 }

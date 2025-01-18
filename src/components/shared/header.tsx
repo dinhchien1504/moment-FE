@@ -19,6 +19,7 @@ import { GetImage } from '@/utils/handle_images';
 import Link from 'next/link';
 import { useSocketContext } from '@/context/socket_context';
 import { useLoadingContext } from '@/context/loading_context';
+import PostDetailModal from '../post_detail/post_detail_modal';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -30,7 +31,27 @@ const Header = () => {
     const { disconnect } = useSocketContext()
 
 
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker đã đăng ký', registration);
+            })
+            .catch((error) => {
+              console.log('Đăng ký Service Worker thất bại:', error);
+            });
+        }
 
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(permission => {
+              if (permission === 'granted') {
+                console.log('Quyền nhận thông báo đã được cấp!');
+              } else {
+                console.log('Quyền nhận thông báo bị từ chối');
+              }
+            });
+          }
+      }, []);
 
 
     useEffect(() => {
@@ -171,10 +192,7 @@ const Header = () => {
                     setNumberOfNoti={setNumberOfNoti}
                     numberOfNoti={numberOfNoti}
                 />
-                {/* <PostModal
-                showPost = {showPost}
-                setShowPost= {setShowPost}
-                /> */}
+                <PostDetailModal/>
             </>
         )
     }

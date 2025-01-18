@@ -129,7 +129,7 @@ const TakePhotoModal = (props: IProps) => {
         <>
             <Modal
                 show={showTakePhoto}
-                size={"xl"}
+                size={"lg"}
                 onHide={() => {
                     setShowTakePhoto(false);
                 }}

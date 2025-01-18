@@ -7,12 +7,9 @@ import { useEffect, useState } from "react";
 import SpinnerAnimation from "../shared/spiner_animation";
 import FriendCard from "./friend_card";
 
-interface Props{
-  setTotalFriend: (value:number)=> void;
-}
 
-const FriendList = (props:Props) => {
-  const setTotalFriendProps=props.setTotalFriend;
+
+const FriendList = () => {
 
   const [accountAcceptedResponses, setAccountAcceptedResponse] = useState<
     IAccountResponse[] | null
@@ -30,7 +27,6 @@ const FriendList = (props:Props) => {
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
       setAccountAcceptedResponse(res.result);
       setCountTotalFriend(res.totalItems);
-      setTotalFriendProps(res.totalItems);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách bạn bè:", error);
     }
@@ -42,9 +38,9 @@ const FriendList = (props:Props) => {
     <>
       <div className="title d-flex justify-content-between p-2">
         <div className="d-flex align-items-center">
-          <h4>
-            Bạn bè
-          </h4><span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+          <h5>
+            Bạn bè <span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+          </h5>
         </div>
 
         <Link href={"/friends"} className="text-decoration-none">
