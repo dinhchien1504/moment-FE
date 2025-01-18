@@ -24,8 +24,9 @@ const ItemNoti = ( props:Props) => {
     const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
 
     const handleShowPostDetail = (slug:string) => {
-        // startLoadingSpiner ()
-        router.replace(`${pathName}?post=${slug}`)
+
+        // router.push(`${pathName}?post=${slug}`); 
+        window.history.pushState({}, '', `${pathName}?post=${slug}`);
     }
 
     return (

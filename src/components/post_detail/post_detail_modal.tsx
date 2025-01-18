@@ -11,15 +11,13 @@ import { GetImage } from '@/utils/handle_images';
 import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
 import { useLoadingContext } from '@/context/loading_context';
+import { usePostDetailContext } from '@/context/post_detail_context';
 
-interface IProps {
-    postSlug :string
-    setPostSlug : (value :string) => void
-}
 
-const PostDetailModal = (props : IProps) => {
-    const {postSlug, setPostSlug} = props
-    
+
+const PostDetailModal = () => {
+
+    const {postSlug, setPostSlug} = usePostDetailContext()
     const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
 
     const [photoResponse, setPhotoResponse] = useState<IPhotoResponse>()

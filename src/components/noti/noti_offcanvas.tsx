@@ -44,7 +44,7 @@ const NotiOffCanvas = (props: IProps) => {
     const numberOfNotiAll = useRef<number>(0);
 
     // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
-    const [postSlug, setPostSlug] = useState<string> ("")
+    // const [postSlug, setPostSlug] = useState<string> ("")
 
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
@@ -87,7 +87,7 @@ const NotiOffCanvas = (props: IProps) => {
         setIsloadingNotiUnread(true)
 
         const adjustedLimit = 6 + numberOfItemRemove;
-
+    
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
             time: timeCurrent,
@@ -114,9 +114,9 @@ const NotiOffCanvas = (props: IProps) => {
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiUnread(updatedNotis);
             setNumberOfItemRemove(0)
-            console.log("numberOfNotiUnread trong fetch >>> ", numberOfNotiUnread.current)
-            console.log("numberOfNotiUnread trong fetch >>> ", notis.length)
+          
             numberOfNotiUnread.current =  numberOfNotiUnread.current - notis.length
+            console.log("numberOfNotiUnread trong fetch >>> ", numberOfNotiUnread.current)
         }
         setIsloadingNotiUnread(false)
     }
@@ -149,8 +149,6 @@ const NotiOffCanvas = (props: IProps) => {
 
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiAll(updatedNotis);
-            console.log("numberOfNotiAll trong fetch >>> ", numberOfNotiAll.current)
-            console.log("updatedNotis trong fetch >>> ",  notis.length)
             numberOfNotiAll.current =  numberOfNotiAll.current - notis.length
         }
         setIsloadingNotiAll(false)
@@ -176,11 +174,11 @@ const NotiOffCanvas = (props: IProps) => {
         getTimeUTC()
     }, [])
 
-useEffect(() => {
+// useEffect(() => {
         
-numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
+// numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
 
-    }, [numberOfItemRemove])
+//     }, [numberOfItemRemove])
 
 
     useEffect(() => {
@@ -194,7 +192,7 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
     }, [notiUnread.length])
 
     useEffect(() => {
-        console.log("numberOfNotiAll trong useEffect >>> ", numberOfNotiAll.current)
+        // console.log("numberOfNotiAll.current trong useEffect >>> ", numberOfNotiAll.current)
 
         if (numberOfNotiAll.current === 0) {
             setLockViewMoreNotiAll(true);
@@ -232,7 +230,7 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
                     notiIds: ids
                 }
                 console.log("notiViewReq >>> ", notiViewReq)
-
+                setNumberOfNoti(numberOfNoti - ids.length)
 
                 const res = await FetchClientPostApi(API.NOTI_VIEW.NOTI_VIEW, notiViewReq)
 
@@ -251,7 +249,6 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
                     );
 
                     console.log("ids >>> ", ids)
-                    setNumberOfNoti(numberOfNoti - ids.length)
                 }
             }
 
@@ -359,7 +356,6 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
                                 notiUnread={notiUnread}
                                 numberOfItemRemove = {numberOfItemRemove}
                                 setNumberOfItemRemove = {setNumberOfItemRemove}
-                                setPostSlug = {setPostSlug}
                             />
                         </Tab>
 
@@ -382,7 +378,7 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
                                 notiAll={notiAll}
                                 numberOfItemRemove = {numberOfItemRemove}
                                 setNumberOfItemRemove = {setNumberOfItemRemove}
-                                setPostSlug = {setPostSlug}
+
                             />
                         </Tab>
 
@@ -390,10 +386,6 @@ numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
                     </Tabs>
                 </Offcanvas.Body>
             </Offcanvas>
-            <PostDetailModal 
-            postSlug= {postSlug}
-            setPostSlug = {setPostSlug}
-            />
         </>
     )
 }

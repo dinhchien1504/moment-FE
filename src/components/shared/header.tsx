@@ -19,6 +19,7 @@ import { GetImage } from '@/utils/handle_images';
 import Link from 'next/link';
 import { useSocketContext } from '@/context/socket_context';
 import { useLoadingContext } from '@/context/loading_context';
+import PostDetailModal from '../post_detail/post_detail_modal';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -191,10 +192,7 @@ const Header = () => {
                     setNumberOfNoti={setNumberOfNoti}
                     numberOfNoti={numberOfNoti}
                 />
-                {/* <PostModal
-                showPost = {showPost}
-                setShowPost= {setShowPost}
-                /> */}
+                <PostDetailModal/>
             </>
         )
     }
