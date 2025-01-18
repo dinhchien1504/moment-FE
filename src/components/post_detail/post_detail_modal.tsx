@@ -13,17 +13,17 @@ import SpinnerAnimation from '../shared/spiner_animation';
 import { useLoadingContext } from '@/context/loading_context';
 
 interface IProps {
-    setShowPostDetail : (value :boolean) => void
-    showPostDetail :boolean
+    postSlug :string
+    setPostSlug : (value :string) => void
 }
 
 const PostDetailModal = (props : IProps) => {
-    const {setShowPostDetail, showPostDetail} = props
+    const {postSlug, setPostSlug} = props
     
-    // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
+    const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
 
     const [photoResponse, setPhotoResponse] = useState<IPhotoResponse>()
-    const [postIsExist, setPostIsExist] = useState<boolean>(true)
+    const [postIsExist, setPostIsExist] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const searchParams = useSearchParams();
@@ -38,7 +38,7 @@ const PostDetailModal = (props : IProps) => {
             // stopLoadingSpiner()
             setIsLoading(true)
             setShowPostDetail(true)
-            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
+            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${postSlug}`)
             if (res && res.status === 200) {
                
                 const photo: IPhotoResponse = res.result
@@ -52,14 +52,40 @@ const PostDetailModal = (props : IProps) => {
             setIsLoading(false)
         }
 
+        if (postSlug != "") {
+            getPhoto()
+        } else {
+            setShowPostDetail(false)
+            console.log("dong lai ne 222")
+        }
+    }, [postSlug])
+
+    useEffect (() => {
+        const getPhoto = async () => {
+            // stopLoadingSpiner()
+            setIsLoading(true)
+            setShowPostDetail(true)
+            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
+            if (res && res.status === 200) {
+               
+                const photo: IPhotoResponse = res.result
+                setPhotoResponse(photo)
+                setPostIsExist(true)
+            } else {
+                setPostIsExist(false)
+            }
+            setIsLoading(false)
+        }
         if (post != null) {
             getPhoto()
         }
-    }, [showPostDetail])
+    }, [])
 
     const handleClosePostDetail = () => {
-        setShowPostDetail(false)
+        setPostSlug("")
         router.push(pathName)
+        setShowPostDetail(false)
+        console.log("dong lai ne 11111")
     }
 
 

@@ -16,7 +16,7 @@ interface Props {
     numberOfItemRemove:number;
     setNumberOfItemRemove: (value : number) => void
 
-    setShowPostDetail : (value :boolean) => void
+    setPostSlug  : (value :string) => void
 }
 
 
@@ -30,7 +30,7 @@ const AllNotiTab = (props: Props) => {
         notiUnread, 
         numberOfItemRemove, 
         setNumberOfItemRemove, 
-        setShowPostDetail,
+        setPostSlug
      } = props
 
 
@@ -48,7 +48,7 @@ const AllNotiTab = (props: Props) => {
     }
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
-        setShowPostDetail(true)
+        setPostSlug(notiRes.slug)
         if (notiRes.status != "read") {
             setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"
