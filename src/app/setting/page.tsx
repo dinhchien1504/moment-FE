@@ -8,10 +8,10 @@ const SettingPage = () => {
 
     return (
         <>
-            <div className={styles.buttonContainer}>
-                <Button href="/" variant="secondary" size="lg" className={styles.customButton}>
+            <div className={styles.buttonContainer + " container mt-2"}>
+                {/* <Button href="/" variant="secondary" size="lg" className={styles.customButton}>
                     Home
-                </Button>
+                </Button> */}
                 <div className={styles.settingSidebar}>
                     <SettingSidebar/>
                 </div>

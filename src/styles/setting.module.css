@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column; /* Sắp xếp theo cột */
     gap: 20px; /* Khoảng cách giữa các phần tử */
-    margin: 20px 0 0 100px; /* Khoảng cách trên cùng */
+    /* margin: 20px 0 0 100px; Khoảng cách trên cùng */
   }
   
   .customButton {
@@ -96,9 +96,9 @@
   }
   
   .tabContainer {
-    margin: -20px auto;
+    /* margin: -20px auto; */
     padding: 10px;
-    width: 70%;
+    /* width: 70%; */
     background-color: #f9f9f9; /* Màu nền nhạt */
     border-radius: 10px; /* Bo góc */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
