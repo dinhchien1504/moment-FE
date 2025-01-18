@@ -27,7 +27,7 @@ const HomePage = async () => {
               time={time}
             ></VerticalSwiper>
           </Col>
-          <Col md={0} lg={3} className="d-none d-md-block">col-3</Col>
+          <Col md={0} lg={3} className="d-none d-lg-block">col-3</Col>
         </Row>
       </Container>
       

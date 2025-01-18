@@ -118,3 +118,12 @@
 .bg-body-tertiary.ctn-header.navbar.navbar-expand.navbar-light{
     height: 60px;
 }
+.hover-text-decoration-underline{
+    text-decoration: none;
+}
+.hover-text-decoration-underline:hover{
+    text-decoration: underline;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
