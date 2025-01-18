@@ -15,6 +15,7 @@ import ModalChangInfo from './modal_changeInfo';
 import FormChangePassword from './modal_changPassword';
 import ModelChangeUserName from './modal_changeUserName';
 import styles from '@/styles/setting.module.css';
+import SpinnerAnimation from '../shared/spiner_animation';
 
 const SettingSidebar = () => {
 
@@ -41,7 +42,11 @@ const SettingSidebar = () => {
 
 
     if (!accountInfo) {
-        return <p>Loading...</p>; // Hiển thị khi dữ liệu đang tải
+        return (
+            <div className='d-flex justify-content-center align-items-center'>
+                <SpinnerAnimation></SpinnerAnimation>
+            </div> // Hiển thị khi dữ liệu đang tải
+        )
     }
     return (
         <>
