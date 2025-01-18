@@ -10,6 +10,7 @@ import { LoadingProvider } from "@/context/loading_context";
 import LoadingSpiner from "@/components/shared/loading_spiner";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PostDetailProvider } from "@/context/post_detail_context";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,7 +32,7 @@ export default async function RootLayout({
         <link rel="icon" href="/images/logo-removebg.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#ff0064" />
-        <link rel="manifest" href="/manifest.json"/>
+        <link rel="manifest" href="/manifest.json" />
 
       </head>
       <body className={`${inter.className}`}>
@@ -39,37 +40,40 @@ export default async function RootLayout({
         <LoadingProvider>
           <SocketProvider>
             <UserProvider>
-              <Header />
-              <NextTopLoader
-                color="linear-gradient(268deg,rgb(12, 147, 250) 0%,rgb(206, 230, 249) 100%)"
-                initialPosition={0.08}
-                crawlSpeed={50}
-                height={3}
-                crawl={true}
-                easing="ease"
-                speed={50}
-                zIndex={1600}
-                showAtBottom={false}
-              />
-              <LoadingSpiner/>
-              {children}
+              <PostDetailProvider>
+                <LoadingSpiner />
+                <Header />
+                {children}
+              </PostDetailProvider>
             </UserProvider>
           </SocketProvider>
         </LoadingProvider>
-
+        
+        <NextTopLoader
+          color="linear-gradient(268deg,rgb(12, 147, 250) 0%,rgb(206, 230, 249) 100%)"
+          initialPosition={0.08}
+          crawlSpeed={50}
+          height={3}
+          crawl={true}
+          easing="ease"
+          speed={50}
+          zIndex={1600}
+          showAtBottom={false}
+        />
+      
         <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Bounce}
-            />
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </body>
     </html>
   );

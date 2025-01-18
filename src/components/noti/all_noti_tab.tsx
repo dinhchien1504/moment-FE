@@ -4,6 +4,7 @@ import { useState } from "react"
 import SpinnerAnimation from "../shared/spiner_animation"
 import ItemNoti from "./item_noti"
 import { Button } from "react-bootstrap"
+import { usePostDetailContext } from "@/context/post_detail_context"
 
 interface Props {
     notiAll: INotiResponse[]
@@ -15,8 +16,6 @@ interface Props {
 
     numberOfItemRemove:number;
     setNumberOfItemRemove: (value : number) => void
-
-    setPostSlug  : (value :string) => void
 }
 
 
@@ -29,11 +28,10 @@ const AllNotiTab = (props: Props) => {
         setNotiUnread, 
         notiUnread, 
         numberOfItemRemove, 
-        setNumberOfItemRemove, 
-        setPostSlug
+        setNumberOfItemRemove
      } = props
 
-
+     const {setPostSlug} = usePostDetailContext()
 
     const [pageCurrent, setPageCurrent] = useState<number>(1)
 

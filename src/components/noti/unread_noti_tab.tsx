@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import cookie from "js-cookie";
 import { Button } from "react-bootstrap"
 import SpinnerAnimation from "../shared/spiner_animation"
+import { usePostDetailContext } from "@/context/post_detail_context"
 
 interface Props {
     notiUnread: INotiResponse[],
@@ -17,10 +18,11 @@ interface Props {
     notiAll: INotiResponse[]
     numberOfItemRemove:number;
     setNumberOfItemRemove: (value : number) => void
-    setPostSlug  : (value :string) => void
 }
 
 const UnReadNotiTab = (props: Props) => {
+
+    const {setPostSlug} = usePostDetailContext()
 
     const { notiUnread, 
         fetchGetNotiUnread, 
@@ -28,9 +30,7 @@ const UnReadNotiTab = (props: Props) => {
         isLoadingNotiUnread,
          setNotiAll, notiAll, 
          numberOfItemRemove,
-          setNumberOfItemRemove,
-        
-          setPostSlug } = props
+          setNumberOfItemRemove,} = props
 
 
 
