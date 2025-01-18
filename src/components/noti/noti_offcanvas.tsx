@@ -176,12 +176,16 @@ const NotiOffCanvas = (props: IProps) => {
         getTimeUTC()
     }, [])
 
+useEffect(() => {
+        
+numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
 
+    }, [numberOfItemRemove])
 
 
     useEffect(() => {
         console.log("numberOfNotiUnread.current trong useEffect >>> ", numberOfNotiUnread.current)
-        if (   numberOfNotiUnread.current + numberOfItemRemove  == 0) {
+        if (   numberOfNotiUnread.current   === 0) {
             setLockViewMoreNotiUnread(true);
         } else {
             setLockViewMoreNotiUnread(false);
