@@ -43,7 +43,8 @@ const NotiOffCanvas = (props: IProps) => {
     const numberOfNotiUnread = useRef<number>(0);
     const numberOfNotiAll = useRef<number>(0);
 
-    const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
+    // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
+    const [postSlug, setPostSlug] = useState<string> ("")
 
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
@@ -354,7 +355,7 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiUnread={notiUnread}
                                 numberOfItemRemove = {numberOfItemRemove}
                                 setNumberOfItemRemove = {setNumberOfItemRemove}
-                                setShowPostDetail = {setShowPostDetail}
+                                setPostSlug = {setPostSlug}
                             />
                         </Tab>
 
@@ -377,7 +378,7 @@ const NotiOffCanvas = (props: IProps) => {
                                 notiAll={notiAll}
                                 numberOfItemRemove = {numberOfItemRemove}
                                 setNumberOfItemRemove = {setNumberOfItemRemove}
-                                setShowPostDetail = {setShowPostDetail}
+                                setPostSlug = {setPostSlug}
                             />
                         </Tab>
 
@@ -386,8 +387,8 @@ const NotiOffCanvas = (props: IProps) => {
                 </Offcanvas.Body>
             </Offcanvas>
             <PostDetailModal 
-            showPostDetail = {showPostDetail}
-            setShowPostDetail = {setShowPostDetail}
+            postSlug= {postSlug}
+            setPostSlug = {setPostSlug}
             />
         </>
     )
