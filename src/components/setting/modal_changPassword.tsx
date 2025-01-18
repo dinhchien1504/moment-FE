@@ -1,18 +1,25 @@
 import API from '@/api/api';
 import { FetchClientPutApi } from '@/api/fetch_client_api';
+import { validPassword } from '@/validation/valid';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLoadingContext } from '@/context/loading_context';
 
 function FormChangePassword() {
     const [show, setShow] = useState(false);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext();
+    const [errors, setErrors] = useState({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+    });
     const [successMessage, setSuccessMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const [isHiddenOld, setIsHiddenOld] = useState(true);
@@ -30,58 +37,65 @@ function FormChangePassword() {
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        setErrorMessage("");
+        setErrors({
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        });
         setSuccessMessage("");
     };
 
-
     const handleSave = async () => {
-        // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
-        if (newPassword !== confirmPassword) {
-            toast.error("Mật khẩu mới và xác nhận mật khẩu không khớp!", { autoClose: 3000 });
-            return;
-        }
-    
-        // Kiểm tra mật khẩu mới có hợp lệ không (có thể thêm vào các quy tắc kiểm tra)
-        if (!newPassword.trim()) {
-            toast.error("Mật khẩu không được để trống!", { autoClose: 3000 });
-            return;
-        }
+        const newErrors = {
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        };
+
         if (!oldPassword.trim()) {
-            toast.error("Mật khẩu không được để trống!", { autoClose: 3000 });
-            return;
+            newErrors.oldPassword = "Mật khẩu cũ không được để trống!";
+        }
+        if (!newPassword.trim()) {
+            newErrors.newPassword = "Mật khẩu mới không được để trống!";
+        } else if (!validPassword(newPassword)) {
+            newErrors.newPassword = "Mật khẩu mới phải chứa ít nhất một chữ cái hoa, một chữ cái thường, một số và một ký tự đặc biệt!";
         }
         if (oldPassword === newPassword) {
-            toast.error("Mật khẩu cũ và mật khẩu mới không được trùng nhau!", { autoClose: 3000 });
+            newErrors.newPassword = "Mật khẩu cũ và mật khẩu mới không được trùng nhau!";
+        }
+        if (newPassword !== confirmPassword) {
+            newErrors.confirmPassword = "Mật khẩu mới và xác nhận mật khẩu không khớp!";
+        }
+
+        setErrors(newErrors);
+
+        // Kiểm tra nếu có lỗi thì không gửi yêu cầu
+        if (Object.values(newErrors).some((error) => error !== "")) {
             return;
         }
-    
+
         try {
-            setIsSaving(true);
+            // Bắt đầu loading spinner
+            startLoadingSpiner();
             const response = await FetchClientPutApi(API.SETTING.CHANGE_PASSWORD, {
                 oldPassword,
                 newPassword,
             });
-    
+
             if (response.status === 200) {
-                toast.success("Đổi mật khẩu thành công!", { autoClose: 3000 });
-                handleClose(); // Đóng modal
-            } else if (response.status === 400) {
-                // Xử lý lỗi từ backend, ví dụ như mật khẩu cũ không chính xác
-                const error = response.errors?.find((err: any) => err.code === "OLD_PASSWORD_INCORRECT");
-                if (!error) {
-                    toast.error("Mật khẩu cũ không chính xác! Vui lòng kiểm tra lại.", { autoClose: 3000 });
-                } else {
-                    toast.error(`Đã xảy ra lỗi: ${response.message}`, { autoClose: 3000 });
-                }
+                setSuccessMessage("Đổi mật khẩu thành công!");
+                handleClose();
             } else {
-                toast.error("Thay đổi mật khẩu thất bại! Vui lòng thử lại.", { autoClose: 3000 });
+                setErrors({
+                    ...errors,
+                    oldPassword: "Mật khẩu cũ không chính xác!",
+                });
             }
         } catch (error) {
             console.error("Error changing password:", error);
-            toast.error("Đã xảy ra lỗi trong quá trình thay đổi mật khẩu!", { autoClose: 3000 });
         } finally {
-            setIsSaving(false);
+            // Dừng loading spinner
+            stopLoadingSpiner();
         }
     };
 
@@ -121,13 +135,11 @@ function FormChangePassword() {
                                         cursor: "pointer",
                                     }}
                                 >
-                                    {isHiddenOld ? (
-                                        <i className="fa fa-eye-slash"></i>
-                                    ) : (
-                                        <i className="fa fa-eye"></i>
-                                    )}
+                                    {isHiddenOld ? <i className="fa fa-eye-slash"></i> : <i className="fa fa-eye"></i>}
                                 </span>
+
                             </div>
+                            {errors.oldPassword && <p className="text-danger">{errors.oldPassword}</p>}
                         </Form.Group>
 
                         {/* New Password Field */}
@@ -149,13 +161,11 @@ function FormChangePassword() {
                                         cursor: "pointer",
                                     }}
                                 >
-                                    {isHiddenNew ? (
-                                        <i className="fa fa-eye-slash"></i>
-                                    ) : (
-                                        <i className="fa fa-eye"></i>
-                                    )}
+                                    {isHiddenNew ? <i className="fa fa-eye-slash"></i> : <i className="fa fa-eye"></i>}
                                 </span>
+
                             </div>
+                            {errors.newPassword && <p className="text-danger">{errors.newPassword}</p>}
                         </Form.Group>
 
                         {/* Confirm Password Field */}
@@ -183,25 +193,30 @@ function FormChangePassword() {
                                         <i className="fa fa-eye"></i>
                                     )}
                                 </span>
+
                             </div>
+                            {errors.confirmPassword && (
+                                <p className="text-danger">{errors.confirmPassword}</p>
+                            )}
                         </Form.Group>
 
-                        {errorMessage && (
-                            <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
+                        {successMessage && (
+                            <p className="text-success">{successMessage}</p>
                         )}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose} disabled={isSaving}>
                         Đóng
                     </Button>
-                    <Button variant="primary" onClick={handleSave}>
-                        Lưu thay đổi
+                    <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+                        {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 }
+
 
 export default FormChangePassword;

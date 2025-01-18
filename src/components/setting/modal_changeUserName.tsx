@@ -5,72 +5,83 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import cookie from "js-cookie";
 import Modal from 'react-bootstrap/Modal';
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateSuccessUserName from './update_success';
 import { useRouter } from 'next/navigation';
 import { useLoadingContext } from '@/context/loading_context';
+import { validUserName } from '@/validation/valid';
 
 
 function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: string; onSave: (newUserName: string) => void }) {
   const [show, setShow] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const [newUserName, setNewUserName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const {startLoadingSpiner} = useLoadingContext()
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const {startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext();
+
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setNewUserName(""); // Reset tên đăng nhập mới mỗi khi mở modal
+    setIsInvalid(false);
+    setErrorMessage("");
     setShow(true);
   };
 
   const handleLogout = () => {
-    startLoadingSpiner()
-        cookie.remove("session-id");
-        router.push("/login")
+    startLoadingSpiner();
+    cookie.remove("session-id");
+    router.push("/login");
+  };
+
+  const validateNewUserName = (username: string): boolean => {
+    if (!validUserName(username)) {
+      setIsInvalid(true);
+      setErrorMessage("Tên đăng nhập không hợp lệ!");
+      return false;
+    }
+    return true;
   };
 
   const handleSave = async () => {
-    if (!newUserName.trim()) {
-        toast.error("Tên đăng nhập mới không được để trống!", { autoClose: 3000 });
-        return;
-    }
+    if (!validateNewUserName(newUserName)) return;
 
     try {
-        setIsSaving(true);
-        const response = await FetchClientPutApi(API.SETTING.CHANGE_USERNAME, { userName: newUserName });
+      startLoadingSpiner();
+      const response = await FetchClientPutApi(API.SETTING.CHANGE_USERNAME, { userName: newUserName });
 
-        if (response.status === 200) {
-          setShowSuccessModal(true);
-            onSave(newUserName); // Cập nhật username mới lên giao diện cha
-            handleClose(); // Đóng modal
-        } else if (response.status === 400) {
-            // Xử lý lỗi từ backend
-            const error = response.errors?.find((err: any) => err.code === "ACCOUNT_2");
-            if (error) {
-                toast.error("Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.", { autoClose: 3000 });
-            } else {
-                toast.error(`Đã xảy ra lỗi: ${response.message}`, { autoClose: 3000 });
-            }
+      if (response.status === 200) {
+        setShowSuccessModal(true);
+        onSave(newUserName); // Cập nhật username mới lên giao diện cha
+        handleClose(); // Đóng modal
+      } else if (response.status === 400) {
+        const error = response.errors?.find((err: any) => err.code === "ACCOUNT_2");
+        if (error) {
+          setIsInvalid(true);
+          setErrorMessage("Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.");
         } else {
-            toast.error("Thay đổi tên đăng nhập thất bại! Vui lòng thử lại.", { autoClose: 3000 });
+          setIsInvalid(true);
+          setErrorMessage(`Đã xảy ra lỗi: ${response.message}`);
         }
+      } else {
+        setIsInvalid(true);
+        setErrorMessage("Thay đổi tên đăng nhập thất bại! Vui lòng thử lại.");
+      }
     } catch (error) {
-        console.error("Error changing username:", error);
-        toast.error("Đã xảy ra lỗi trong quá trình thay đổi tên đăng nhập!", { autoClose: 3000 });
+      console.error("Error changing username:", error);
+      setIsInvalid(true);
+      setErrorMessage("Đã xảy ra lỗi trong quá trình thay đổi tên đăng nhập!");
     } finally {
-        setIsSaving(false);
+      stopLoadingSpiner();
     }
-};
-
-  
+  };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        <i className="fa-regular fa-pen-to-square" style={{ cursor: "pointer" }}></i>
-      </Button>
+      
+        <i className="fa-regular fa-pen-to-square" style={{ cursor: "pointer" }} onClick={handleShow}></i>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Thay đổi tên đăng nhập</Modal.Title>
@@ -86,9 +97,15 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
               <Form.Control
                 type="text"
                 value={newUserName}
-                onChange={(e) => setNewUserName(e.target.value)}
+                onChange={(e) => {
+                  setNewUserName(e.target.value);
+                  setIsInvalid(false); // Reset trạng thái lỗi khi người dùng nhập
+                  setErrorMessage("");
+                }}
+                isInvalid={isInvalid}
                 autoFocus
               />
+              <Form.Control.Feedback type="invalid">{errorMessage}</Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -110,5 +127,6 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
     </>
   );
 }
+
 
 export default ModelChangeUserName;
