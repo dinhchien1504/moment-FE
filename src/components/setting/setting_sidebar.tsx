@@ -96,7 +96,7 @@ const SettingSidebar = () => {
                                             </ListGroup.Item>
                                             <Card.Body className={styles.cardBody}>
                                                 <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
-                                                <Card.Text>Giới tính: {accountInfo.sex}</Card.Text>
+                                                <Card.Text>Giới tính: {accountInfo.sex === "female" ? "Nam" : "Nữ"}</Card.Text>
                                                 <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
                                                 <ModalChangInfo
                                                     accountInfo={accountInfo}
