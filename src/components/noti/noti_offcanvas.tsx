@@ -6,14 +6,11 @@ import Tabs from 'react-bootstrap/Tabs';
 import UnReadNotiTab from './unread_noti_tab';
 import AllNotiTab from './all_noti_tab';
 import { useEffect, useRef, useState } from "react"
-// import { getCurrentTime } from '@/utils/utils_time';
 import API from '@/api/api';
 import { FetchClientGetApi, FetchClientPostApi } from '@/api/fetch_client_api';
-import Badge from 'react-bootstrap/Badge';
 import { useSocketContext } from '@/context/socket_context';
 import "@/styles/noti_offcanvas.css";
 import { getServerUTC } from '@/utils/utc_server_action';
-import PostDetailModal from '../post_detail/post_detail_modal';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -36,15 +33,11 @@ const NotiOffCanvas = (props: IProps) => {
     const [isLoadingNotiUnread, setIsloadingNotiUnread] = useState<boolean>(false)
     const [isLoadingNotiAll, setIsloadingNotiAll] = useState<boolean>(false)
 
-    // const [numberOfNotiAll, setNumberOfNotiAll] = useState<number>(0)
-    // const [numberOfNotiUnread, setNumberOfNotiUnread] = useState<number>(1)
     const [numberOfItemRemove, setNumberOfItemRemove] = useState <number> (0)
 
     const numberOfNotiUnread = useRef<number>(0);
     const numberOfNotiAll = useRef<number>(0);
 
-    // const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
-    // const [postSlug, setPostSlug] = useState<string> ("")
 
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
@@ -174,13 +167,6 @@ const NotiOffCanvas = (props: IProps) => {
         getTimeUTC()
     }, [])
 
-// useEffect(() => {
-        
-// numberOfNotiUnread.current = numberOfNotiUnread.current - numberOfItemRemove;
-
-//     }, [numberOfItemRemove])
-
-
     useEffect(() => {
         console.log("numberOfNotiUnread.current trong useEffect >>> ", numberOfNotiUnread.current)
         if (   numberOfNotiUnread.current   === 0) {
@@ -192,7 +178,7 @@ const NotiOffCanvas = (props: IProps) => {
     }, [notiUnread.length])
 
     useEffect(() => {
-        // console.log("numberOfNotiAll.current trong useEffect >>> ", numberOfNotiAll.current)
+
 
         if (numberOfNotiAll.current === 0) {
             setLockViewMoreNotiAll(true);
@@ -302,14 +288,6 @@ const NotiOffCanvas = (props: IProps) => {
         });
     }
 
-    // const handleOnclickTabNotiAll = () => {
-    //     handleDeteleUnread ()
-    // }
-
-    // const handleOnclickTabNotiUnread = () => {
-    //     // setNotiUnread(prevNotiUnread => prevNotiUnread.filter(noti => noti.status !== 'read'));
-    // }
-
     useEffect(() => {
         if (showNoti === false) { 
             handleDeteleUnread ()
@@ -335,13 +313,9 @@ const NotiOffCanvas = (props: IProps) => {
                         id="uncontrolled-tab-example"
                         className="mb-3"
                         onSelect={(key) => {
-                            // Chỉ xử lý khi người dùng chọn tab mới
                             if (key === "all") {
                                 handleDeteleUnread(); // Xử lý khi tab "Tất cả" được chọn
                             } 
-                            // else if (key === "unread") {
-                            //     handleOnclickTabNotiUnread(); // Xử lý khi tab "Chưa đọc" được chọn
-                            // }
                         }}
                     >
                         <Tab eventKey="all" title="Tất cả"

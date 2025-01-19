@@ -10,6 +10,7 @@ import UpdateSuccessUserName from './update_success';
 import { useRouter } from 'next/navigation';
 import { useLoadingContext } from '@/context/loading_context';
 import { validUserName } from '@/validation/valid';
+import { useUserContext } from '@/context/user_context';
 
 
 function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: string; onSave: (newUserName: string) => void }) {
@@ -21,6 +22,7 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext();
+  const {fetchGetUser} = useUserContext()
 
   const handleClose = () => setShow(false);
   const handleShow = () => {

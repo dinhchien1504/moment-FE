@@ -142,3 +142,11 @@ body,html {
     min-width: 300px;
   }
 }
+
+.p-selector {
+  cursor: pointer; 
+}
+
+.rounded-circle{
+  object-fit: cover;
+}
