@@ -55,13 +55,13 @@ const SettingSidebar = () => {
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
-                                <Nav.Item className={styles.navItem}>
-                                    <Nav.Link eventKey="first" className={styles.customNavLink}>
+                                <Nav.Item className={styles.navItem} style={{cursor:"pointer"}} >
+                                    <Nav.Link as={"div"} eventKey="first" className={styles.customNavLink}>
                                         Mật khẩu và bảo mật
                                     </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item className={styles.navItem}>
-                                    <Nav.Link eventKey="second" className={styles.customNavLink}>
+                                <Nav.Item  className={styles.navItem} style={{cursor:"pointer"}}>
+                                    <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
                                         Thông tin cá nhân
                                     </Nav.Link>
                                 </Nav.Item>
