@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column; /* Sắp xếp theo cột */
     gap: 20px; /* Khoảng cách giữa các phần tử */
-    margin: 20px 0 0 100px; /* Khoảng cách trên cùng */
+    /* margin: 20px 0 0 100px; Khoảng cách trên cùng */
   }
   
   .customButton {
@@ -11,7 +11,7 @@
     color: #fff; /* Màu chữ */
     border: none; /* Xóa viền */
     border-radius: 8px; /* Góc bo tròn */
-    padding: 10px 20px; /* Khoảng cách trong */
+    padding: 10px; /* Khoảng cách trong */
     font-size: 18px; /* Kích thước chữ */
     font-weight: bold; /* Đậm chữ */
     text-decoration: none; /* Xóa gạch dưới */
@@ -27,10 +27,78 @@
   .customButton:active {
     transform: translateY(0); /* Giữ nguyên vị trí khi bấm */
   }
+
+
+  @media (max-width: 768px) { /* Màn hình máy tính bảng hoặc điện thoại nhỏ */
+    .buttonContainer {
+      margin: 0;
+      display: flex;
+      flex-direction: column; /* Đặt các phần tử theo chiều dọc */
+      align-items: center; /* Các phần tử có chiều rộng đầy đủ */
+      padding-top: 20px;
+      width: 100%;
+    }
+    .settingSidebar{
+      width: 100%;
+    }
+    .customButton {
+      margin: 10x 0 20px 0;
+      width: 30%; /* Nút chiếm toàn bộ chiều rộng */
+      height: 40px; /* Giảm chiều cao cho vừa với màn hình nhỏ */
+      font-size: 14px;
+      margin-bottom: 20px; /* Giảm kích thước chữ */
+    }
+    .tabContainer{
+      text-align: center;
+      width: 100%;
+      margin: 0 auto; /* Xóa margin nếu có */
+      padding: 0; /* Xóa padding nếu có */
+    }
+
+    .navPills {
+      padding: 5px;
+      width: 100%;
+      border: 2px solid #ddd; /* Đường viền phân cách */
+    }
+  
+    .navItem {
+      margin-bottom: 8px;
+    }
+  
+    .title{
+      font-size: 20px;
+    }
+    .customNavLink {
+      font-size: 14px;
+      padding: 8px;
+      width: 100%;
+    }
+    .card {
+      margin-bottom: 15px;
+      font-size: 19px;
+    }
+  
+    .cardHeader {
+      font-size: 15px;
+    }
+  
+    .listGroupItemEmail {
+      width: 100%;
+      font-size: 13px;
+    }
+  .listGroupItemUserName{
+    font-size: 13px;
+  }
+    .cardBody {
+      font-size: 12px;
+      padding: 10px;
+    }
+  }
+  
   .tabContainer {
-    margin: -20px auto;
+    /* margin: -20px auto; */
     padding: 10px;
-    width: 70%;
+    /* width: 70%; */
     background-color: #f9f9f9; /* Màu nền nhạt */
     border-radius: 10px; /* Bo góc */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
@@ -38,7 +106,6 @@
   
   .navPills {
     border-right: 2px solid #ddd; /* Đường viền phân cách */
-    padding-right: 15px; /* Khoảng cách nội dung bên phải */
   }
   
   .navItem {
