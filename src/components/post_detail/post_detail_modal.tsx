@@ -30,60 +30,86 @@ const PostDetailModal = () => {
     const pathName = usePathname()
     const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
 
-    useEffect(() => {
+    // useEffect(() => {
 
+    //     const getPhoto = async () => {
+    //         // stopLoadingSpiner()
+    //         setIsLoading(true)
+    //         setShowPostDetail(true)
+    //         const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${postSlug}`)
+    //         if (res && res.status === 200) {
+               
+    //             const photo: IPhotoResponse = res.result
+    //             setPhotoResponse(photo)
+    //             console.log("post >>> ", photo)
+    //             setPostIsExist(true)
+
+    //         } else {
+    //             setPostIsExist(false)
+    //         }
+    //         setIsLoading(false)
+    //     }
+
+    //     if (postSlug != "") {
+    //         getPhoto()
+    //     } else {
+    //         setShowPostDetail(false)
+    //         console.log("dong lai ne 222")
+    //     }
+    // }, [postSlug])
+
+    // useEffect (() => {
+    //     const getPhoto = async () => {
+    //         // stopLoadingSpiner()
+    //         setIsLoading(true)
+    //         setShowPostDetail(true)
+    //         const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
+    //         if (res && res.status === 200) {
+               
+    //             const photo: IPhotoResponse = res.result
+    //             setPhotoResponse(photo)
+    //             setPostIsExist(true)
+    //         } else {
+    //             setPostIsExist(false)
+    //         }
+    //         setIsLoading(false)
+    //     }
+    //     if (post != null) {
+    //         getPhoto()
+    //     }
+    // }, [])
+
+    useEffect (() => {
+        console.log("doi urrl ne tr >>>>",searchParams)
         const getPhoto = async () => {
             // stopLoadingSpiner()
             setIsLoading(true)
             setShowPostDetail(true)
-            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${postSlug}`)
+            const newPost = searchParams.get('post');
+            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${newPost}`)
             if (res && res.status === 200) {
                
                 const photo: IPhotoResponse = res.result
                 setPhotoResponse(photo)
-                console.log("post >>> ", photo)
                 setPostIsExist(true)
-
             } else {
                 setPostIsExist(false)
             }
             setIsLoading(false)
         }
 
-        if (postSlug != "") {
+        if (searchParams.size > 0) {
             getPhoto()
         } else {
             setShowPostDetail(false)
-            console.log("dong lai ne 222")
         }
-    }, [postSlug])
 
-    useEffect (() => {
-        const getPhoto = async () => {
-            // stopLoadingSpiner()
-            setIsLoading(true)
-            setShowPostDetail(true)
-            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
-            if (res && res.status === 200) {
-               
-                const photo: IPhotoResponse = res.result
-                setPhotoResponse(photo)
-                setPostIsExist(true)
-            } else {
-                setPostIsExist(false)
-            }
-            setIsLoading(false)
-        }
-        if (post != null) {
-            getPhoto()
-        }
-    }, [])
+    }, [searchParams])
 
     const handleClosePostDetail = () => {
-        setPostSlug("")
-        router.push(pathName)
-        setShowPostDetail(false)
-        console.log("dong lai ne 11111")
+        // setPostSlug("")
+        // router.push(pathName)
+        window.history.pushState({}, '', `${pathName}`);
     }
 
 

@@ -46,7 +46,7 @@ const AllNotiTab = (props: Props) => {
     }
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
-        setPostSlug(notiRes.slug)
+        // setPostSlug(notiRes.slug)
         if (notiRes.status != "read") {
             setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"
