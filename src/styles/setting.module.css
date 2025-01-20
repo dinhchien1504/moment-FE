@@ -60,16 +60,20 @@
       width: 100%;
       border: 2px solid #ddd; /* Đường viền phân cách */
     }
-  
-    .navItem {
-      margin-bottom: 8px;
-    }
-  
     .title{
       font-size: 20px;
     }
+    .navItem{
+      margin-bottom: 0px ;
+    }
+    .rowNav{
+      display: flex;
+      justify-content: center;
+      align-items: center ;
+      height: 100%
+    }
     .customNavLink {
-      font-size: 14px;
+      font-size: 12px;
       padding: 8px;
       width: 100%;
     }
@@ -105,11 +109,14 @@
   }
   
   .navPills {
+    display:flex;
+    flex-direction: column;
     border-right: 2px solid #ddd; /* Đường viền phân cách */
   }
   
   .navItem {
-    margin-bottom: 10px; /* Khoảng cách giữa các mục */
+    flex: 1;
+  text-align: center; /* Khoảng cách giữa các mục */
   }
   
   /* styles.module.css */

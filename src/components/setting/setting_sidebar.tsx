@@ -55,17 +55,21 @@ const SettingSidebar = () => {
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
+                                <Row  className={styles.rowNav}>
+                                
                                 <Nav.Item className={styles.navItem}>
                                     <Nav.Link eventKey="first" className={styles.customNavLink}>
-                                        Mật khẩu và bảo mật
+                                        Mật khẩu & bảo mật
                                     </Nav.Link>
                                 </Nav.Item>
+                               
                                 <Nav.Item className={styles.navItem}>
                                     <Nav.Link eventKey="second" className={styles.customNavLink}>
                                         Thông tin cá nhân
                                     </Nav.Link>
                                 </Nav.Item>
-
+                                
+                                </Row>
                             </Nav>
                         </Col>
                         <Col sm={9}>
