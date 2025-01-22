@@ -1,6 +1,7 @@
 import API from '@/api/api';
 import { FetchClientPutApi } from '@/api/fetch_client_api';
 import { useLoadingContext } from '@/context/loading_context';
+import { useUserContext } from '@/context/user_context';
 import { validBirthday, validName, validNoEmpty } from '@/validation/valid';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -30,7 +31,7 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
     sex: "",
     address: "",
   });
-  
+  const { fetchGetUser } = useUserContext();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true); 
@@ -83,6 +84,7 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
       const response = await FetchClientPutApi(API.SETTING.SETTING, updatedInfo);
       if (response.status === 200) {
         onSave(updatedInfo);
+        await fetchGetUser()
         handleClose();
       } else {
         alert("Cập nhật thất bại. Vui lòng thử lại!");

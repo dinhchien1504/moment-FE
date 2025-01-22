@@ -14,6 +14,7 @@ const HomePage = async () => {
   };
 
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  console.log("photo ne >>> ", resPhoto)
   return (
     <>
       <Container fluid className="container-home">

@@ -10,6 +10,7 @@
     width: 50px;
     height: 50px;
     object-fit:cover ;
+    cursor: pointer; 
 }
 
 .img-avatar-item{
@@ -22,6 +23,7 @@
 
 .font-item{
     font-size: 16px;
+    cursor: pointer; 
 }
 
 .font-item:active{
@@ -118,6 +120,12 @@
 .bg-body-tertiary.ctn-header.navbar.navbar-expand.navbar-light{
     height: 60px;
 }
+
+.font-item.active{ 
+    background-color: white !important;
+    color: black !important;
+}
+
 .hover-text-decoration-underline{
     text-decoration: none;
 }
