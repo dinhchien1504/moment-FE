@@ -23,7 +23,9 @@ const ContentOfUser = (props: Props) => {
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastPhotoRef = useRef<HTMLDivElement | null>(null);
-  const [loadingPhotos, setLoadingPhotos] = useState<Record<string, boolean>>({});
+  const [loadingPhotos, setLoadingPhotos] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // Hàm tải thêm dữ liệu
   // const handleLazyLoading = async () => {
@@ -39,7 +41,6 @@ const ContentOfUser = (props: Props) => {
   //   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   //   const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
-    
 
   //   if (!resPro.result.listPhotoProfile || resPro.result.listPhotoProfile.length === 0) {
   //     setHasMore(false); // Không còn dữ liệu
@@ -60,7 +61,7 @@ const ContentOfUser = (props: Props) => {
   //       acc[photo.id] = true; // Đặt trạng thái loading ban đầu là true
   //       return acc;
   //     }, {} as Record<string, boolean>);
-    
+
   //     setLoadingPhotos((prevLoading) => ({
   //       ...prevLoading,
   //       ...newLoadingState,
@@ -76,7 +77,6 @@ const ContentOfUser = (props: Props) => {
 
   // };
 
-  
   const handleLazyLoading = async () => {
     if (isLoading || !hasMore) return; // Dừng nếu đang tải hoặc không còn dữ liệu
     setIsLoading(true); // Bắt đầu tải
@@ -87,9 +87,11 @@ const ContentOfUser = (props: Props) => {
     };
 
     const resPro = await FetchClientPostApi(API.PROFILE.PROFILE, dataProfile);
-    
 
-    if (!resPro.result.listPhotoProfile || resPro.result.listPhotoProfile.length === 0) {
+    if (
+      !resPro.result.listPhotoProfile ||
+      resPro.result.listPhotoProfile.length === 0
+    ) {
       setHasMore(false); // Không còn dữ liệu
       setIsLoading(false); // Kết thúc tải
       return; // Dừng lại
@@ -111,10 +113,7 @@ const ContentOfUser = (props: Props) => {
     });
     // console.log("profile photo 2 ", profileRespone);
     setIsLoading(false); // Kết thúc tải
-
-  }; 
-
-
+  };
 
   // Tăng `pageCurrent` khi phần tử cuối được cuộn vào vùng nhìn thấy
   useEffect(() => {
@@ -124,7 +123,7 @@ const ContentOfUser = (props: Props) => {
       (entries) => {
         const lastEntry = entries[0];
         // if (lastEntry.isIntersecting && hasMore) {
-          if (lastEntry.isIntersecting && hasMore && !isLoading){
+        if (lastEntry.isIntersecting && hasMore && !isLoading) {
           setPageCurrent((prev) => prev + 1);
         }
       },
@@ -143,7 +142,7 @@ const ContentOfUser = (props: Props) => {
     return () => {
       if (element) observerRef.current?.unobserve(element);
     };
-  }, [profileRespone.listPhotoProfile, hasMore,isLoading]);
+  }, [profileRespone.listPhotoProfile, hasMore, isLoading]);
 
   // Gọi API khi `pageCurrent` thay đổi
   useEffect(() => {
@@ -151,7 +150,7 @@ const ContentOfUser = (props: Props) => {
       handleLazyLoading();
     }
   }, [pageCurrent, hasMore]);
-  
+
   return (
     <Tabs
       defaultActiveKey="YourPost"
@@ -161,36 +160,39 @@ const ContentOfUser = (props: Props) => {
       <Tab eventKey="YourPost" title="Your Post">
         <Container className="ListImg">
           <Row className="g-4">
-            {profileRespone.listPhotoProfile.map((photo, index) => {
-              // Đặt ref cho phần tử cuối cùng
-              const isLastPhoto =
-                index === profileRespone.listPhotoProfile.length - 1;
-              return (
-
-                <Col
-                  
-                  key={photo.id}
-                  ref={isLastPhoto ? lastPhotoRef : null}
-                  className="col-12 gap-3 col-sm-6 col-md-4"
-                >
-                  <Image
-                    className="ImgBlock"
-                    src={GetImage(photo.urlPhoto)}
-                    style={{
-                      backgroundColor: "#f2f4f7",
-                      maxWidth: "100%",
-                      aspectRatio: "1 / 1",
-                      objectFit: "contain",
-                    }}
-                    rounded
-                  />
-                </Col>
-              );
-            })}
+            {profileRespone.listPhotoProfile?.length > 0 ? (
+              profileRespone.listPhotoProfile.map((photo, index) => {
+                // Đặt ref cho phần tử cuối cùng
+                const isLastPhoto =
+                  index === profileRespone.listPhotoProfile.length - 1;
+                return (
+                  <Col
+                    key={photo.id}
+                    ref={isLastPhoto ? lastPhotoRef : null}
+                    className="col-12 gap-3 col-sm-6 col-md-4"
+                  >
+                    <Image
+                      className="ImgBlock"
+                      src={GetImage(photo.urlPhoto)}
+                      style={{
+                        backgroundColor: "#f2f4f7",
+                        maxWidth: "100%",
+                        aspectRatio: "1 / 1",
+                        objectFit: "contain",
+                      }}
+                      rounded
+                    />
+                  </Col>
+                );
+              })
+            ) : (
+              <p className="text-center w-100">Không có dữ liệu</p>
+            )}
           </Row>
+
           {isLoading && hasMore && (
             <div className="loading-spinner d-flex justify-content-center align-items-center mt-3">
-              <SpinnerAnimation/>
+              <SpinnerAnimation />
             </div>
           )}
         </Container>

@@ -7,12 +7,13 @@ import "@/styles/profile_user.css";
 import API from "@/api/api";
 import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
 import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
+import { getServerUTC } from "@/utils/utc_server_action";
 
 
 const ProfileUser = async (props: any ) => {
   const { params } = props;
   // console.log ('para',params.id);
-  const timestamp= getCurrentTime()
+  const timestamp= await getServerUTC()
 
   const dataProfile: IProfileFillterRequest  = {
     pageCurrent: 0,
@@ -20,7 +21,7 @@ const ProfileUser = async (props: any ) => {
     userName:params.id,
   }
   const resProfile = await FetchServerPostApi(API.PROFILE.PROFILE ,dataProfile);
-  // console.log(resProfile.result);
+  console.log('data',resProfile.result);
   // const resProfile = await FetchServerGetApi(API.PROFILE.GETPROFILE , dataProfile);
   // const resProfile = await FetchServerGetApi(API.PHOTO.LIST , dataProfile);
 
@@ -54,13 +55,13 @@ const ProfileUser = async (props: any ) => {
         <Col md={4} className="mb-4 width90ps">
           <div className="mb-4  " >
             <InforUser profileRespone = {resProfile.result } 
+             time =  {timestamp}
               params = {params.id}
             />
           </div>
           <div>
             <ContentOfUser profileRespone={resProfile.result}
              time =  {timestamp}
-              
               params = {params.id}
 
             />

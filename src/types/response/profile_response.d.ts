@@ -6,4 +6,6 @@ interface IProfileResponse{
     userName:string;
     urlAvt:string;
     quantityFriend: number;
+    friendStatus: string;
+    idAccount:string;
 }

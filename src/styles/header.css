@@ -86,28 +86,35 @@
 
 }
 
-/* end noti */
+.btn-noti{
+    width: 70px;
+}
 
+
+/* end noti */
+.search-load{
+    min-height:50px;
+    min-width: 290px;
+  }
 
 @media (max-width: 550px) {
     .nav-profile{
         padding-right: 0px !important;
     }
     
-    .nav-noti{
-        padding-right: 0px !important;
-    }
+   
+
 }
 
-
-
-@media (max-width: 491px) {
-    .btn-noti{
-        width: 70px;
-    }
-}
 
 
 .bg-noti{
     background-color: #ff0066 !important;
+}
+
+.dropdown-toggle::after  {
+    display:  none;
+}
+.bg-body-tertiary.ctn-header.navbar.navbar-expand.navbar-light{
+    height: 60px;
 }

@@ -18,7 +18,7 @@ export const FetchClientPostApi = async (api: string,bodyData: any) => {
           body: JSON.stringify(bodyData), // Gửi dữ liệu JSON
         });
 
-        console.log()
+    
         const data = await res.json();
         if (data.status === 401) {
           throw new Error("Unauthorize"); 
@@ -81,7 +81,6 @@ export const FetchClientGetApiWithSignal = async (api: string, signal: AbortSign
   } catch (error: any) {
     // Nếu yêu cầu bị hủy (AbortError)
     if (error.name === "AbortError") {
-      console.log("Yêu cầu search đã được dừng");
     } else if (error.message === "Unauthorized") {
       window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập nếu Unauthorized
     } else {
