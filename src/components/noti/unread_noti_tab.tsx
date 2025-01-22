@@ -1,10 +1,7 @@
 "use client"
 
 import ItemNoti from "./item_noti"
-import Stomp from "stompjs"
-import SockJS from 'sockjs-client'
-import { useEffect, useState } from "react"
-import cookie from "js-cookie";
+import { useState } from "react"
 import { Button } from "react-bootstrap"
 import SpinnerAnimation from "../shared/spiner_animation"
 
@@ -12,16 +9,27 @@ interface Props {
     notiUnread: INotiResponse[],
     fetchGetNotiUnread: (value: number) => void
     lockViewMoreNotiUnread: boolean
-    isLoadingNotiUnread:boolean
+    isLoadingNotiUnread: boolean
+    setNotiAll: (value: INotiResponse[]) => void
+    notiAll: INotiResponse[]
+    numberOfItemRemove:number;
+    setNumberOfItemRemove: (value : number) => void
 }
 
 const UnReadNotiTab = (props: Props) => {
 
-    const { notiUnread, fetchGetNotiUnread, lockViewMoreNotiUnread , isLoadingNotiUnread} = props
 
-  
+    const { notiUnread, 
+        fetchGetNotiUnread, 
+        lockViewMoreNotiUnread, 
+        isLoadingNotiUnread,
+         setNotiAll, notiAll, 
+         numberOfItemRemove,
+          setNumberOfItemRemove,} = props
 
-    const [pageCurrent, setPageCurrent] = useState<number>(0)
+
+
+    const [pageCurrent, setPageCurrent] = useState<number>(1)
 
 
     const handleViewMoreUnread = async () => {
@@ -32,14 +40,37 @@ const UnReadNotiTab = (props: Props) => {
         await fetchGetNotiUnread(pc)
     }
 
+    const handleChangeStatus = (notiRes: INotiResponse) => {
+        if ( notiRes.status!= "read" ) {
+            setNumberOfItemRemove(numberOfItemRemove + 1)
+            notiRes.status = "read"
+
+            const notiNew:INotiResponse[] =[]
+            for (let i=0; i< notiAll.length ; i++)
+            {
+                if(notiAll[i].id == notiRes.id ) {
+                    notiAll[i].status = "read"
+                }
+                notiNew.push(notiAll[i])
+            }
+            setNotiAll(notiNew)
+        }
+    }
+
 
     return (
         <>
             {notiUnread?.map((noti, index) => (
 
-                <ItemNoti key={index}
-                    noti={noti}
-                />
+                <div key={index}
+                    onClick={() => { handleChangeStatus(noti) }}
+                >
+                    <ItemNoti
+                        noti={noti}
+                    />
+                </div>
+
+
 
             ))}
 

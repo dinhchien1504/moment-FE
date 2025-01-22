@@ -2,7 +2,7 @@
 
 import API from "@/api/api";
 import { GetImage } from "@/utils/handle_images";
-import { FetchClientPostApi } from "@/api/fetch_client_api";
+import { FetchClientPostApi,FetchClientPutApi } from "@/api/fetch_client_api";
 import React, { use, useState, useRef, useEffect } from "react";
 import { Col, Container, Row, Button, Stack, Image } from "react-bootstrap";
 import Overlay from "react-bootstrap/Overlay";
@@ -40,15 +40,15 @@ const InforUser = (props: Props) => {
         accountFriendId: idAccountChange,
         status: newStatus,
       };
-  
-      const result = await FetchClientPostApi(API.ACCOUNT.CHANGE_STATUS, dataChangeStatus);
+      console.log ('this is datachange', dataChangeStatus)
+      const result = await FetchClientPutApi(API.ACCOUNT.CHANGE_STATUS, dataChangeStatus);
   
       if (result.status === 200) {
         setProfileRespone((prevProfile) => ({
           ...prevProfile,
           friendStatus: newStatus,
         }));
-        setFriendStatus(newStatus);
+        setFriendStatus(profileRespone.friendStatus);
       }
     } catch (error) {
       console.error("Error", error);
@@ -67,11 +67,8 @@ const InforUser = (props: Props) => {
       const addFriend = await FetchClientPostApi(API.ACCOUNT.ADD, dataChange);
   
       if (addFriend.status === 200) {
-        console.log('this is adfriendadfriend', addFriend)
-        console.log('this is main,' ,props.profileRespone)
-        // console.log('this is friendStautsfriendStauts', addFriend.result.friendStatus)
+        
         setFriendStatus(addFriend.result.friendStatus); // Lấy từ API thay vì gán cứng 'sent'
-        // console.log('status after add', friendStatus)
       }
     } catch (error) {
       console.error("Error :", error);
@@ -214,7 +211,7 @@ const InforUser = (props: Props) => {
                 <Button
                   variant="dark"
                   onClick={() =>
-                    changeStatus(profileRespone.idAccount, "deleted")
+                    changeStatus(profileRespone.idAccount,"deleted")
                   }
                 >
                   Đã gửi lời mời{" "}

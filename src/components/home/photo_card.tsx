@@ -2,15 +2,23 @@
 import { GetImage } from "@/utils/handle_images";
 import { formatDate } from "@/utils/utils_time";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   photoResponse: IPhotoResponse;
   setUrlImageModal: (src: string) => void;
 }
 const PhotoCard = (props: IProps) => {
-  const { id, urlPhoto, caption, createdAt, name, urlAvt, userName } =
+  const { id, urlPhoto, caption, createdAt, name, urlAvt, userName, slug } =
     props.photoResponse;
   const setUrlImageModal = props.setUrlImageModal;
+
+  const pathName  = usePathname()
+
+  const handleShowPostDetail = (slug:string) => {
+      window.history.pushState({}, '', `${pathName}?post=${slug}`);
+  }
+
 
   return (
     <div
@@ -29,7 +37,9 @@ const PhotoCard = (props: IProps) => {
           </div>
           <div className="d-block">
           <Link className="text-black text-decoration-none" href={`/${userName}`}>{name}</Link>
-            <p className="m-0 fs-6">{formatDate(createdAt)}</p>
+            <p className="p-selector m-0 fs-6"
+             onClick={() => {handleShowPostDetail(slug)}}
+            >{formatDate(createdAt)}</p>
           </div>
         </div>
         <div className="post-caption px-2 py-1">

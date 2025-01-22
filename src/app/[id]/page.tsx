@@ -1,13 +1,11 @@
 'use server'
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import API from "@/api/api";
+import { FetchServerPostApi } from "@/api/fetch_server_api";
 import ContentOfUser from "@/components/profile/content";
 import InforUser from "@/components/profile/infor_user";
 import "@/styles/profile_user.css";
-import API from "@/api/api";
-import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
-import { getCurrentTime, getTimeZone } from "@/utils/utils_time";
 import { getServerUTC } from "@/utils/utc_server_action";
+import { Col, Container, Row } from "react-bootstrap";
 
 
 const ProfileUser = async (props: any ) => {

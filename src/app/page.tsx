@@ -14,6 +14,7 @@ const HomePage = async () => {
   };
 
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
+  console.log("photo ne >>> ", resPhoto)
   return (
     <>
       <Container fluid className="container-home">
@@ -27,7 +28,7 @@ const HomePage = async () => {
               time={time}
             ></VerticalSwiper>
           </Col>
-          <Col md={0} lg={3} className="d-none d-md-block">col-3</Col>
+          <Col md={0} lg={3} className="d-none d-md-block"></Col>
         </Row>
       </Container>
       
