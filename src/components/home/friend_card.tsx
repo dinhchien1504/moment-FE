@@ -207,7 +207,7 @@ const FriendCard = ({ accountResponse }: Props) => {
       />
       <div className="info-friend">
         <Link
-          className="mb-1 d-block text-black text-decoration-none"
+          className="mb-1 d-block text-black hover-text-decoration-underline"
           href={urlProfile}
         >
           {name}
