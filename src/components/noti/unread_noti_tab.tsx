@@ -1,13 +1,9 @@
 "use client"
 
 import ItemNoti from "./item_noti"
-import Stomp from "stompjs"
-import SockJS from 'sockjs-client'
-import { useEffect, useState } from "react"
-import cookie from "js-cookie";
+import { useState } from "react"
 import { Button } from "react-bootstrap"
 import SpinnerAnimation from "../shared/spiner_animation"
-import { usePostDetailContext } from "@/context/post_detail_context"
 
 interface Props {
     notiUnread: INotiResponse[],
@@ -22,7 +18,6 @@ interface Props {
 
 const UnReadNotiTab = (props: Props) => {
 
-    const {setPostSlug} = usePostDetailContext()
 
     const { notiUnread, 
         fetchGetNotiUnread, 
@@ -46,7 +41,6 @@ const UnReadNotiTab = (props: Props) => {
     }
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
-        setPostSlug(notiRes.slug)
         if ( notiRes.status!= "read" ) {
             setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"

@@ -10,8 +10,8 @@ interface UpdateSuccessUserNameProps {
 
 function UpdateSuccessUserName({ show, handleClose, handleLogout }: UpdateSuccessUserNameProps) {
     return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+      <Modal show={show}>
+        <Modal.Header>
           <Modal.Title>Thông báo</Modal.Title>
         </Modal.Header>
         <Modal.Body>Bạn đã thay đổi tên đăng nhập thành công! Vui lòng đăng nhập lại!</Modal.Body>

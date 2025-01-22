@@ -1,23 +1,16 @@
 "use client"
 import { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { FetchClientGetApi } from '@/api/fetch_client_api';
 import API from '@/api/api';
 import "@/styles/post_detail_modal.css"
-import { useRouter } from 'next/navigation';
 import { GetImage } from '@/utils/handle_images';
 import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
-import { useLoadingContext } from '@/context/loading_context';
-import { usePostDetailContext } from '@/context/post_detail_context';
-
-
 
 const PostDetailModal = () => {
 
-    const {postSlug, setPostSlug} = usePostDetailContext()
     const [showPostDetail, setShowPostDetail] = useState<boolean>(false)
 
     const [photoResponse, setPhotoResponse] = useState<IPhotoResponse>()
@@ -25,69 +18,46 @@ const PostDetailModal = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const searchParams = useSearchParams();
-    const post = searchParams.get('post')
-    const router = useRouter()
     const pathName = usePathname()
-    const {startLoadingSpiner, stopLoadingSpiner} = useLoadingContext()
+
+      // useState cho modal ảnh
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-
         const getPhoto = async () => {
-            // stopLoadingSpiner()
             setIsLoading(true)
             setShowPostDetail(true)
-            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${postSlug}`)
+            const newPost = searchParams.get('post');
+            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${newPost}`)
             if (res && res.status === 200) {
-               
+
                 const photo: IPhotoResponse = res.result
                 setPhotoResponse(photo)
-                console.log("post >>> ", photo)
                 setPostIsExist(true)
-
             } else {
                 setPostIsExist(false)
             }
             setIsLoading(false)
         }
 
-        if (postSlug != "") {
+        if (searchParams.size > 0) {
             getPhoto()
         } else {
             setShowPostDetail(false)
-            console.log("dong lai ne 222")
         }
-    }, [postSlug])
 
-    useEffect (() => {
-        const getPhoto = async () => {
-            // stopLoadingSpiner()
-            setIsLoading(true)
-            setShowPostDetail(true)
-            const res = await FetchClientGetApi(`${API.PHOTO.LIST}?post=${post}`)
-            if (res && res.status === 200) {
-               
-                const photo: IPhotoResponse = res.result
-                setPhotoResponse(photo)
-                setPostIsExist(true)
-            } else {
-                setPostIsExist(false)
-            }
-            setIsLoading(false)
-        }
-        if (post != null) {
-            getPhoto()
-        }
-    }, [])
+    }, [searchParams])
 
     const handleClosePostDetail = () => {
-        setPostSlug("")
-        router.push(pathName)
-        setShowPostDetail(false)
-        console.log("dong lai ne 11111")
+        window.history.pushState({}, '', `${pathName}`);
     }
 
-
-
+    const openModal = () => {
+        setIsModalOpen(true);
+      };
+      const closeModal = () => {
+        setIsModalOpen(false);
+      };
     return (
         <>
             <Modal
@@ -99,6 +69,23 @@ const PostDetailModal = () => {
                     <Modal.Title>Bài viết</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {isModalOpen && (
+                        <div
+                            className="modal-custom-overlay-detail position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center"
+                            onClick={closeModal}
+                        >
+                            <div
+                                className="modal-custom-content-detail position-relative"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <img src={GetImage(photoResponse?.urlPhoto)} alt="" className="zoomed-image-detail" />
+                                <div className="modal-close-detail" onClick={closeModal}>
+                                    X
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {isLoading ? (<>
                         <div className='div-post-spiner' >
                             <SpinnerAnimation />
@@ -126,6 +113,9 @@ const PostDetailModal = () => {
                                     }}
                                     src={GetImage(photoResponse?.urlPhoto)}
                                     className="img-capture-detail"
+                                    onClick={() => {
+                                        openModal();
+                                    }}
                                 />
                             </div>
                         </>) : (<>
@@ -141,11 +131,6 @@ const PostDetailModal = () => {
                         </>)
 
                     )}
-
-
-
-
-
 
                 </Modal.Body>
 

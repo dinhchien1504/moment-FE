@@ -198,25 +198,25 @@ const FriendAll = (props: FriendAllProps) => {
               className="flex-column shadow round-2 border-2"
             >
               <Row>
-                <Col sm={12} className="col-4 p-1">
+                <Col sm={12} className="col-4 mb-1">
                   <Nav.Item>
-                    <Nav.Link className="text-center" eventKey="first">
-                      <i className="fa-solid fa-users"></i> Bạn bè
+                    <Nav.Link as={"div"} className="text-center" eventKey="first" style={{cursor:"pointer"}}>
+                      <i className="fa-solid fa-users" style={{marginRight:"5px"}}></i> Bạn bè
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
-                <Col sm={12} className="col-4 p-1">
+                <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link className="text-center" eventKey="second">
-                      <i className="fa-regular fa-envelope"></i>
+                    <Nav.Link as={"div"} className="text-center" eventKey="second" style={{cursor:"pointer"}}>
+                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
                       <i className="fa-solid fa-arrow-left"></i> Lời mời
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
-                <Col sm={12} className="col-4 p-1">
+                <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link className="text-center" eventKey="third">
-                      <i className="fa-regular fa-envelope"></i>
+                    <Nav.Link as={"div"} className="text-center" eventKey="third" style={{cursor:"pointer"}}>
+                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
                       <i className="fa-solid fa-arrow-right"></i> Đã gửi
                     </Nav.Link>
                   </Nav.Item>

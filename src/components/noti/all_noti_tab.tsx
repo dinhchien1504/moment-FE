@@ -4,7 +4,6 @@ import { useState } from "react"
 import SpinnerAnimation from "../shared/spiner_animation"
 import ItemNoti from "./item_noti"
 import { Button } from "react-bootstrap"
-import { usePostDetailContext } from "@/context/post_detail_context"
 
 interface Props {
     notiAll: INotiResponse[]
@@ -31,7 +30,6 @@ const AllNotiTab = (props: Props) => {
         setNumberOfItemRemove
      } = props
 
-     const {setPostSlug} = usePostDetailContext()
 
     const [pageCurrent, setPageCurrent] = useState<number>(1)
 
@@ -46,7 +44,6 @@ const AllNotiTab = (props: Props) => {
     }
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
-        setPostSlug(notiRes.slug)
         if (notiRes.status != "read") {
             setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"

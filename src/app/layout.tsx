@@ -10,7 +10,6 @@ import { LoadingProvider } from "@/context/loading_context";
 import LoadingSpiner from "@/components/shared/loading_spiner";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PostDetailProvider } from "@/context/post_detail_context";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -40,11 +39,9 @@ export default async function RootLayout({
         <LoadingProvider>
           <SocketProvider>
             <UserProvider>
-              <PostDetailProvider>
                 <LoadingSpiner />
                 <Header />
                 {children}
-              </PostDetailProvider>
             </UserProvider>
           </SocketProvider>
         </LoadingProvider>
