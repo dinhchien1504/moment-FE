@@ -122,7 +122,7 @@
 }
 
 .font-item.active{ 
-    background-color: white !important;
+    background-color: rgb(208, 208, 208) !important;
     color: black !important;
 }
 

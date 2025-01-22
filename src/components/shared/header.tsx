@@ -167,7 +167,7 @@ const Header = () => {
                                             </Dropdown.Item>
                                             <Dropdown.Item eventKey="3" className='font-item' as='div'>
                                                 <Link href="/setting" className='text-decoration-none text-dark'>
-                                                    <i className="fa-solid fa-gear"></i> Cài đặt
+                                                    <i className="fa-solid fa-gear"></i><span> Cài đặt</span>
                                                 </Link>
                                             </Dropdown.Item>
 
