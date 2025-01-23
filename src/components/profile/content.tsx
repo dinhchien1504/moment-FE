@@ -174,6 +174,7 @@ const ContentOfUser = (props: Props) => {
                     <Image
                       className="ImgBlock"
                       src={GetImage(photo.urlPhoto)}
+                      alt=""
                       style={{
                         backgroundColor: "#f2f4f7",
                         maxWidth: "100%",

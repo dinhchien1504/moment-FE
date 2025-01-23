@@ -104,7 +104,6 @@ const InforUser = (props: Props) => {
           API.PROFILE.PROFILE,
           dataProfile
         );
-        console
 
         if (
           response.status === 200 &&
@@ -140,6 +139,7 @@ const InforUser = (props: Props) => {
       <Col className="center_col">
         <Stack gap={3} className="center_col ">
           <Image
+            alt =""
             src={GetImage(profileRespone.urlAvt)}
             style={{
               objectFit: "cover",
