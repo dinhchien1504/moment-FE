@@ -78,7 +78,7 @@ const NotiOffCanvas = (props: IProps) => {
 
             const notis: INotiResponse[] = res.result
 
-            if (notis.length === 0) {
+            if (notis.length < 6) {
                 setLockViewMoreNotiUnread(true)
             }
             // Tính toán updatedNotis trước khi cập nhật state
@@ -114,7 +114,7 @@ const NotiOffCanvas = (props: IProps) => {
 
             const notis: INotiResponse[] = res.result
 
-            if (notis.length === 0) {
+            if (notis.length < 6) {
                 setLockViewMoreNotiAll(true)
             }
 
@@ -266,7 +266,7 @@ const NotiOffCanvas = (props: IProps) => {
                         id="uncontrolled-tab-example"
                         className="mb-3"
                         onSelect={(key) => {
-                            if (key === "all") {
+                            if (key === "unread") {
                                 handleDeteleUnread(); // Xử lý khi tab "Tất cả" được chọn
                             } 
                         }}
