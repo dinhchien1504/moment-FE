@@ -33,25 +33,25 @@ const Header = () => {
 
     useEffect(() => {
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('Service Worker đã đăng ký', registration);
-            })
-            .catch((error) => {
-              console.log('Đăng ký Service Worker thất bại:', error);
-            });
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker đã đăng ký', registration);
+                })
+                .catch((error) => {
+                    console.log('Đăng ký Service Worker thất bại:', error);
+                });
         }
 
         if (Notification.permission !== 'granted') {
             Notification.requestPermission().then(permission => {
-              if (permission === 'granted') {
-                console.log('Quyền nhận thông báo đã được cấp!');
-              } else {
-                console.log('Quyền nhận thông báo bị từ chối');
-              }
+                if (permission === 'granted') {
+                    console.log('Quyền nhận thông báo đã được cấp!');
+                } else {
+                    console.log('Quyền nhận thông báo bị từ chối');
+                }
             });
-          }
-      }, []);
+        }
+    }, []);
 
 
     useEffect(() => {
@@ -149,29 +149,26 @@ const Header = () => {
 
                                         <Dropdown.Menu align="end">
                                             <Dropdown.Item eventKey="1" as='div'>
-                                                <div className='text-center font-item'>
-                                                    <img
-                                                        src={GetImage(user?.urlPhoto)}
+                                                <Link href={user?.userName + ''} className='text-decoration-none text-dark'>
+                                                    <div className='text-center font-item'>
+                                                        <img
+                                                            src={GetImage(user?.urlPhoto)}
 
-                                                        alt="Dropdown Trigger"
-                                                        className='img-avatar-item'
-                                                    />
-                                                    {user?.name}
-                                                </div>
-                                            </Dropdown.Item>
-                                            <Dropdown.Divider />
-                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
-                                                <Link href={user?.userName+''} className='text-decoration-none text-dark'>
-                                                    <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
-                                                </Link>
-                                            </Dropdown.Item>
-                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
-                                                <Link href="/setting" passHref legacyBehavior>
-                                                    <div>
-                                                        <i className="fa-solid fa-gear"></i> Cài đặt
+                                                            alt="Dropdown Trigger"
+                                                            className='img-avatar-item'
+                                                        />
+                                                        {user?.name}
                                                     </div>
                                                 </Link>
+                                            </Dropdown.Item>
+                                            <Dropdown.Divider />
+                                            
+                                            <Link href="/setting" className='text-decoration-none text-dark'>
+                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
+                                                    <i className="fa-solid fa-gear"></i> Cài đặt
                                                 </Dropdown.Item>
+                                            </Link>
+
                                             <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}
                                             >
@@ -192,7 +189,7 @@ const Header = () => {
                     setNumberOfNoti={setNumberOfNoti}
                     numberOfNoti={numberOfNoti}
                 />
-                <PostDetailModal/>
+                <PostDetailModal />
             </>
         )
     }

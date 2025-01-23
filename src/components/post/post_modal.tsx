@@ -63,7 +63,6 @@ const PostModal = (props: IProps) => {
   }
 
   const handlePost = async () => {
-    // startLoading()
     startLoadingSpiner()
 
     if (filePreview) {
@@ -82,9 +81,7 @@ const PostModal = (props: IProps) => {
           setCaption("")
           setFileRoot(null)
           setFilePreview(null)
-        } else {
-          // stopLoading()
-        }
+        } 
       }
 
     }
