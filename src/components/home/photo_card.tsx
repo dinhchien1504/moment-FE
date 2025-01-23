@@ -35,8 +35,8 @@ const PhotoCard = (props: IProps) => {
           </div>
           <div className="d-block">
           <Link className="text-black text-decoration-none" href={`/${userName}`}>{name}</Link>
-            <p className="p-selector m-0 fs-6"
-             onClick={() => {handleShowPostDetail(slug)}}
+            <p className="m-0 fs-6"
+              onClick={() => {handleShowPostDetail(slug)}}
             >{formatDate(createdAt)}</p>
           </div>
         </div>
