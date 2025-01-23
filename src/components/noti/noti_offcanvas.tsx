@@ -11,6 +11,7 @@ import { FetchClientGetApi, FetchClientPostApi } from '@/api/fetch_client_api';
 import { useSocketContext } from '@/context/socket_context';
 import "@/styles/noti_offcanvas.css";
 import { getServerUTC } from '@/utils/utc_server_action';
+import { formatUTCToLocalTime } from '@/utils/utils_time';
 interface IProps {
     showNoti: boolean
     numberOfNoti: number
@@ -25,25 +26,16 @@ const NotiOffCanvas = (props: IProps) => {
     const [notiUnread, setNotiUnread] = useState<INotiResponse[]>([])
     const [notiAll, setNotiAll] = useState<INotiResponse[]>([])
 
-    const [timeCurrent, setTimeCurrent] = useState<string>("")
-
     const [lockViewMoreNotiUnread, setLockViewMoreNotiUnread] = useState<boolean>(false)
     const [lockViewMoreNotiAll, setLockViewMoreNotiAll] = useState<boolean>(false)
 
     const [isLoadingNotiUnread, setIsloadingNotiUnread] = useState<boolean>(false)
     const [isLoadingNotiAll, setIsloadingNotiAll] = useState<boolean>(false)
-
-    const [numberOfItemRemove, setNumberOfItemRemove] = useState <number> (0)
-
-    const numberOfNotiUnread = useRef<number>(0);
-    const numberOfNotiAll = useRef<number>(0);
-
-
+    const timeNotiAll = useRef<string>("");
+    const timeNotiUnread = useRef<string>("");
 
     const [notiNew, setNotiNew] = useState<any>("unknow")
-
     const { subscribe } = useSocketContext();
-
 
 
     useEffect(() => {
@@ -70,23 +62,14 @@ const NotiOffCanvas = (props: IProps) => {
     }, [notiNew])
 
 
-    const handleOffset = (pageCurrent:number, itemRemove :number) => {
-        const fromIndex: number = (pageCurrent - 1) * 6 - itemRemove;
-        return fromIndex > 0 ? fromIndex : 0; // Offset không được âm
-    }
-
     const fetchGetNotiUnread = async (pageCurrent: number) => {
 
         setIsloadingNotiUnread(true)
-
-        const adjustedLimit = 6 + numberOfItemRemove;
-    
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
-            time: timeCurrent,
+            time: timeNotiUnread.current,
             status: "unread",
-            limit : adjustedLimit,
-            offset: handleOffset(pageCurrent, numberOfItemRemove)
+            limit : 6,
         }
 
         const res = await FetchClientPostApi(API.NOTI.NOTI_GET, req)
@@ -95,21 +78,22 @@ const NotiOffCanvas = (props: IProps) => {
 
             const notis: INotiResponse[] = res.result
 
-
+            if (notis.length < 6) {
+                setLockViewMoreNotiUnread(true)
+            }
             // Tính toán updatedNotis trước khi cập nhật state
+
             const updatedNotis = [
                 ...notiUnread,
-                ...notis.filter((newNoti) => !notiUnread.some((existingNoti) => existingNoti.id === newNoti.id))
+                ...notis
             ];
 
-
-
             // Cập nhật notiUnread sau khi kiểm tra
+            if (updatedNotis[updatedNotis.length - 1] != undefined) {
+                timeNotiUnread.current = updatedNotis[updatedNotis.length - 1].createdAt
+            }
+
             setNotiUnread(updatedNotis);
-            setNumberOfItemRemove(0)
-          
-            numberOfNotiUnread.current =  numberOfNotiUnread.current - notis.length
-            console.log("numberOfNotiUnread trong fetch >>> ", numberOfNotiUnread.current)
         }
         setIsloadingNotiUnread(false)
     }
@@ -118,13 +102,11 @@ const NotiOffCanvas = (props: IProps) => {
 
     const fetchGetNotiAll = async (pageCurrent: number) => {
         setIsloadingNotiAll(true)
-        const adjustedLimit = 6
         const req: NotiFilterRequest = {
             pageCurrent: pageCurrent,
-            time: timeCurrent,
+            time: timeNotiAll.current,
             status: "all",
-            limit : adjustedLimit,
-            offset: handleOffset(pageCurrent, 0)
+            limit : 6,
         }
         const res = await FetchClientPostApi(API.NOTI.NOTI_GET, req)
         if (res && res.status === 200) {
@@ -132,17 +114,21 @@ const NotiOffCanvas = (props: IProps) => {
 
             const notis: INotiResponse[] = res.result
 
-            // Tính toán updatedNotis trước khi cập nhật state
+            if (notis.length < 6) {
+                setLockViewMoreNotiAll(true)
+            }
+
             const updatedNotis = [
                 ...notiAll,
-                ...notis.filter((newNoti) => !notiAll.some((existingNoti) => existingNoti.id === newNoti.id))
+                ...notis
             ];
 
-
+            if (updatedNotis[updatedNotis.length - 1] != undefined) {
+                timeNotiAll.current = updatedNotis[updatedNotis.length - 1].createdAt
+            }
 
             // Cập nhật notiUnread sau khi kiểm tra
             setNotiAll(updatedNotis);
-            numberOfNotiAll.current =  numberOfNotiAll.current - notis.length
         }
         setIsloadingNotiAll(false)
     }
@@ -150,45 +136,13 @@ const NotiOffCanvas = (props: IProps) => {
 
     const fetchCountNoti = async () => {
 
-        const res = await FetchClientGetApi(`${API.NOTI.COUNT_NOTI}?time=${timeCurrent}`)
+        const res = await FetchClientGetApi(`${API.NOTI.COUNT_NOTI}?time=${timeNotiAll.current}`)
         if (res && res.status === 200) {
            const numberOfNotiRes:INumberOfNotiResponse = res.result;
            setNumberOfNoti(numberOfNotiRes.numberOfNotiNew)
-          numberOfNotiAll.current = numberOfNotiRes.numberOfNotiAll
-          numberOfNotiUnread.current = numberOfNotiRes.numberOfNotiUnread
         }
     }
 
-    useEffect(() => {
-        const getTimeUTC = async () => {
-            const time = await getServerUTC()
-            setTimeCurrent(time)
-        }
-        getTimeUTC()
-    }, [])
-
-    useEffect(() => {
-        console.log("numberOfNotiUnread.current trong useEffect >>> ", numberOfNotiUnread.current)
-        if (   numberOfNotiUnread.current   === 0) {
-            setLockViewMoreNotiUnread(true);
-        } else {
-            setLockViewMoreNotiUnread(false);
-        }
-
-    }, [notiUnread.length])
-
-    useEffect(() => {
-
-
-        if (numberOfNotiAll.current === 0) {
-            setLockViewMoreNotiAll(true);
-        } else {
-            setLockViewMoreNotiAll(false);
-        }
-
-    }, [notiAll.length])
-
-    // ---------------------------------
 
     useEffect(() => {
 
@@ -247,16 +201,16 @@ const NotiOffCanvas = (props: IProps) => {
 
     }, [showNoti, notiAll.length, notiUnread.length])
 
-    // ---------------------------------
-
-
-
-
 
     useEffect(() => {
         const fetchData = async () => {
             setIsloadingNotiAll(true)
             setIsloadingNotiUnread(true)
+
+            const time = await getServerUTC()
+            timeNotiAll.current = formatUTCToLocalTime(time)
+            timeNotiUnread.current = formatUTCToLocalTime(time)
+           
 
             await fetchCountNoti()
             await fetchGetNotiAll(0)
@@ -267,11 +221,10 @@ const NotiOffCanvas = (props: IProps) => {
 
         }
 
-        if (timeCurrent != "") {
             fetchData()
-        }
 
-    }, [timeCurrent])
+
+    }, [])
 
     const handleDeteleUnread = () => {
         setNotiUnread(prevNotiUnread => {
@@ -313,7 +266,7 @@ const NotiOffCanvas = (props: IProps) => {
                         id="uncontrolled-tab-example"
                         className="mb-3"
                         onSelect={(key) => {
-                            if (key === "all") {
+                            if (key === "unread") {
                                 handleDeteleUnread(); // Xử lý khi tab "Tất cả" được chọn
                             } 
                         }}
@@ -328,8 +281,8 @@ const NotiOffCanvas = (props: IProps) => {
                                 isLoadingNotiAll={isLoadingNotiAll}
                                 setNotiUnread = {setNotiUnread}
                                 notiUnread={notiUnread}
-                                numberOfItemRemove = {numberOfItemRemove}
-                                setNumberOfItemRemove = {setNumberOfItemRemove}
+                                // numberOfItemRemove = {numberOfItemRemove}
+                                // setNumberOfItemRemove = {setNumberOfItemRemove}
                             />
                         </Tab>
 
@@ -350,8 +303,8 @@ const NotiOffCanvas = (props: IProps) => {
                                 isLoadingNotiUnread={isLoadingNotiUnread}
                                 setNotiAll = {setNotiAll}
                                 notiAll={notiAll}
-                                numberOfItemRemove = {numberOfItemRemove}
-                                setNumberOfItemRemove = {setNumberOfItemRemove}
+                                // numberOfItemRemove = {numberOfItemRemove}
+                                // setNumberOfItemRemove = {setNumberOfItemRemove}
 
                             />
                         </Tab>

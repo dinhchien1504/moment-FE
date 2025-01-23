@@ -38,7 +38,7 @@ const OffcanvasFriend = () => {
         </div>
       </div>
 
-      <div className="button-show-friend position-fixed z-1 d-flex d-sm-none">
+      <div className="button-show-friend position-fixed z-1 d-flex d-md-none">
         <div
           className="bg-dark-subtle p-2 rounded-2 ms-1"
           onClick={() => {

@@ -12,9 +12,6 @@ interface Props {
     isLoadingNotiAll: boolean
     setNotiUnread: (value: INotiResponse[]) => void
     notiUnread: INotiResponse[]
-
-    numberOfItemRemove:number;
-    setNumberOfItemRemove: (value : number) => void
 }
 
 
@@ -26,8 +23,6 @@ const AllNotiTab = (props: Props) => {
         isLoadingNotiAll, 
         setNotiUnread, 
         notiUnread, 
-        numberOfItemRemove, 
-        setNumberOfItemRemove
      } = props
 
 
@@ -45,17 +40,16 @@ const AllNotiTab = (props: Props) => {
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
         if (notiRes.status != "read") {
-            setNumberOfItemRemove(numberOfItemRemove + 1)
             notiRes.status = "read"
 
-            const notiNew:INotiResponse[] =[]
-            for (let i=0; i< notiUnread.length ; i++)
-            {
-                if(notiUnread[i].id != notiRes.id ) {
-                    notiNew.push(notiUnread[i])
-                }
-            }
-            setNotiUnread(notiNew)
+            // const notiNew:INotiResponse[] =[]
+            // for (let i=0; i< notiUnread.length ; i++)
+            // {
+            //     if(notiUnread[i].id != notiRes.id ) {
+            //         notiNew.push(notiUnread[i])
+            //     }
+            // }
+            // setNotiUnread(notiNew)
         }
 
     
