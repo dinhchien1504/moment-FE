@@ -55,7 +55,7 @@ const SettingSidebar = () => {
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
-                                <Row  className={styles.rowNav}>
+                                <div  className={styles.rowNav}>
                                 
                                 <Nav.Item className={styles.navItem}>
                                     <Nav.Link eventKey="first" className={styles.customNavLink}>
@@ -69,7 +69,7 @@ const SettingSidebar = () => {
                                     </Nav.Link>
                                 </Nav.Item>
                                 
-                                </Row>
+                                </div>
                             </Nav>
                         </Col>
                         <Col sm={9}>

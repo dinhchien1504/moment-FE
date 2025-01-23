@@ -64,11 +64,12 @@
       font-size: 20px;
     }
     .navItem{
-      margin-bottom: 0px ;
+      margin: -10px;
     }
     .rowNav{
       display: flex;
       justify-content: center;
+      gap: 10px;
       align-items: center ;
       height: 100%
     }
@@ -114,9 +115,8 @@
     border-right: 2px solid #ddd; /* Đường viền phân cách */
   }
   
-  .navItem {
-    flex: 1;
-  text-align: center; /* Khoảng cách giữa các mục */
+  .navItem { /* Khoảng cách giữa các mục */
+    margin: 10px;
   }
   
   /* styles.module.css */
