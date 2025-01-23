@@ -40,15 +40,25 @@ const InforUser = (props: Props) => {
         accountFriendId: idAccountChange,
         status: newStatus,
       };
-      console.log ('this is datachange', dataChangeStatus)
+      // console.log ('this is datachange', dataChangeStatus)
       const result = await FetchClientPutApi(API.ACCOUNT.CHANGE_STATUS, dataChangeStatus);
-  
+      console.log ('result', result)
       if (result.status === 200) {
         setProfileRespone((prevProfile) => ({
           ...prevProfile,
           friendStatus: newStatus,
         }));
-        setFriendStatus(profileRespone.friendStatus);
+        console.log ('profil status',profileRespone.friendStatus )
+        if (profileRespone.friendStatus == "received")
+        {
+        setFriendStatus(dataChangeStatus.status);
+
+        }
+        else {
+          setFriendStatus(profileRespone.friendStatus);
+        }
+        // setFriendStatus(result.);
+
       }
     } catch (error) {
       console.error("Error", error);
@@ -68,7 +78,7 @@ const InforUser = (props: Props) => {
   
       if (addFriend.status === 200) {
         
-        setFriendStatus(addFriend.result.friendStatus); // Lấy từ API thay vì gán cứng 'sent'
+        setFriendStatus(addFriend.result.friendStatus);
       }
     } catch (error) {
       console.error("Error :", error);
@@ -112,6 +122,7 @@ const InforUser = (props: Props) => {
     if (friendStatus !== profileRespone.friendStatus) {
       // Kiểm tra nếu trạng thái mới khác trạng thái hiện tại
       fetchUpdatedProfile();
+      // setFriendStatus(fetchUpdatedProfile().res)
     }
   }, [friendStatus, profileRespone.friendStatus]); // Thêm `profileRespone.friendStatus` để tránh gọi API khi giá trị không đổi
 
@@ -184,7 +195,7 @@ const InforUser = (props: Props) => {
                 <Button variant="dark">Nhắn tin</Button>
               </>
             )}
-            {friendStatus === "invited" && (
+            {friendStatus === "received" && (
               <>
                 <Button
                   variant="dark"
