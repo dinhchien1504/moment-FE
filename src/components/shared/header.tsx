@@ -160,16 +160,17 @@ const Header = () => {
                                                 </Link>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            <Dropdown.Item eventKey="2" className='font-item' as='div'>
+                                            {/* <Dropdown.Item eventKey="2" className='font-item' as='div'>
                                                 <Link href={user?.userName+''} className='text-decoration-none text-dark'>
                                                     <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
                                                 </Link>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" className='font-item' as='div'>
-                                                <Link href="/setting" className='text-decoration-none text-dark'>
+                                            </Dropdown.Item> */}
+
+                                            <Link href="/setting" className='text-decoration-none text-dark'>
+                                                <Dropdown.Item eventKey="3" className='font-item' as='div'>
                                                     <i className="fa-solid fa-gear"></i><span> Cài đặt</span>
-                                                </Link>
-                                            </Dropdown.Item>
+                                                </Dropdown.Item>
+                                            </Link>
 
                                             <Dropdown.Item eventKey="4" className='font-item' as='div'
                                                 onClick={() => { handleLogout() }}

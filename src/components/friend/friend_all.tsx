@@ -169,7 +169,16 @@ const FriendAll = (props: FriendAllProps) => {
   };
 
   const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
-    if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
+    if (accountResponses === null) {
+      return (
+        <>
+          <div className="d-flex justify-content-center">
+            <SpinnerAnimation></SpinnerAnimation>;
+          </div>
+        </>
+      )
+    }
+
 
     return (
       <div >
@@ -200,23 +209,23 @@ const FriendAll = (props: FriendAllProps) => {
               <Row>
                 <Col sm={12} className="col-4 mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="first" style={{cursor:"pointer"}}>
-                      <i className="fa-solid fa-users" style={{marginRight:"5px"}}></i> Bạn bè
+                    <Nav.Link as={"div"} className="text-center" eventKey="first" style={{ cursor: "pointer" }}>
+                      <i className="fa-solid fa-users" style={{ marginRight: "5px" }}></i> Bạn bè
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="second" style={{cursor:"pointer"}}>
-                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
+                    <Nav.Link as={"div"} className="text-center" eventKey="second" style={{ cursor: "pointer" }}>
+                      <i className="fa-regular fa-envelope" style={{ marginRight: "5px" }}></i>
                       <i className="fa-solid fa-arrow-left"></i> Lời mời
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="third" style={{cursor:"pointer"}}>
-                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
+                    <Nav.Link as={"div"} className="text-center" eventKey="third" style={{ cursor: "pointer" }}>
+                      <i className="fa-regular fa-envelope" style={{ marginRight: "5px" }}></i>
                       <i className="fa-solid fa-arrow-right"></i> Đã gửi
                     </Nav.Link>
                   </Nav.Item>
