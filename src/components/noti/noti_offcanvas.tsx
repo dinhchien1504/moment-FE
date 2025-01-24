@@ -171,23 +171,23 @@ const NotiOffCanvas = (props: IProps) => {
                 }
                 console.log("notiViewReq >>> ", notiViewReq)
                 setNumberOfNoti(numberOfNoti - ids.length)
+                
+                setNotiAll(prevNotiAll =>
+                    prevNotiAll.map(noti =>
+                        ids.includes(noti.id) ? { ...noti, status: 'unread' } : noti
+                    )
+                );
+
+                setNotiUnread(prevNotiUnread =>
+                    prevNotiUnread.map(noti =>
+                        ids.includes(noti.id) ? { ...noti, status: 'unread' } : noti
+                    )
+                );
 
                 const res = await FetchClientPostApi(API.NOTI_VIEW.NOTI_VIEW, notiViewReq)
 
                 if (res && res.status === 200) {
                     // set lai du lieu sau khi lưu
-                    setNotiAll(prevNotiAll =>
-                        prevNotiAll.map(noti =>
-                            ids.includes(noti.id) ? { ...noti, status: 'unread' } : noti
-                        )
-                    );
-
-                    setNotiUnread(prevNotiUnread =>
-                        prevNotiUnread.map(noti =>
-                            ids.includes(noti.id) ? { ...noti, status: 'unread' } : noti
-                        )
-                    );
-
                     console.log("ids >>> ", ids)
                 }
             }
