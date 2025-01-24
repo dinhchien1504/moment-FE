@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLoadingContext } from '@/context/loading_context';
-
+import styles from '@/styles/setting.module.css';
 function FormChangePassword() {
     const [show, setShow] = useState(false);
     const [oldPassword, setOldPassword] = useState("");
@@ -105,7 +105,7 @@ function FormChangePassword() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow} className={styles.btnChangePassword} >
                 Thay đổi mật khẩu
             </Button>
 

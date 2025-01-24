@@ -74,12 +74,12 @@ const SettingSidebar = () => {
                         </Col>
                         <Col sm={9}>
                             <Tab.Content>
-                                <Tab.Pane eventKey="first">
+                                <Tab.Pane eventKey="first" className='mt-3'>
                                     <h3 className={styles.title}>Mật khẩu và bảo mật</h3>
                                     <FormChangePassword />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="second">
-                                    <h3>Thông tin cá nhân</h3>
+                                <Tab.Pane eventKey="second" className='mt-3'>
+                                    <h3  >Thông tin cá nhân</h3>
                                     <Card className={styles.card}>
                                         <Card.Header as="h5" className={styles.cardHeader}>
                                             {accountInfo.name}
@@ -100,7 +100,7 @@ const SettingSidebar = () => {
                                             </ListGroup.Item>
                                             <Card.Body className={styles.cardBody}>
                                                 <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
-                                                <Card.Text>Giới tính: {accountInfo.sex === "female" ? "Nam" : "Nữ"}</Card.Text>
+                                                <Card.Text>Giới tính: {accountInfo.sex === "male" ? "Nam" : "Nữ"}</Card.Text>
                                                 <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
                                                 <ModalChangInfo
                                                     accountInfo={accountInfo}

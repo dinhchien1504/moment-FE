@@ -28,8 +28,12 @@
     transform: translateY(0); /* Giữ nguyên vị trí khi bấm */
   }
 
+  .btnChangePassword{
+    background-color: black !important;
+    border-color: black;
+  }
 
-  @media (max-width: 768px) { /* Màn hình máy tính bảng hoặc điện thoại nhỏ */
+  @media (max-width: 575px) { /* Màn hình máy tính bảng hoặc điện thoại nhỏ */
     .buttonContainer {
       margin: 0;
       display: flex;
@@ -114,27 +118,32 @@
     flex-direction: column;
     border-right: 2px solid #ddd; /* Đường viền phân cách */
   }
+
+  
   
   .navItem { /* Khoảng cách giữa các mục */
     margin: 10px;
+    cursor: pointer;
   }
-  
+
   /* styles.module.css */
 .customNavLink {
     color: #555; /* Màu chữ mặc định */
     font-weight: bold;
     transition: all 0.3s ease;
+    
   }
   
   .customNavLink:hover {
-    color: #6c63ff;
-    background-color: rgba(108, 99, 255, 0.1);
+    color: white;
+    /* background-color: rgba(108, 99, 255, 0.1); */
+    background-color: black;
   }
   
-  .customNavLink.active {
+  .customNavLink:active {
     color: #fff;
-    background-color: #6c63ff;
     border-radius: 5px;
+    background-color: black !important;
   }
   
   .card {
