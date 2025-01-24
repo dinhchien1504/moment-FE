@@ -2,7 +2,6 @@
 import { useLoadingContext } from '@/context/loading_context';
 import { useSocketContext } from '@/context/socket_context';
 import { useUserContext } from '@/context/user_context';
-import "@/styles/header.css";
 import { GetImage } from '@/utils/handle_images';
 import cookie from "js-cookie";
 import Image from 'next/image';
@@ -18,6 +17,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import LiveSearch from '../home/search';
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import PostDetailModal from '../post_detail/post_detail_modal';
+import "@/styles/header.css";
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();

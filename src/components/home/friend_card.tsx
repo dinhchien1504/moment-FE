@@ -45,8 +45,8 @@ const FriendCard = ({ accountResponse }: Props) => {
           <span>
             Đã kết bạn
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="outline-dark"
               onClick={() => handleChangeStatus("deleted")}
             >
               Hủy
@@ -58,8 +58,8 @@ const FriendCard = ({ accountResponse }: Props) => {
           <span>
             Đã gửi
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="outline-dark"
               onClick={() => handleChangeStatus("deleted")}
             >
               Xóa
@@ -70,14 +70,14 @@ const FriendCard = ({ accountResponse }: Props) => {
         return (
           <div title={`Yêu cầu vào ${timeDifference}`}>
             <Button
-              className="btn-sm m-1 btn btn-primary"
+              className="btn-sm m-1 btn-primary"
               onClick={() => handleChangeStatus("accepted")}
             >
               Chấp nhận
             </Button>
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="dark"
               onClick={() => handleChangeStatus("deleted")}
             >
               Từ chối
@@ -87,7 +87,7 @@ const FriendCard = ({ accountResponse }: Props) => {
       case "me":
         return (
           <Button
-            variant="outline-primary"
+            variant="outline-dark"
             className="btn-sm m-1"
             href={urlProfile}
           >
@@ -97,7 +97,8 @@ const FriendCard = ({ accountResponse }: Props) => {
       case "none":
         return (
           <Button
-            className="btn-sm m-1 btn btn-primary"
+            variant="dark"
+            className="btn-sm m-1"
             onClick={() => handleSend()}
           >
             Kết bạn

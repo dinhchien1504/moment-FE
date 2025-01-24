@@ -19,23 +19,6 @@ const ProfileUser = async (props: any ) => {
     userName:params.id,
   }
   const resProfile = await FetchServerPostApi(API.PROFILE.PROFILE ,dataProfile);
-  // console.log(resProfile.result);
-  // const resProfile = await FetchServerGetApi(API.PROFILE.GETPROFILE , dataProfile);
-  // const resProfile = await FetchServerGetApi(API.PHOTO.LIST , dataProfile);
-
-
-  // console.log('this is',resProfile)
-
-  // const res:IProfileResponse  = {
-  //   id:11,
-  //   listUrlPhoto:[
-  //     "",
-  //   ],
-  //   name:"em Chien",
-  //   urlAvt:"https://via.placeholder.com/150",
-  //   userName:"DinhChien",
-  // }; 
-
 
   return (
     <div style={{backgroundColor:"#f2f4f7"}}>
