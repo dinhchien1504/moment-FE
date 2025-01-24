@@ -42,14 +42,14 @@ const AllNotiTab = (props: Props) => {
         if (notiRes.status != "read") {
             notiRes.status = "read"
 
-            // const notiNew:INotiResponse[] =[]
-            // for (let i=0; i< notiUnread.length ; i++)
-            // {
-            //     if(notiUnread[i].id != notiRes.id ) {
-            //         notiNew.push(notiUnread[i])
-            //     }
-            // }
-            // setNotiUnread(notiNew)
+            const notiNew:INotiResponse[] =[]
+            for (let i=0; i< notiUnread.length ; i++)
+            {
+                if(notiUnread[i].id != notiRes.id ) {
+                    notiNew.push(notiUnread[i])
+                }
+            }
+            setNotiUnread(notiNew)
         }
 
     
