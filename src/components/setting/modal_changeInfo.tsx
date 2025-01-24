@@ -99,7 +99,7 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow} style={{backgroundColor:"black", borderColor:"black"}}>
         Thay đổi thông tin cá nhân
       </Button>
 
