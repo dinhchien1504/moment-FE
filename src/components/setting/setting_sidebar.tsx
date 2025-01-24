@@ -55,27 +55,31 @@ const SettingSidebar = () => {
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
-                                <Nav.Item className={styles.navItem} style={{cursor:"pointer"}} >
-                                    <Nav.Link as={"div"} eventKey="first" className={styles.customNavLink}>
-                                        Mật khẩu và bảo mật
+                                <div  className={styles.rowNav}>
+                                
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link  as={"div"}  eventKey="first" className={styles.customNavLink}>
+                                        Mật khẩu & bảo mật
                                     </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item  className={styles.navItem} style={{cursor:"pointer"}}>
+                               
+                                <Nav.Item className={styles.navItem}>
                                     <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
                                         Thông tin cá nhân
                                     </Nav.Link>
                                 </Nav.Item>
-
+                                
+                                </div>
                             </Nav>
                         </Col>
                         <Col sm={9}>
                             <Tab.Content>
-                                <Tab.Pane eventKey="first">
+                                <Tab.Pane eventKey="first" className='mt-3'>
                                     <h3 className={styles.title}>Mật khẩu và bảo mật</h3>
                                     <FormChangePassword />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="second">
-                                    <h3>Thông tin cá nhân</h3>
+                                <Tab.Pane eventKey="second" className='mt-3'>
+                                    <h3  >Thông tin cá nhân</h3>
                                     <Card className={styles.card}>
                                         <Card.Header as="h5" className={styles.cardHeader}>
                                             {accountInfo.name}
@@ -96,7 +100,7 @@ const SettingSidebar = () => {
                                             </ListGroup.Item>
                                             <Card.Body className={styles.cardBody}>
                                                 <Card.Text>Ngày sinh: {accountInfo.birthday}</Card.Text>
-                                                <Card.Text>Giới tính: {accountInfo.sex === "female" ? "Nam" : "Nữ"}</Card.Text>
+                                                <Card.Text>Giới tính: {accountInfo.sex === "male" ? "Nam" : "Nữ"}</Card.Text>
                                                 <Card.Text>Địa chỉ: {accountInfo.address}</Card.Text>
                                                 <ModalChangInfo
                                                     accountInfo={accountInfo}

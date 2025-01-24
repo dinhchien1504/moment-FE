@@ -28,8 +28,12 @@
     transform: translateY(0); /* Giữ nguyên vị trí khi bấm */
   }
 
+  .btnChangePassword{
+    background-color: black !important;
+    border-color: black;
+  }
 
-  @media (max-width: 768px) { /* Màn hình máy tính bảng hoặc điện thoại nhỏ */
+  @media (max-width: 575px) { /* Màn hình máy tính bảng hoặc điện thoại nhỏ */
     .buttonContainer {
       margin: 0;
       display: flex;
@@ -60,16 +64,21 @@
       width: 100%;
       border: 2px solid #ddd; /* Đường viền phân cách */
     }
-  
-    .navItem {
-      margin-bottom: 8px;
-    }
-  
     .title{
       font-size: 20px;
     }
+    .navItem{
+      margin: -10px;
+    }
+    .rowNav{
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center ;
+      height: 100%
+    }
     .customNavLink {
-      font-size: 14px;
+      font-size: 12px;
       padding: 8px;
       width: 100%;
     }
@@ -105,29 +114,36 @@
   }
   
   .navPills {
+    display:flex;
+    flex-direction: column;
     border-right: 2px solid #ddd; /* Đường viền phân cách */
   }
+
   
-  .navItem {
-    margin-bottom: 10px; /* Khoảng cách giữa các mục */
+  
+  .navItem { /* Khoảng cách giữa các mục */
+    margin: 10px;
+    cursor: pointer;
   }
-  
+
   /* styles.module.css */
 .customNavLink {
     color: #555; /* Màu chữ mặc định */
     font-weight: bold;
     transition: all 0.3s ease;
+    
   }
   
   .customNavLink:hover {
-    color: #6c63ff;
-    background-color: rgba(108, 99, 255, 0.1);
+    color: white;
+    /* background-color: rgba(108, 99, 255, 0.1); */
+    background-color: black;
   }
   
-  .customNavLink.active {
+  .customNavLink:active {
     color: #fff;
-    background-color: #6c63ff;
     border-radius: 5px;
+    background-color: black !important;
   }
   
   .card {
