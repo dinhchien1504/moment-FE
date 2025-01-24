@@ -146,4 +146,9 @@
   .nav{
       --bs-link-color:#000;
       --bs-nav-link-hover-color: #fb0362;
+      --bs-nav-link-color:#fb0362;
   }
+  .nav-item {
+    border: 2px solid #000;
+    border-radius: 7px;
+}
