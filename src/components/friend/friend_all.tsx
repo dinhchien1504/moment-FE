@@ -204,29 +204,29 @@ const FriendAll = (props: FriendAllProps) => {
           <Col sm={3} className="col-12">
             <Nav
               variant="pills"
-              className="flex-column shadow round-2 border-2"
+              className="flex-column shadow rounded-2"
             >
               <Row>
                 <Col sm={12} className="col-4 mb-1">
                   <Nav.Item>
                     <Nav.Link as={"div"} className="text-center" eventKey="first" style={{ cursor: "pointer" }}>
-                      <i className="fa-solid fa-users" style={{ marginRight: "5px" }}></i> Bạn bè
+                      <i className="fa-solid fa-users ms-1"></i> <span>Bạn bè</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
                     <Nav.Link as={"div"} className="text-center" eventKey="second" style={{ cursor: "pointer" }}>
-                      <i className="fa-regular fa-envelope" style={{ marginRight: "5px" }}></i>
-                      <i className="fa-solid fa-arrow-left"></i> Lời mời
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-left"></i> <span>Lời mời</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
                     <Nav.Link as={"div"} className="text-center" eventKey="third" style={{ cursor: "pointer" }}>
-                      <i className="fa-regular fa-envelope" style={{ marginRight: "5px" }}></i>
-                      <i className="fa-solid fa-arrow-right"></i> Đã gửi
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-right ms-1"></i>  <span>Đã gửi</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
