@@ -173,7 +173,7 @@ const FriendAll = (props: FriendAllProps) => {
       return (
         <>
           <div className="d-flex justify-content-center">
-            <SpinnerAnimation></SpinnerAnimation>;
+            <SpinnerAnimation></SpinnerAnimation>
           </div>
         </>
       )

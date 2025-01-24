@@ -266,7 +266,7 @@ const NotiOffCanvas = (props: IProps) => {
                         id="uncontrolled-tab-example"
                         className="mb-3"
                         onSelect={(key) => {
-                            if (key === "unread") {
+                            if (key === "all") {
                                 handleDeteleUnread(); // Xử lý khi tab "Tất cả" được chọn
                             } 
                         }}
