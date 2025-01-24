@@ -20,6 +20,7 @@ import SpinnerAnimation from '../shared/spiner_animation';
 const SettingSidebar = () => {
 
     const [accountInfo, setAccountInfo] = useState<IAccountResponse | null>(null);
+    const [activeTab, setActiveTab] = useState("first");
 
     const handleSaveUserName = (newUserName: string) => {
         setAccountInfo((prev) => prev ? { ...prev, userName: newUserName } : prev); // Cập nhật tên đăng nhập trên giao diện
@@ -54,21 +55,47 @@ const SettingSidebar = () => {
                 <div className={styles.tabContainer}>
                     <Row>
                         <Col sm={3}>
-                            <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
-                                <div  className={styles.rowNav}>
-                                
-                                <Nav.Item className={styles.navItem}>
-                                    <Nav.Link  as={"div"}  eventKey="first" className={styles.customNavLink}>
-                                        Mật khẩu & bảo mật
-                                    </Nav.Link>
-                                </Nav.Item>
-                               
-                                <Nav.Item className={styles.navItem}>
-                                    <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
-                                        Thông tin cá nhân
-                                    </Nav.Link>
-                                </Nav.Item>
-                                
+                            <Nav variant="pills" activeKey={activeTab}
+                                onSelect={(selectedKey) => selectedKey && setActiveTab(selectedKey)} className={`flex-column ${styles.navPills}`}>
+                                <div className={styles.rowNav}>
+
+                                    <Nav.Item>
+                                        <Nav.Link
+                                            as="div"
+                                            eventKey="first"
+                                            style={{
+                                                backgroundColor: activeTab === "first" ? "black" : "transparent",
+                                                color: activeTab === "first" ? "white" : "black",
+                                                padding: "10px 15px",
+                                                borderRadius: "5px",
+                                                textAlign: "center",
+                                                cursor: "pointer",
+                                                transition: "0.3s",
+                                            }}
+                                            onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "#ddd"}
+                                            onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "transparent"}
+                                        >
+                                            Mật khẩu & bảo mật
+                                        </Nav.Link>
+                                    </Nav.Item>
+
+                                    <Nav.Item>
+                                        <Nav.Link
+                                            as="div"
+                                            eventKey="second"
+                                            style={{
+                                                backgroundColor: activeTab === "second" ? "black" : "transparent",
+                                                color: activeTab === "second" ? "white" : "black",
+                                                padding: "10px 15px",
+                                                borderRadius: "5px",
+                                                textAlign: "center",
+                                                cursor: "pointer"
+                                            }}
+                                        >
+                                            Thông tin cá nhân
+                                        </Nav.Link>
+                                    </Nav.Item>
+
                                 </div>
                             </Nav>
                         </Col>

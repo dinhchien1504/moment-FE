@@ -128,7 +128,8 @@
 
   /* styles.module.css */
 .customNavLink {
-    color: #555; /* Màu chữ mặc định */
+    
+    color: #fff; /* Màu chữ mặc định */
     font-weight: bold;
     transition: all 0.3s ease;
     
