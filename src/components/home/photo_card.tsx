@@ -21,9 +21,7 @@ const PhotoCard = (props: IProps) => {
 
 
   return (
-    <div
-    className="ImgBlock"
-    >
+    <>
       <div className="d-flex h-100 flex-column w-100 border border-2 shadow-sm rounded-2 m-2 bg-light">
         <div className="p-2 px-2 post-info d-flex border-bottom mb-2">
           <div className="img-avt mx-2">
@@ -55,7 +53,7 @@ const PhotoCard = (props: IProps) => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default PhotoCard;

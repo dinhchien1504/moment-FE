@@ -152,11 +152,11 @@ body,html {
   }
 }
 
-.ImgBlock {
+/* .ImgBlock {
   animation: appear ease;
   animation-timeline: view();
   animation-range: entry 0;
-}
+} */
 
 /* amination */
 @keyframes appear {
@@ -171,11 +171,11 @@ body,html {
   }
 }
 
-.ImgBlock {
+/* .ImgBlock {
   animation: appear ease;
   animation-timeline: view();
   animation-range: entry 0;
-}
+} */
 
 .p-selector {
   cursor: pointer; 
