@@ -217,6 +217,7 @@ const InforUser = (props: Props) => {
                   onClick={() => {
                     changeStatus(profileRespone.idAccount, "deleted");
                   }}
+                  style={{backgroundColor:"white", color:"black"}}
                 >
                   Từ chối
                 </Button>
@@ -225,13 +226,19 @@ const InforUser = (props: Props) => {
 
             {friendStatus === "sent" && (
               <>
-                <Button
+               <Button
                   variant="dark"
+                >
+                  Đã gửi lời mời{" "}
+                </Button>
+                <Button
+                  variant="white"
                   onClick={() =>
                     changeStatus(profileRespone.idAccount,"deleted")
                   }
+                  style={{borderColor:"black"}}
                 >
-                  Đã gửi lời mời{" "}
+                 Hủy{" "}
                 </Button>
               </>
             )}

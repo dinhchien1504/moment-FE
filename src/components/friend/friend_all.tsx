@@ -225,7 +225,7 @@ const FriendAll = (props: FriendAllProps) => {
                       eventKey="second"
                       style={{ cursor: "pointer" }}
                     >
-                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-regular fa-envelope"></i>{" "}
                       <i className="fa-solid fa-arrow-left"></i>{" "}
                       <span>Lời mời</span>
                     </Nav.Link>

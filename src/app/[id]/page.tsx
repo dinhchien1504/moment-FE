@@ -6,6 +6,7 @@ import InforUser from "@/components/profile/infor_user";
 import "@/styles/profile_user.css";
 import { getServerUTC } from "@/utils/utc_server_action";
 import { Col, Container, Row } from "react-bootstrap";
+import NotFound from "../not-found";
 
 
 const ProfileUser = async (props: any ) => {
@@ -19,6 +20,11 @@ const ProfileUser = async (props: any ) => {
     userName:params.id,
   }
   const resProfile = await FetchServerPostApi(API.PROFILE.PROFILE ,dataProfile);
+  if (resProfile && resProfile.status != 200) {
+    return (<>
+      <NotFound/>
+    </>)
+  }
 
   return (
     <div style={{backgroundColor:"#f2f4f7"}}>

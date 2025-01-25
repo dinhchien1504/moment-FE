@@ -133,6 +133,7 @@ const Header = () => {
 
                                     <Dropdown
                                         drop='down'
+                                        className='img-profile-header'
                                     >
                                         <Dropdown.Toggle as="div" id="dropdown-custom-components"
                                         >

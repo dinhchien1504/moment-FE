@@ -8,6 +8,7 @@ import "@/styles/post_detail_modal.css"
 import { GetImage } from '@/utils/handle_images';
 import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
+import Link from 'next/link';
 
 const PostDetailModal = () => {
 
@@ -92,7 +93,9 @@ const PostDetailModal = () => {
                         </div>
                     </>) : (
                         postIsExist ? (<>
-                            <div>
+                        
+                            <div
+                            >
                                 <img
                                     src={GetImage(photoResponse?.urlAvt)}
                                     width={50}
@@ -100,7 +103,7 @@ const PostDetailModal = () => {
                                     alt="Dropdown Trigger"
                                     className="img-avatar-item-detail"
                                 />
-                                {photoResponse?.name}
+                            <Link className="text-black hover-text-decoration-underline" href={`/${photoResponse?.userName}`}>{photoResponse?.name}</Link>
                             </div>
                             <div className="post-caption-detail px-2 py-1">
                                 <p className="m-0 text-align-start">{photoResponse?.caption}</p>
@@ -118,6 +121,7 @@ const PostDetailModal = () => {
                                     }}
                                 />
                             </div>
+                          
                         </>) : (<>
                             <div className='div-post-not-exist'>
                                 <Image src={"/images/error.jpg"}
