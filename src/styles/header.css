@@ -122,6 +122,33 @@
 }
 
 .font-item.active{ 
-    background-color: white !important;
+    background-color: rgb(208, 208, 208) !important;
     color: black !important;
+}
+
+.hover-text-decoration-underline{
+    text-decoration: none;
+}
+.hover-text-decoration-underline:hover{
+    text-decoration: underline;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+:root {
+    --bs-secondary-rgb: 255, 0, 100;
+    --bs-primary-rgb: 0, 0, 0;
+  }
+  .nav-pills {
+    --bs-nav-pills-link-active-bg: #000;
+    --bs-nav-pills-link-active-color: #fb0362;
+  }
+  .nav{
+      --bs-link-color:#000;
+      --bs-nav-link-hover-color: #fb0362;
+      --bs-nav-link-color:#fb0362;
+  }
+  .nav-item {
+    border: 2px solid #000;
+    border-radius: 7px;
 }

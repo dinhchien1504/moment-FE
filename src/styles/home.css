@@ -10,10 +10,6 @@ body,html {
   height: 100%;
 }
 
-:root {
-  --bs-secondary-rgb: 255, 0, 100;
-  --bs-primary-rgb: 0, 0, 0;
-}
 
 .container-home {
   background-color: #f2f4f7;

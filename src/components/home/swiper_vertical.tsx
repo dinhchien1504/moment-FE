@@ -212,7 +212,7 @@ const VerticalSwiper = (props: Props) => {
         {/* navigation swiper */}
         <div className="container-navigation position-absolute bottom-0 end-0 d-flex flex-column z-1 ">
           <div className="d-none flex-column m-auto d-md-flex justify-content-center flex-grow-1">
-            <div className="swiper-button-up p-2 rounded-5 bg-secondary">
+            <div className="swiper-button-up p-2 rounded-5 bg-secondary cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="25"
@@ -227,7 +227,7 @@ const VerticalSwiper = (props: Props) => {
                 />
               </svg>
             </div>
-            <div className="swiper-button-down p-2 rounded-5 bg-secondary mt-2">
+            <div className="swiper-button-down p-2 rounded-5 bg-secondary mt-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="25"

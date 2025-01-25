@@ -159,7 +159,7 @@ const FriendAll = (props: FriendAllProps) => {
     )
       return (
         <Button
-          variant="primary"
+          variant="outline-dark"
           disabled={loading} // Disable button khi đang loading
           onClick={() => addAccountFriend(type)}
         >
@@ -169,16 +169,25 @@ const FriendAll = (props: FriendAllProps) => {
   };
 
   const renderCardFriend = (accountResponses: IAccountResponse[] | null) => {
-    if (accountResponses === null) return <SpinnerAnimation></SpinnerAnimation>;
+    if (accountResponses === null) {
+      return (
+        <>
+          <div className="d-flex justify-content-center">
+            <SpinnerAnimation></SpinnerAnimation>
+          </div>
+        </>
+      )
+    }
 
     return (
-      <div >
+      <div>
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-xl-3 g-1">
-          {Array.isArray(accountResponses) && accountResponses.map((accountResponse, index) => (
-            <div className="col" key={index}>
-              <FriendCard accountResponse={accountResponse} />
-            </div>
-          ))}
+          {Array.isArray(accountResponses) &&
+            accountResponses.map((accountResponse, index) => (
+              <div className="col" key={index}>
+                <FriendCard accountResponse={accountResponse} />
+              </div>
+            ))}
         </div>
       </div>
     );
@@ -193,31 +202,46 @@ const FriendAll = (props: FriendAllProps) => {
       >
         <Row className="mt-2">
           <Col sm={3} className="col-12">
-            <Nav
-              variant="pills"
-              className="flex-column shadow round-2 border-2"
-            >
+            <Nav variant="pills" className="flex-column shadow rounded-2">
               <Row>
                 <Col sm={12} className="col-4 mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="first" style={{cursor:"pointer"}}>
-                      <i className="fa-solid fa-users" style={{marginRight:"5px"}}></i> Bạn bè
+                    <Nav.Link
+                      as={"div"}
+                      className="text-center"
+                      eventKey="first"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <i className="fa-solid fa-users ms-1"></i>{" "}
+                      <span>Bạn bè</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="second" style={{cursor:"pointer"}}>
-                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
-                      <i className="fa-solid fa-arrow-left"></i> Lời mời
+                    <Nav.Link
+                      as={"div"}
+                      className="text-center"
+                      eventKey="second"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-left"></i>{" "}
+                      <span>Lời mời</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
                 <Col sm={12} className="col-4  mb-1">
                   <Nav.Item>
-                    <Nav.Link as={"div"} className="text-center" eventKey="third" style={{cursor:"pointer"}}>
-                      <i className="fa-regular fa-envelope" style={{marginRight:"5px"}}></i>
-                      <i className="fa-solid fa-arrow-right"></i> Đã gửi
+                    <Nav.Link
+                      as={"div"}
+                      className="text-center"
+                      eventKey="third"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-solid fa-arrow-right ms-1"></i>{" "}
+                      <span>Đã gửi</span>
                     </Nav.Link>
                   </Nav.Item>
                 </Col>
@@ -227,19 +251,33 @@ const FriendAll = (props: FriendAllProps) => {
           <Col sm={9}>
             <Tab.Content className="p-2 bg-light shadow rounded-2 border-2">
               <Tab.Pane eventKey="first">
-                {renderCardFriend(accountResponses)}
+                {accountResponses.length > 0 ? (
+                  renderCardFriend(accountResponses)
+                ) : (
+                  <p>Không có bạn bè</p>
+                )}
                 <div className="d-flex justify-content-center">
                   {loading ? <SpinnerAnimation /> : renderLoadMore("accepted")}
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                {renderCardFriend(accountReceivedResponses)}
+                {accountReceivedResponses != null &&
+                accountReceivedResponses.length > 0 ? (
+                  renderCardFriend(accountReceivedResponses)
+                ) : (
+                  <p>Không có lời mời</p>
+                )}
                 <div className="d-flex justify-content-center">
                   {loading ? <SpinnerAnimation /> : renderLoadMore("received")}
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="third">
-                {renderCardFriend(accountSentResponses)}
+                {accountSentResponses != null &&
+                accountSentResponses.length > 0 ? (
+                  renderCardFriend(accountSentResponses)
+                ) : (
+                  <p>Không có lời mời đã gửi</p>
+                )}
                 <div className="d-flex justify-content-center">
                   {loading ? <SpinnerAnimation /> : renderLoadMore("sent")}
                 </div>

@@ -1,25 +1,23 @@
 'use client'
+import { useLoadingContext } from '@/context/loading_context';
+import { useSocketContext } from '@/context/socket_context';
+import { useUserContext } from '@/context/user_context';
+import { GetImage } from '@/utils/handle_images';
+import cookie from "js-cookie";
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import Badge from 'react-bootstrap/Badge';
 import Container from 'react-bootstrap/Container';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { usePathname, useRouter } from "next/navigation";
-import { useUserContext } from '@/context/user_context';
-import { useEffect, useState } from 'react';
-import "@/styles/header.css"
-import Image from 'next/image';
-import { Button, Form } from 'react-bootstrap';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-import cookie from "js-cookie";
-import NotiOffCanvas from '../noti/noti_offcanvas';
-import Badge from 'react-bootstrap/Badge';
-import PostModal from '../post/post_modal';
 import LiveSearch from '../home/search';
-import { GetImage } from '@/utils/handle_images';
-import Link from 'next/link';
-import { useSocketContext } from '@/context/socket_context';
-import { useLoadingContext } from '@/context/loading_context';
+import NotiOffCanvas from '../noti/noti_offcanvas';
 import PostDetailModal from '../post_detail/post_detail_modal';
+import "@/styles/header.css";
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -162,10 +160,15 @@ const Header = () => {
                                                 </Link>
                                             </Dropdown.Item>
                                             <Dropdown.Divider />
-                                            
+                                            {/* <Dropdown.Item eventKey="2" className='font-item' as='div'>
+                                                <Link href={user?.userName+''} className='text-decoration-none text-dark'>
+                                                    <i className="fa-solid fa-user"></i> <span>Trang cá nhân</span>
+                                                </Link>
+                                            </Dropdown.Item> */}
+
                                             <Link href="/setting" className='text-decoration-none text-dark'>
                                                 <Dropdown.Item eventKey="3" className='font-item' as='div'>
-                                                    <i className="fa-solid fa-gear"></i> Cài đặt
+                                                    <i className="fa-solid fa-gear"></i><span> Cài đặt</span>
                                                 </Dropdown.Item>
                                             </Link>
 

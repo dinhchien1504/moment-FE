@@ -12,8 +12,6 @@ interface Props {
     isLoadingNotiUnread: boolean
     setNotiAll: (value: INotiResponse[]) => void
     notiAll: INotiResponse[]
-    numberOfItemRemove:number;
-    setNumberOfItemRemove: (value : number) => void
 }
 
 const UnReadNotiTab = (props: Props) => {
@@ -24,8 +22,7 @@ const UnReadNotiTab = (props: Props) => {
         lockViewMoreNotiUnread, 
         isLoadingNotiUnread,
          setNotiAll, notiAll, 
-         numberOfItemRemove,
-          setNumberOfItemRemove,} = props
+        } = props
 
 
 
@@ -42,7 +39,7 @@ const UnReadNotiTab = (props: Props) => {
 
     const handleChangeStatus = (notiRes: INotiResponse) => {
         if ( notiRes.status!= "read" ) {
-            setNumberOfItemRemove(numberOfItemRemove + 1)
+   
             notiRes.status = "read"
 
             const notiNew:INotiResponse[] =[]

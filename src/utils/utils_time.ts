@@ -1,3 +1,4 @@
+import { formatInTimeZone , format } from 'date-fns-tz';
 // export const getCurrentTime = () => {
 //   return new Date().toISOString();
 // };
@@ -16,3 +17,11 @@ export const formatDate = (dateString: string): string => {
 
   return `${hours}:${minutes} ${day}/${month}/${year}`;
 };
+
+
+export function formatUTCToLocalTime(utcDate: string): string {
+  // Đặt múi giờ mong muốn (Asia/Ho_Chi_Minh)
+  const timeZone = 'Asia/Ho_Chi_Minh';
+ return formatInTimeZone(utcDate, timeZone, "yyyy-MM-dd'T'HH:mm:ss")
+
+}

@@ -43,7 +43,7 @@ const FriendList = () => {
           </h5>
         </div>
 
-        <Link href={"/friends"} className="text-decoration-none">
+        <Link href={"/friends"} className=" hover-text-decoration-underline text-secondary">
           Xem tất cả
         </Link>
       </div>
