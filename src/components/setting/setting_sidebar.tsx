@@ -66,11 +66,12 @@ const SettingSidebar = () => {
                                             style={{
                                                 backgroundColor: activeTab === "first" ? "black" : "transparent",
                                                 color: activeTab === "first" ? "white" : "black",
-                                                padding: "10px 15px",
+                                                fontSize:"12px",
                                                 borderRadius: "5px",
                                                 textAlign: "center",
                                                 cursor: "pointer",
                                                 transition: "0.3s",
+                                                margin: "0px",
                                             }}
                                             onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "#ddd"}
                                             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "transparent"}
@@ -86,10 +87,11 @@ const SettingSidebar = () => {
                                             style={{
                                                 backgroundColor: activeTab === "second" ? "black" : "transparent",
                                                 color: activeTab === "second" ? "white" : "black",
-                                                padding: "10px 15px",
+                                                fontSize:"12px",
                                                 borderRadius: "5px",
                                                 textAlign: "center",
-                                                cursor: "pointer"
+                                                cursor: "pointer",
+                                                margin: "0px",
                                             }}
                                         >
                                             Thông tin cá nhân

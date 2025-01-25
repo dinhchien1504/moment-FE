@@ -7,7 +7,6 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface ModalChangInfoProps {
@@ -99,7 +98,7 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} style={{backgroundColor:"black", borderColor:"black"}}>
+      <Button variant="primary" onClick={handleShow} style={{backgroundColor:"black", borderColor:"black", fontSize:"12px"}}>
         Thay đổi thông tin cá nhân
       </Button>
 
@@ -177,10 +176,10 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose} style={{backgroundColor:"black",borderColor:"black", fontSize:"12px"}}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleSave}>
+          <Button variant="primary" onClick={handleSave} style={{backgroundColor:"#ff0066",borderColor:"#ff0066", fontSize:"12px"}}>
             Lưu
           </Button>
         </Modal.Footer>

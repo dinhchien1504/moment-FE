@@ -112,10 +112,10 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} disabled={isSaving}>
+          <Button variant="secondary" onClick={handleClose} disabled={isSaving} style={{backgroundColor:"black",borderColor:"black", fontSize:"12px"}}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+          <Button variant="primary" onClick={handleSave} disabled={isSaving} style={{backgroundColor:"#ff0066",borderColor:"#ff0066", fontSize:"12px"}}>
             {isSaving ? "Đang lưu..." : "Lưu"}
           </Button>
         </Modal.Footer>
