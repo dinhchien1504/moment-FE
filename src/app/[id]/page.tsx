@@ -36,13 +36,13 @@ const ProfileUser = async (props: any ) => {
         <Col md={4} className="mb-4 width90ps">
           <div className="mb-4  " >
             <InforUser profileRespone = {resProfile.result } 
+             time =  {timestamp}
               params = {params.id}
             />
           </div>
           <div>
             <ContentOfUser profileRespone={resProfile.result}
              time =  {timestamp}
-              
               params = {params.id}
 
             />
