@@ -97,4 +97,24 @@
     color:white;
 }
 
-  
+.div-avt-btn {
+    position: relative; /* Để định vị nút camera tương đối với avatar */
+    display: inline-block; /* Đảm bảo kích thước tự động theo nội dung */
+}
+
+.btn-change-avt {
+    position: absolute; /* Đặt nút camera chồng lên avatar */
+    bottom: 10px; /* Căn chỉnh nút sát viền dưới */
+    right: -2px; /* Căn chỉnh nút sát viền phải */
+    border-radius: 50%; /* Làm tròn nút */
+    width: 35px; /* Chiều rộng nút */
+    height: 35px; /* Chiều cao nút */
+    padding: 0px; /* Loại bỏ padding */
+    display: flex; /* Căn giữa icon trong nút */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    background-color: #000; /* Màu nền nút */
+    color: #fff; /* Màu icon */
+    cursor: pointer; /* Con trỏ chỉ tay khi hover */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ cho nút */
+}
