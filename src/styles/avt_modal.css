@@ -1,0 +1,40 @@
+.btn-close-avt-modal{
+    border-color: black;
+}
+
+.label-img-avt{
+
+ width: 120px;
+ height: 40px;
+ background-color: black;
+ color: white;
+ padding: 10px;
+ border-radius: 10px;
+}
+
+.div-add-delete{
+    display: flex;
+    justify-content: space-between;
+align-items: center;
+margin-top: 20px;
+}
+
+.div-img-btn{
+    display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: center;
+}
+
+.img-change-avatar{
+  width: 250px;
+  height: 250px;
+  border-radius: 130px;
+  border: 1px solid black;
+  object-fit: cover;
+}
+
+.delete-img-avt{
+    border-color: black;
+    margin-left: 20px
+}

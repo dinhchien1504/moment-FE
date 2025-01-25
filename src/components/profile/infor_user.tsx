@@ -2,14 +2,17 @@
 
 import API from "@/api/api";
 import { GetImage } from "@/utils/handle_images";
-import { FetchClientPostApi,FetchClientPutApi } from "@/api/fetch_client_api";
+import { FetchClientPostApi, FetchClientPutApi } from "@/api/fetch_client_api";
 import React, { use, useState, useRef, useEffect } from "react";
 import { Col, Container, Row, Button, Stack, Image } from "react-bootstrap";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
 import FriendList from "../home/friend_list";
+import "@/styles/profile_user.css"
 
 import RequestFriend from "../friend/request_friend";
+import Link from "next/link";
+import AvatarModal from "./avatar_modal";
 
 interface Props {
   profileRespone: IProfileResponse;
@@ -20,6 +23,8 @@ interface Props {
 const InforUser = (props: Props) => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showAvtModal, setShowAvtModal] = useState<boolean> (false)
+
 
   const { params, time } = props;
   const [pageCurrent, setPageCurrent] = useState(0);
@@ -42,16 +47,15 @@ const InforUser = (props: Props) => {
       };
       // console.log ('this is datachange', dataChangeStatus)
       const result = await FetchClientPutApi(API.ACCOUNT.CHANGE_STATUS, dataChangeStatus);
-      console.log ('result', result)
+      console.log('result', result)
       if (result.status === 200) {
         setProfileRespone((prevProfile) => ({
           ...prevProfile,
           friendStatus: newStatus,
         }));
-        console.log ('profil status',profileRespone.friendStatus )
-        if (profileRespone.friendStatus == "received")
-        {
-        setFriendStatus(dataChangeStatus.status);
+        console.log('profil status', profileRespone.friendStatus)
+        if (profileRespone.friendStatus == "received") {
+          setFriendStatus(dataChangeStatus.status);
 
         }
         else {
@@ -66,18 +70,18 @@ const InforUser = (props: Props) => {
       setLoading(false);
     }
   };
-  
+
   const handleAddFriend = async () => {
     try {
       setLoading(true);
       const dataChange = {
         accountFriendId: profileRespone.idAccount,
       };
-  
+
       const addFriend = await FetchClientPostApi(API.ACCOUNT.ADD, dataChange);
-  
+
       if (addFriend.status === 200) {
-        
+
         setFriendStatus(addFriend.result.friendStatus);
       }
     } catch (error) {
@@ -89,7 +93,7 @@ const InforUser = (props: Props) => {
   useEffect(() => {
     console.log('friendStatus updated:', friendStatus);
   }, [friendStatus]);
-  
+
 
   useEffect(() => {
     const fetchUpdatedProfile = async () => {
@@ -125,9 +129,14 @@ const InforUser = (props: Props) => {
     }
   }, [friendStatus, profileRespone.friendStatus]); // Thêm `profileRespone.friendStatus` để tránh gọi API khi giá trị không đổi
 
-  
+
+  const handleShowAvtModal = ( ) => {
+    setShowAvtModal(true)
+  }
 
   return (
+    <>
+  
     <Row
       style={{
         display: "flex",
@@ -138,18 +147,25 @@ const InforUser = (props: Props) => {
     >
       <Col className="center_col">
         <Stack gap={3} className="center_col ">
-          <Image
-            alt =""
-            src={GetImage(profileRespone.urlAvt)}
-            style={{
-              objectFit: "cover",
-            }}
-            height="150px"
-            width="150px"
-            roundedCircle
-          />
+          <div className="div-avt-btn">
+            <Image
+              alt=""
+              src={GetImage(profileRespone.urlAvt)}
+              style={{
+                objectFit: "cover",
+              }}
+              height="150px"
+              width="150px"
+              roundedCircle
+            />
+            <Button variant="dark" className="btn-change-avt"
+            onClick={() => {handleShowAvtModal()}}>
+              <i className="fa-solid fa-camera"></i>
+            </Button>
+          </div>
+
           <div className="">
-            {profileRespone.name }
+            {profileRespone.name}
           </div>
           <div className="">
             {profileRespone.userName}
@@ -157,14 +173,16 @@ const InforUser = (props: Props) => {
           <div className="flex gap-2">
             {friendStatus === "me" && (
               <>
-                <Button variant="dark">Đăng bài </Button>
-                <Button variant="dark">
-                  {" "}
-                  <i className="fa-solid fa-gear"></i>
-                </Button>
-                <Button variant="dark">
+                {/* <Button variant="dark">Đăng bài </Button> */}
+                <Link href={"/setting"}>
+                  <Button variant="dark">
+                    <i className="fa-solid fa-gear"></i>
+                  </Button>
+                </Link>
+
+                {/* <Button variant="dark">
                   <i className="fa-solid fa-share"></i>
-                </Button>
+                </Button> */}
               </>
             )}
             {friendStatus === "accepted" && (
@@ -185,9 +203,9 @@ const InforUser = (props: Props) => {
                   {(props) => (
                     <Tooltip id="overlay-example" {...props}>
                       <Button
-                      style= {{
-                        color:"white"
-                      }}
+                        style={{
+                          color: "white"
+                        }}
                         variant="none"
                         onClick={() => {
                           changeStatus(profileRespone.idAccount, "deleted");
@@ -217,7 +235,7 @@ const InforUser = (props: Props) => {
                   onClick={() => {
                     changeStatus(profileRespone.idAccount, "deleted");
                   }}
-                  style={{backgroundColor:"white", color:"black"}}
+                  style={{ backgroundColor: "white", color: "black" }}
                 >
                   Từ chối
                 </Button>
@@ -226,7 +244,7 @@ const InforUser = (props: Props) => {
 
             {friendStatus === "sent" && (
               <>
-               <Button
+                <Button
                   variant="dark"
                 >
                   Đã gửi lời mời{" "}
@@ -234,11 +252,11 @@ const InforUser = (props: Props) => {
                 <Button
                   variant="white"
                   onClick={() =>
-                    changeStatus(profileRespone.idAccount,"deleted")
+                    changeStatus(profileRespone.idAccount, "deleted")
                   }
-                  style={{borderColor:"black"}}
+                  style={{ borderColor: "black" }}
                 >
-                 Hủy{" "}
+                  Hủy{" "}
                 </Button>
               </>
             )}
@@ -255,6 +273,12 @@ const InforUser = (props: Props) => {
         </Stack>
       </Col>
     </Row>
+    <AvatarModal
+    setShowAvtModal={setShowAvtModal}
+    showAvtModal = {showAvtModal}
+    profileRespone = {profileRespone}
+    />
+    </>
   );
 };
 

@@ -120,6 +120,7 @@ const PostModal = (props: IProps) => {
                     type="file"
                     accept="image/*"
                     id="fileInput"
+                    capture="environment"
                     hidden
                     onChange={(e) => {
                       handleFileChange(e);

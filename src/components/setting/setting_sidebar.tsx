@@ -50,12 +50,18 @@ const SettingSidebar = () => {
     }
     return (
         <>
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+            <Tab.Container id="left-tabs-example" defaultActiveKey="second">
                 <div className={styles.tabContainer}>
                     <Row>
                         <Col sm={3}>
                             <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
                                 <div  className={styles.rowNav}>
+
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
+                                        Thông tin cá nhân
+                                    </Nav.Link>
+                                </Nav.Item>
                                 
                                 <Nav.Item className={styles.navItem}>
                                     <Nav.Link  as={"div"}  eventKey="first" className={styles.customNavLink}>
@@ -63,11 +69,7 @@ const SettingSidebar = () => {
                                     </Nav.Link>
                                 </Nav.Item>
                                
-                                <Nav.Item className={styles.navItem}>
-                                    <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
-                                        Thông tin cá nhân
-                                    </Nav.Link>
-                                </Nav.Item>
+                          
                                 
                                 </div>
                             </Nav>
