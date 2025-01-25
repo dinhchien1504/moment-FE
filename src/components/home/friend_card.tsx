@@ -9,6 +9,7 @@ import "@/styles/friend_card.css";
 import SpinnerAnimation from "../shared/spiner_animation";
 import { toast } from "react-toastify";
 import FriendErrorCode from "@/exception/friend_error_code";
+import { GetImage } from "@/utils/handle_images";
 
 interface Props {
   accountResponse: IAccountResponse;
@@ -204,7 +205,7 @@ const FriendCard = ({ accountResponse }: Props) => {
   return (
     <div className="friend-card bg-hover p-2 rounded-2 d-flex" title={name}>
       <img
-        src={urlPhoto || "/images/avatar.jpg"}
+        src={GetImage(urlPhoto) || "/images/avatar.jpg"}
         alt={name}
         className="img-avt d-flex flex-column mx-2"
       />
