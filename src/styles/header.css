@@ -141,14 +141,18 @@
   }
   .nav-pills {
     --bs-nav-pills-link-active-bg: #000;
-    --bs-nav-pills-link-active-color: #fb0362;
+    /* --bs-nav-pills-link-active-color: #fb0362; */
   }
   .nav{
       --bs-link-color:#000;
-      --bs-nav-link-hover-color: #fb0362;
-      --bs-nav-link-color:#fb0362;
+      --bs-nav-link-hover-color: black;
+      /* --bs-nav-link-color:#fb0362; */
   }
   .nav-item {
-    border: 2px solid #000;
-    border-radius: 7px;
+    /* border: 2px solid #000; */
+    /* border-radius: 7px; */
+}
+
+.img-profile-header .active {
+    background-color: white;
 }

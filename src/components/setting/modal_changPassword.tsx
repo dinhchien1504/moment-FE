@@ -206,10 +206,10 @@ function FormChangePassword() {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose} disabled={isSaving}>
+                    <Button variant="secondary" onClick={handleClose} disabled={isSaving} style={{backgroundColor:"white", color:"black"}}>
                         Đóng
                     </Button>
-                    <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+                    <Button variant="primary" onClick={handleSave} disabled={isSaving}  style={{backgroundColor:"black", borderColor:"black"}}>
                         {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
                     </Button>
                 </Modal.Footer>

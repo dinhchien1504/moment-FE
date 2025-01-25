@@ -86,9 +86,12 @@
 .nav-tabs .navlink {
     color:black;
 }
+#uncontrolled-tab-example-tab-YourPost{
+    color: #000;
+}
 .nav-tabs .nav-link.active 
 {
-    background-color: black;
+    /* background-color: black; */
 }
 .nav-tabs .nav-link:hover {
     color:white;

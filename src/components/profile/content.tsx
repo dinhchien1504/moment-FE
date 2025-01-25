@@ -6,7 +6,7 @@ import { GetImage } from "@/utils/handle_images";
 import API from "@/api/api";
 import "@/styles/profile_user.css";
 import SpinnerAnimation from "../shared/spiner_animation";
-
+import { usePathname } from "next/navigation";
 interface Props {
   profileRespone: IProfileResponse;
   params: string;
@@ -26,7 +26,7 @@ const ContentOfUser = (props: Props) => {
   const [loadingPhotos, setLoadingPhotos] = useState<Record<string, boolean>>(
     {}
   );
-
+  const pathName = usePathname()
   // Hàm tải thêm dữ liệu
   // const handleLazyLoading = async () => {
   //   if (isLoading ||
@@ -151,6 +151,9 @@ const ContentOfUser = (props: Props) => {
     }
   }, [pageCurrent, hasMore]);
 
+  const handleShowPostDetail = (slug:string) => {
+    window.history.pushState({}, '', `${pathName}?post=${slug}`);
+}
   return (
     <Tabs
       defaultActiveKey="YourPost"
@@ -182,6 +185,7 @@ const ContentOfUser = (props: Props) => {
                         objectFit: "contain",
                       }}
                       rounded
+                      onClick={() => {handleShowPostDetail(photo.slug)}}
                     />
                   </Col>
                 );

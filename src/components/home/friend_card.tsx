@@ -72,6 +72,7 @@ const FriendCard = ({ accountResponse }: Props) => {
             <Button
               className="btn-sm m-1 btn-primary"
               onClick={() => handleChangeStatus("accepted")}
+              style={{backgroundColor:"black", borderColor:"black"}}
             >
               Chấp nhận
             </Button>
@@ -79,6 +80,7 @@ const FriendCard = ({ accountResponse }: Props) => {
               className="btn-sm m-1"
               variant="dark"
               onClick={() => handleChangeStatus("deleted")}
+              style={{backgroundColor:"white", color:"black"}}
             >
               Từ chối
             </Button>
