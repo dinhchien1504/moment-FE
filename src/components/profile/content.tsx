@@ -198,12 +198,12 @@ const ContentOfUser = (props: Props) => {
           )}
         </Container>
       </Tab>
-      <Tab eventKey="profile" title="Favorite">
+      {/* <Tab eventKey="profile" title="Favorite">
         Tab content for Profile
       </Tab>
       <Tab eventKey="contact" title="Liked">
         Tab content for Contact
-      </Tab>
+      </Tab> */}
     </Tabs>
   );
 };

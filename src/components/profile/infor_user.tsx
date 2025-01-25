@@ -149,12 +149,15 @@ const InforUser = (props: Props) => {
             roundedCircle
           />
           <div className="">
-            {profileRespone.name + " " + profileRespone.userName}
+            {profileRespone.name }
+          </div>
+          <div className="">
+            {profileRespone.userName}
           </div>
           <div className="flex gap-2">
             {friendStatus === "me" && (
               <>
-                <Button variant="dark">Posting</Button>
+                <Button variant="dark">Đăng bài </Button>
                 <Button variant="dark">
                   {" "}
                   <i className="fa-solid fa-gear"></i>
@@ -182,6 +185,9 @@ const InforUser = (props: Props) => {
                   {(props) => (
                     <Tooltip id="overlay-example" {...props}>
                       <Button
+                      style= {{
+                        color:"white"
+                      }}
                         variant="none"
                         onClick={() => {
                           changeStatus(profileRespone.idAccount, "deleted");
@@ -192,7 +198,7 @@ const InforUser = (props: Props) => {
                     </Tooltip>
                   )}
                 </Overlay>
-                <Button variant="dark">Nhắn tin</Button>
+                {/* <Button variant="dark">Nhắn tin</Button> */}
               </>
             )}
             {friendStatus === "received" && (
@@ -203,7 +209,7 @@ const InforUser = (props: Props) => {
                     changeStatus(profileRespone.idAccount, "accepted");
                   }}
                 >
-                  Accepted
+                  Chấp nhận
                 </Button>
 
                 <Button
@@ -212,7 +218,7 @@ const InforUser = (props: Props) => {
                     changeStatus(profileRespone.idAccount, "deleted");
                   }}
                 >
-                  Decline
+                  Từ chối
                 </Button>
               </>
             )}

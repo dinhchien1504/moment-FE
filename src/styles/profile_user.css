@@ -83,4 +83,15 @@
     background-color: rgba(255, 255, 255, 0.7);
     z-index: 1;
   }
+.nav-tabs .navlink {
+    color:black;
+}
+.nav-tabs .nav-link.active 
+{
+    background-color: black;
+}
+.nav-tabs .nav-link:hover {
+    color:white;
+}
+
   
