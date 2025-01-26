@@ -26,13 +26,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     if (stompClient) return;
     if (cookie.get("session-id") === undefined) return;
     
-    const socket = new SockJS(`${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`, null, {
-      transportOptions: {
-        websocket: {
-            rejectUnauthorized: false
-        }
-    }
-    });
+    const socket = new SockJS(`${API.NOTI.NOTI_SOCKET}?ss=${cookie.get("session-id")}`);
     const client = Stomp.over(socket);
     client.connect({}, () => {
       console.log("Connect success");
