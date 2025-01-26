@@ -208,6 +208,7 @@ const FriendCard = ({ accountResponse }: Props) => {
         src={GetImage(urlPhoto) || "/images/avatar.jpg"}
         alt={name}
         className="img-avt d-flex flex-column mx-2"
+        style={{objectFit:"cover"}}
       />
       <div className="info-friend">
         <Link

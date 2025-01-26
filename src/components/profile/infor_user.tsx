@@ -13,6 +13,7 @@ import "@/styles/profile_user.css"
 import RequestFriend from "../friend/request_friend";
 import Link from "next/link";
 import AvatarModal from "./avatar_modal";
+import SpinnerAnimation from "../shared/spiner_animation";
 
 interface Props {
   profileRespone: IProfileResponse;
@@ -24,6 +25,7 @@ const InforUser = (props: Props) => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [showAvtModal, setShowAvtModal] = useState<boolean>(false)
+  const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false)
 
 
   const { params, time } = props;
@@ -40,7 +42,7 @@ const InforUser = (props: Props) => {
   const target = useRef(null);
   const changeStatus = async (idAccountChange: string, newStatus: string) => {
     try {
-      setLoading(true);
+      setIsLoadingAction(true)
       const dataChangeStatus = {
         accountFriendId: idAccountChange,
         status: newStatus,
@@ -67,13 +69,13 @@ const InforUser = (props: Props) => {
     } catch (error) {
       console.error("Error", error);
     } finally {
-      setLoading(false);
+      setIsLoadingAction(false)
     }
   };
 
   const handleAddFriend = async () => {
     try {
-      setLoading(true);
+      setIsLoadingAction(true)
       const dataChange = {
         accountFriendId: profileRespone.idAccount,
       };
@@ -87,7 +89,7 @@ const InforUser = (props: Props) => {
     } catch (error) {
       console.error("Error :", error);
     } finally {
-      setLoading(false);
+      setIsLoadingAction(false)
     }
   };
   useEffect(() => {
@@ -98,6 +100,7 @@ const InforUser = (props: Props) => {
   useEffect(() => {
     const fetchUpdatedProfile = async () => {
       try {
+        setIsLoadingAction(true)
         const dataProfile: IProfileFillterRequest = {
           pageCurrent: pageCurrent,
           time: time,
@@ -119,6 +122,8 @@ const InforUser = (props: Props) => {
         }
       } catch (error) {
         console.error("Error fetching updated profile:", error);
+      } finally {
+        setIsLoadingAction(false)
       }
     };
 
@@ -173,104 +178,116 @@ const InforUser = (props: Props) => {
             <div className="">
               {profileRespone.userName}
             </div>
-            <div className="flex gap-2">
-              {friendStatus === "me" && (
-                <>
-                  {/* <Button variant="dark">Đăng bài </Button> */}
-                  <Link href={"/setting"}>
-                    <Button variant="dark">
-                      <i className="fa-solid fa-gear"></i>
-                    </Button>
-                  </Link>
 
-                  {/* <Button variant="dark">
+            {/* ------------------------------------------------------------------------------- */}
+            {isLoadingAction === true ? (
+              <div>
+                <SpinnerAnimation/>
+             </div>
+            ) : (
+                <div className="flex gap-2">
+                  {friendStatus === "me" && (
+                    <>
+                      {/* <Button variant="dark">Đăng bài </Button> */}
+                      <Link href={"/setting"}>
+                        <Button variant="dark">
+                          <i className="fa-solid fa-gear"></i>
+                        </Button>
+                      </Link>
+
+                      {/* <Button variant="dark">
                   <i className="fa-solid fa-share"></i>
                 </Button> */}
-                </>
-              )}
-              {friendStatus === "accepted" && (
-                <>
-                  {/* <Button variant="dark"></Button> */}
-                  <Button
-                    variant="dark"
-                    ref={target}
-                    onClick={() => setShow(!show)}
-                  >
-                    Bạn Bè
-                  </Button>
-                  <Overlay
-                    target={target.current}
-                    show={show}
-                    placement="bottom-start"
-                  >
-                    {(props) => (
-                      <Tooltip id="overlay-example" {...props}>
-                        <Button
-                          style={{
-                            color: "white"
-                          }}
-                          variant="none"
-                          onClick={() => {
-                            changeStatus(profileRespone.idAccount, "deleted");
-                          }}
-                        >
-                          Hủy kết bạn
-                        </Button>
-                      </Tooltip>
-                    )}
-                  </Overlay>
-                  {/* <Button variant="dark">Nhắn tin</Button> */}
-                </>
-              )}
-              {friendStatus === "received" && (
-                <>
-                  <Button
-                    variant="dark"
-                    onClick={() => {
-                      changeStatus(profileRespone.idAccount, "accepted");
-                    }}
-                  >
-                    Chấp nhận
-                  </Button>
+                    </>
+                  )}
+                  {friendStatus === "accepted" && (
+                    <>
+                      {/* <Button variant="dark"></Button> */}
+                      <Button
+                        variant="dark"
+                        ref={target}
+                        onClick={() => setShow(!show)}
+                      >
+                        Bạn Bè
+                      </Button>
+                      <Overlay
+                        target={target.current}
+                        show={show}
+                        placement="bottom-start"
+                      >
+                        {(props) => (
+                          <Tooltip id="overlay-example" {...props}>
+                            <Button
+                              style={{
+                                color: "white"
+                              }}
+                              variant="none"
+                              onClick={() => {
+                                changeStatus(profileRespone.idAccount, "deleted");
+                              }}
+                            >
+                              Hủy kết bạn
+                            </Button>
+                          </Tooltip>
+                        )}
+                      </Overlay>
+                      {/* <Button variant="dark">Nhắn tin</Button> */}
+                    </>
+                  )}
+                  {friendStatus === "received" && (
+                    <>
+                      <Button
+                        variant="dark"
+                        onClick={() => {
+                          changeStatus(profileRespone.idAccount, "accepted");
+                        }}
+                      >
+                        Chấp nhận
+                      </Button>
 
-                  <Button
-                    variant="dark"
-                    onClick={() => {
-                      changeStatus(profileRespone.idAccount, "deleted");
-                    }}
-                    style={{ backgroundColor: "white", color: "black" }}
-                  >
-                    Từ chối
-                  </Button>
-                </>
-              )}
+                      <Button
+                        variant="dark"
+                        onClick={() => {
+                          changeStatus(profileRespone.idAccount, "deleted");
+                        }}
+                        style={{ backgroundColor: "white", color: "black" }}
+                      >
+                        Từ chối
+                      </Button>
+                    </>
+                  )}
 
-              {friendStatus === "sent" && (
-                <>
-                  <Button
-                    variant="dark"
-                  >
-                    Đã gửi lời mời{" "}
-                  </Button>
-                  <Button
-                    variant="white"
-                    onClick={() =>
-                      changeStatus(profileRespone.idAccount, "deleted")
-                    }
-                    style={{ borderColor: "black" }}
-                  >
-                    Hủy{" "}
-                  </Button>
-                </>
-              )}
+                  {friendStatus === "sent" && (
+                    <>
+                      <Button
+                        variant="dark"
+                      >
+                        Đã gửi lời mời{" "}
+                      </Button>
+                      <Button
+                        variant="white"
+                        onClick={() =>
+                          changeStatus(profileRespone.idAccount, "deleted")
+                        }
+                        style={{ borderColor: "black" }}
+                      >
+                        Hủy{" "}
+                      </Button>
+                    </>
+                  )}
 
-              {friendStatus === "none" && (
-                <Button variant="dark" onClick={() => handleAddFriend()}>
-                  {" "}
-                  Kết bạn{" "}
-                </Button>
-              )}
-            </div>
+                  {friendStatus === "none" && (
+                    <Button variant="dark" onClick={() => handleAddFriend()}>
+                      {" "}
+                      Kết bạn{" "}
+                    </Button>
+                  )}
+                </div>
+              )
+            }
+
+
+            {/* --------------------------------------------------------------- */}
 
             {/* <div className="boild">{profileRespone.quantityFriend} Friend</div> */}
           </Stack>
