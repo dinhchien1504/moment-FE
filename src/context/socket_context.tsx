@@ -39,7 +39,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     });
   
     setStompClient(client);
-    console.log("session-id >>> ")
+
 
     return () => {
       if (stompClient) {
