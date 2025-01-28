@@ -39,7 +39,7 @@ const FriendList = () => {
       <div className="title d-flex justify-content-between p-2">
         <div className="d-flex align-items-center">
           <h5>
-            Bạn bè <span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+            Bạn bè <span className="fs-5 ms-2" style={{color:"#e16697"}}>{countTotalFriend==0?'':countTotalFriend}</span>
           </h5>
         </div>
 
