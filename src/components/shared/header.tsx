@@ -30,26 +30,33 @@ const Header = () => {
 
 
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then((registration) => {
-                    console.log('Service Worker đã đăng ký', registration);
-                })
-                .catch((error) => {
-                    console.log('Đăng ký Service Worker thất bại:', error);
-                });
-        }
-
-        if (Notification.permission !== 'granted') {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Quyền nhận thông báo đã được cấp!');
-                } else {
-                    console.log('Quyền nhận thông báo bị từ chối');
-                }
+        // Kiểm tra xem trình duyệt có hỗ trợ Service Worker không
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((registration) => {
+              console.log("Service Worker đã đăng ký", registration);
+            })
+            .catch((error) => {
+              console.log("Đăng ký Service Worker thất bại:", error);
             });
         }
-    }, []);
+    
+        // Kiểm tra trình duyệt có hỗ trợ Notification API không
+        if ("Notification" in window) {
+          if (Notification.permission !== "granted") {
+            Notification.requestPermission().then((permission) => {
+              if (permission === "granted") {
+                console.log("Quyền nhận thông báo đã được cấp!");
+              } else {
+                console.log("Quyền nhận thông báo bị từ chối");
+              }
+            });
+          }
+        } else {
+          console.log("Trình duyệt không hỗ trợ Notification API");
+        }
+      }, []);
 
 
     useEffect(() => {

@@ -20,7 +20,6 @@
     "dotenv": "^16.4.7",
     "js-cookie": "^3.0.5",
     "mobile-detect": "^1.4.5",
-    "moment-fe": "file:",
     "next": "14.2.15",
     "next-pwa": "^5.6.0",
     "nextjs-toploader": "^3.7.15",
