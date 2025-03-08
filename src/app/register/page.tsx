@@ -12,13 +12,13 @@ const RegisterPage = () => {
 
   useEffect(() => {
     const handleOAuth = async () => {
-      setLoading(true);
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
-
+      
       if (!code) {
         return;
       }
+      setLoading(true);
 
       try {
         const data = await fetchGoogleToken(code);
