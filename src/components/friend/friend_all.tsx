@@ -153,9 +153,9 @@ const FriendAll = (props: FriendAllProps) => {
 
   const renderLoadMore = (type: string) => {
     if (
-      totalItemsAccepted > (pageCurrentAccepted + 1) * 10 ||
-      totalItemsReceived > (pageCurrentReceived + 1) * 10 ||
-      totalItemsSent > (pageCurrentSent + 1) * 10
+      totalItemsAccepted >= (pageCurrentAccepted + 1) * 10 && type =='accepted'||
+      totalItemsReceived >= (pageCurrentReceived + 1) * 10 && type =='received'||
+      totalItemsSent >= (pageCurrentSent + 1) * 10 && type =='sent'
     )
       return (
         <Button
@@ -251,7 +251,7 @@ const FriendAll = (props: FriendAllProps) => {
           <Col sm={9}>
             <Tab.Content className="p-2 bg-light shadow rounded-2 border-2">
               <Tab.Pane eventKey="first">
-                {accountResponses.length > 0 ? (
+                { accountResponses && accountResponses.length > 0 ? (
                   renderCardFriend(accountResponses)
                 ) : (
                   <p>Không có bạn bè</p>

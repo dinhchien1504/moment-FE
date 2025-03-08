@@ -14,3 +14,24 @@ export const LoginServerActions = async (AuthenticationRequest: AuthenticationRe
     }
     return res;
 }
+export async function fetchGoogleToken(code: string) {
+    if (!code) throw new Error("Thiếu mã code");
+  
+    const NEXT_PUBLIC_API_HOST= process.env.NEXT_PUBLIC_API_HOST;
+    const response = await fetch(
+      `${NEXT_PUBLIC_API_HOST}/api/auth/google-login?code=${encodeURIComponent(code)}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  
+    if (!response.ok) {
+      throw new Error("Lỗi từ server");
+    }
+  
+    const res = await response.json();
+    setSessionId(res.result.token);
+
+    return res.result;
+  }

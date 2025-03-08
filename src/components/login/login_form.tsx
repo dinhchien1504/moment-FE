@@ -106,7 +106,33 @@ const LoginForm = () => {
         setPassword(e);
     }
     // validation
-
+    const loginWithGoogle = async () => {
+        const redirect_uri = process.env.NEXT_PUBLIC_BASE_URL;
+        const auth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=866410261695-scd1po6vfk56mk4oc7ejrqt5mq1pe1rk.apps.googleusercontent.com&redirect_uri=${redirect_uri}/register&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
+        const popup = window.open(auth_url, "googleLogin", "width=500,height=600");
+    
+        if (!popup) {
+          alert("Trình duyệt chặn popup. Hãy bật popup và thử lại!");
+          return;
+        }
+    
+        window.addEventListener(
+          "message",
+          async (event: MessageEvent) => {
+            if (event.origin !== window.location.origin) return;
+    
+            const accessToken = event.data?.token;
+            if (accessToken) {
+              await fetchGetUser(); // Cập nhật thông tin người dùng
+              router.push("/");
+            }
+    
+            if (!popup.closed) popup.close(); // Đảm bảo đóng popup nếu chưa đóng
+            router.push("/");
+          },
+          { once: true }
+        );
+      };
     return (
         <>
             <Form className='form-login' >
@@ -175,15 +201,26 @@ const LoginForm = () => {
                 >Đăng nhập</Button>
             </Form>
 
-            <Form className='form-login mt-2'>
-                <Link className='btn-register'
-                    href={"/register"} >
-                    <Button className='btn-register' >
-                        Đăng ký
-                    </Button>
-                </Link>
-            </Form >
-        </>
-    )
-}
-export default LoginForm
+      <Form className="form-login mt-2">
+        <Link className="btn-register" href={"/register"}>
+          <Button className="btn-register">Đăng ký</Button>
+        </Link>
+
+        <Button variant="outline" className="border border-black mt-2 w-100" onClick={() => loginWithGoogle()}>
+          <svg 
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          className="bi bi-arrow-up text-primary me-1"
+          viewBox="0 0 488 512"
+          fill="currentColor"
+          >
+            <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
+          </svg>
+          <span>Đăng nhập với Google</span>
+        </Button>
+      </Form>
+    </>
+  );
+};
+export default LoginForm;

@@ -42,6 +42,7 @@ self.addEventListener('push', (event) => {
       body: data.message || 'Bạn có một thông báo mới!',
       icon: '/images/logo-removebg.192.png',
       badge: '/images/logo-removebg.192.png',
+      data: { url: data.url || '/' }, // Thêm data vào notification
     },
     url: data.url || '/',  // Đường dẫn bạn muốn người dùng chuyển tới khi nhấn vào thông báo
   };
