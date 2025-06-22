@@ -9,4 +9,4 @@ const COMMENT_API = {
     PUBLIC_COMMENT_PHOTO_REPLY: `${API_HOST}/api/comment/photo/reply`,
 
 };
-export default COMMENT_API;
+export default COMMENT_API; 
