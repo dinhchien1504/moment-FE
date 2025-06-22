@@ -7,10 +7,12 @@ import SEARCH_API from "./endpoints/search";
 import PROFILE_API from "./endpoints/profile";
 import SETTING_API from "./endpoints/setting";
 import NOTI_VIEW_API from "./endpoints/noti_view";
+import COMMENT_API from "./endpoints/comment";
 
 const API = {
   AUTH: AUTH_API,
   ACCOUNT:ACCOUNT_API,
+  COMMENT:COMMENT_API,
   PHOTO: PHOTO_API,
   POST:POST_API,
   SEARCH: SEARCH_API,
