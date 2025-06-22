@@ -3,7 +3,7 @@
 import API from "@/api/api";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/user_context";
-import { FetchServerGetApi, FetchServerPostApi } from "@/api/fetch_server_api";
+import { FetchClientGetApi, FetchClientPostApi } from "@/api/fetch_client_api";
 import { Button, Card, Form, InputGroup } from "react-bootstrap"; // Thay CardContent bằng Form, InputGroup
 import { CommentPhotoItem } from "./comment-photo-item";
 import SpinnerAnimation from "../shared/spiner_animation";
@@ -32,7 +32,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     const params = new URLSearchParams({ photoId: photoId.toString() });
     if (beforeCreatedAt) params.append("createdAt", beforeCreatedAt);
 
-    const data: CommentClientResponse = await FetchServerGetApi(
+    const data: CommentClientResponse = await FetchClientGetApi(
       `${API.COMMENT.PUBLIC_COMMENT_PHOTO}?${params.toString()}`
     );
 
@@ -74,7 +74,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     setComments((prev) => [optimisticComment, ...prev]);
     setNewCommentContent("");
 
-    const res = await FetchServerPostApi(API.COMMENT.COMMENT, {
+    const res = await FetchClientPostApi(API.COMMENT.COMMENT, {
       photoId,
       content,
     });
