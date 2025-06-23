@@ -36,7 +36,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       `${API.COMMENT.PUBLIC_COMMENT_PHOTO}?${params.toString()}`
     );
 
-    const newComments = data.result;
+    const newComments = data.result ?? [];
 
     setComments((prev) => (append ? [...prev, ...newComments] : newComments));
     setLastCreatedAt(
