@@ -151,7 +151,7 @@ const VerticalSwiper = (props: Props) => {
   return (
     <>
       <Row className="h-100">
-        <Col lg={6} md={12} className="h-100">
+        <Col lg={7} md={12} className="h-100">
           <div className="wrapper-swiper position-relative h-100">
             <Swiper
               onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -284,7 +284,7 @@ const VerticalSwiper = (props: Props) => {
             </div>
           </div>
         </Col>
-        <Col lg={6} md={0} >
+        <Col lg={5} md={0} >
           <OffcanvasComment photoId={currentPhotoId} />
           {/* <CommentPhotoSection photoId={currentPhotoId}/> */}
         </Col>
