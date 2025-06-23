@@ -91,6 +91,9 @@ body,html {
 .button-show-friend{
   top:calc(100vh - 88px)
 }
+.button-show-comment{
+  bottom: 120px;
+}
 
 .height-list-friend{
   height: calc(100vh - 100px);
@@ -103,6 +106,20 @@ body,html {
 .height-list-friend::-webkit-scrollbar {
   width: 10px;
   height: 5px;
+}
+.height-list-comment{
+  height: calc(100vh - 100px);
+}
+.height-list-comment::-webkit-scrollbar-thumb {
+  background: #9a9a9a45;
+  border-radius: 10px;
+}
+.height-list-comment::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+.height-list-comment-inner{
+    height: calc(100vh - 150px);
 }
 
 .badge-home{
@@ -136,6 +153,15 @@ body,html {
   }
   body{
     min-width: 300px;
+  }
+  .comment-position-sm-fixed {
+    position: fixed;
+    right:0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    height: calc(100vh - 150px);
+    background: #ffffff;
   }
 }
 

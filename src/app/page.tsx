@@ -21,13 +21,12 @@ const HomePage = async () => {
           <Col md={5} lg={3}  className="d-block p-0">
             <OffcanvasFriend />
           </Col>
-          <Col md={7} lg={6} className="h-100 p-0">
+          <Col md={7} lg={9} className="h-100 p-0">
             <VerticalSwiper
               photoResponses={resPhoto.result}
               time={time}
             ></VerticalSwiper>
           </Col>
-          <Col md={0} lg={3} className="d-none d-lg-block"></Col>
         </Row>
       </Container>
       
