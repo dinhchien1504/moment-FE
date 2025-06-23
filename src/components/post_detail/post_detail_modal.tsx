@@ -9,6 +9,7 @@ import { GetImage } from '@/utils/handle_images';
 import Image from "next/image";
 import SpinnerAnimation from '../shared/spiner_animation';
 import Link from 'next/link';
+import CommentPhotoSection from '../home/comment-photo-section';
 
 const PostDetailModal = () => {
 
@@ -120,6 +121,14 @@ const PostDetailModal = () => {
                                         openModal();
                                     }}
                                 />
+                            </div>
+                            <div>
+                                <div className="d-flex justify-content-between px-2 mt-2">
+                                    <h3 className="offcanvas-title" id="offcanvasLabel">
+                                        Bình luận
+                                    </h3>
+                                </div>
+                                    <CommentPhotoSection photoId={Number(photoResponse?.id)}/>
                             </div>
                           
                         </>) : (<>
