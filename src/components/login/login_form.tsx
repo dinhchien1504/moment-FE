@@ -4,14 +4,15 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Button } from 'react-bootstrap';
 import Link from 'next/link'
-import { useState } from 'react';
-import { LoginServerActions } from './login_server_actions';
+import { useEffect, useState } from 'react';
+import { fetchGoogleToken, LoginServerActions } from './login_server_actions';
 import { useUserContext } from '@/context/user_context';
 import { useRouter } from 'next/navigation';
 import { validNoEmpty } from '@/validation/valid';
 import AuthErrorCode from '@/exception/auth_error_code';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useLoadingContext } from '@/context/loading_context';
+import SpinnerAnimation from '../shared/spiner_animation';
 
 const LoginForm = () => {
     const [userName, setUserName] = useState<string>("")
@@ -25,7 +26,40 @@ const LoginForm = () => {
     const [isHidden, setIsHidden] = useState<boolean>(true)
 
     const { setUser, fetchGetUser } = useUserContext();
+
+    const [isLoading,setIsLoading]=useState<boolean>(false)
     const router = useRouter()
+
+      useEffect(() => {
+    const handleOAuth = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+
+      if (!code) {
+        return;
+      }
+      setIsLoading(true);
+
+      try {
+        const data = await fetchGoogleToken(code);
+        console.log(code,data)
+        if (data?.token) {
+          await fetchGetUser();
+          router.push("/");
+        } else {
+          console.error("Token không hợp lệ");
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Lỗi xác thực Google:", error);
+        router.push("/login");
+      }
+    };
+
+    handleOAuth();
+  }, [router]);
+
+  
 
     const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext()
 
@@ -106,34 +140,27 @@ const LoginForm = () => {
         setPassword(e);
     }
     // validation
-    const loginWithGoogle = async () => {
-        const redirect_uri = process.env.NEXT_PUBLIC_BASE_URL;
-        const auth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=866410261695-scd1po6vfk56mk4oc7ejrqt5mq1pe1rk.apps.googleusercontent.com&redirect_uri=${redirect_uri}/register&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
-        const popup = window.open(auth_url, "googleLogin", "width=500,height=600");
-    
-        if (!popup) {
-          alert("Trình duyệt chặn popup. Hãy bật popup và thử lại!");
-          return;
-        }
-    
-        window.addEventListener(
-          "message",
-          async (event: MessageEvent) => {
-            if (event.origin !== window.location.origin) return;
-    
-            const accessToken = event.data?.token;
-            if (accessToken) {
-              await fetchGetUser(); // Cập nhật thông tin người dùng
-              router.push("/");
-            }
-    
-            if (!popup.closed) popup.close(); // Đảm bảo đóng popup nếu chưa đóng
-            router.push("/");
-          },
-          { once: true }
-        );
-      };
+    const loginWithGoogle = () => {
+        const redirect_uri = process.env.NEXT_PUBLIC_REDIRECT_URL;
+        const client_id = process.env.NEXT_PUBLIC_CLIENT_ID;
+
+        const auth_url = `https://accounts.google.com/o/oauth2/v2/auth` +
+            `?client_id=${client_id}` +
+            `&redirect_uri=${redirect_uri}` +
+            `&response_type=code` +
+            `&scope=openid%20email%20profile` +
+            `&prompt=select_account`;
+console.log(auth_url)
+        window.location.href = auth_url;
+};
     return (
+        <>
+        {isLoading ? (
+        <div className="d-flex justify-content-center align-items-center bg-black-50 w-100 h-100">
+          <SpinnerAnimation></SpinnerAnimation>
+        </div>
+      ) : (
+
         <>
             <Form className='form-login' >
                 <div className='div-img mb-4'>
@@ -221,6 +248,8 @@ const LoginForm = () => {
         </Button>
       </Form>
     </>
+      )}
+        </>
   );
 };
 export default LoginForm;

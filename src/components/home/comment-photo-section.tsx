@@ -48,9 +48,8 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     setIsLoadingMore(false);
   };
   useEffect(() => {
-    console.log(photoId)
-    if(photoId!=0)
-    fetchComments();
+    console.log(photoId);
+    if (photoId != 0) fetchComments();
   }, [photoId]);
 
   // Gửi bình luận mới
@@ -124,11 +123,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
       {/* Danh sách bình luận */}
       <div className="space-y-3">
-        {isLoadingMore && comments.length === 0 ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <SpinnerAnimation></SpinnerAnimation>
-          </div>
-        ) : comments.length > 0 ? (
+        {comments.length > 0 ? (
           comments
             .slice()
             .reverse()
@@ -147,16 +142,22 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
               </Card>
             ))
         ) : (
-          <Card className="border-0 shadow-sm bg-light  rounded-3">
-            <Card.Body className="text-center text-muted">
-              Chưa có bình luận nào.
+          <Card className="border-0 shadow-sm bg-light rounded-3">
+            <Card.Body className="text-center text-muted" style={{height:60}}>
+              {isLoadingMore && comments.length === 0 ? (
+                <div className="d-flex justify-content-center align-items-center">
+                  <SpinnerAnimation></SpinnerAnimation>
+                </div>
+              ) : (
+                "Chưa có bình luận nào."
+              )}
             </Card.Body>
           </Card>
         )}
       </div>
 
       {/* Giao diện nhập bình luận mới */}
-      {user && !isLoadingMore&& (
+      {user  && (
         <Card className="border-0 bg-light rounded-3 mt-4 mb-5">
           <Card.Body className="">
             <InputGroup>
@@ -167,7 +168,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                 onChange={(e) => setNewCommentContent(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Viết bình luận..."
-                className="border bg-light rounded-3"
+                className="border rounded-3"
                 style={{
                   resize: "vertical",
                   minHeight: "60px",

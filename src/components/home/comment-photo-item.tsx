@@ -298,7 +298,7 @@ export const CommentPhotoItem = ({
                   onKeyDown={handleKeyDown}
                   placeholder="Viết phản hồi..."
                   ref={replyTextAreaRef}
-                  className="border bg-light rounded rounded-3 "
+                  className="border rounded rounded-3 "
                   style={{
                     resize: "vertical",
                     minHeight: "50px",
