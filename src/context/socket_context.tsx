@@ -21,7 +21,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   const subscriptionQueue: { destination: string, callback: (message: any) => void }[] = [];
   useEffect(() => {
-    console.log("session-id >>> ", cookie.get("session-id") )
     
     if (stompClient) return;
     if (cookie.get("session-id") === undefined) return;

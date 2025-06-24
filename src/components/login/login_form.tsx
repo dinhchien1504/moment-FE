@@ -42,7 +42,6 @@ const LoginForm = () => {
 
       try {
         const data = await fetchGoogleToken(code);
-        console.log(code,data)
         if (data?.token) {
           await fetchGetUser();
           router.push("/");
@@ -150,7 +149,6 @@ const LoginForm = () => {
             `&response_type=code` +
             `&scope=openid%20email%20profile` +
             `&prompt=select_account`;
-console.log(auth_url)
         window.location.href = auth_url;
 };
     return (

@@ -48,7 +48,6 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     setIsLoadingMore(false);
   };
   useEffect(() => {
-    console.log(photoId);
     if (photoId != 0) fetchComments();
   }, [photoId]);
 

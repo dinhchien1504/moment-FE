@@ -11,7 +11,6 @@ import NotFound from "../not-found";
 
 const ProfileUser = async (props: any ) => {
   const { params } = props;
-  // console.log ('para',params.id);
   const timestamp= await getServerUTC()
 
   const dataProfile: IProfileFillterRequest  = {
