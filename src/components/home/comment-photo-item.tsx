@@ -65,7 +65,7 @@ export const CommentPhotoItem = ({
         JSON.stringify(prev)
       ) as CommentClient[];
       const updateRecursively = (commentsArray: CommentClient[]): boolean => {
-        for (let c of commentsArray) {
+        for(const c of commentsArray) {
           if (c.id === commentId) {
             c.replies = append
               ? [...(c.replies || []), ...newReplies]
@@ -125,7 +125,7 @@ export const CommentPhotoItem = ({
         JSON.stringify(prev)
       ) as CommentClient[];
       const updateRecursively = (commentsArray: CommentClient[]): boolean => {
-        for (let c of commentsArray) {
+        for (const c of commentsArray) {
           if (c.id === comment.id) {
             c.replyCount = (c.replyCount || 0) + 1;
             c.replies = c.replies || [];
@@ -158,7 +158,7 @@ export const CommentPhotoItem = ({
           JSON.stringify(prev)
         ) as CommentClient[];
         const updateRecursively = (commentsArray: CommentClient[]): boolean => {
-          for (let c of commentsArray) {
+          for (const c of commentsArray) {
             if (c.id === comment.id) {
               c.replies = c.replies?.map((r) =>
                 r.id === tempId ? actualComment : r
@@ -181,7 +181,7 @@ export const CommentPhotoItem = ({
           JSON.stringify(prev)
         ) as CommentClient[];
         const removeRecursively = (commentsArray: CommentClient[]): boolean => {
-          for (let c of commentsArray) {
+          for (const c of commentsArray) {
             if (c.id === comment.id) {
               c.replyCount = (c.replyCount || 1) - 1;
               c.replies = c.replies?.filter((r) => r.id !== tempId);
