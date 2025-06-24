@@ -6,7 +6,7 @@ import SockJS from 'sockjs-client'
 import API from '@/api/api';
 import cookie from "js-cookie";
 interface SocketContextType {
-  subscribe: (destination: string, callback: (message: any) => void) => void;
+  subscribe: (destination: string, callback: (message: any) => void) => any;
   disconnect : () => void
 }
 
@@ -21,7 +21,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   const subscriptionQueue: { destination: string, callback: (message: any) => void }[] = [];
   useEffect(() => {
-    console.log("session-id >>> ", cookie.get("session-id") )
     
     if (stompClient) return;
     if (cookie.get("session-id") === undefined) return;
@@ -54,10 +53,12 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   const subscribe = (destination: string, callback: (message: any) => void) => {
     if (stompClient ) {
-      stompClient.subscribe(destination, callback);
+      const sub = stompClient.subscribe(destination, callback);
+      return sub;
     } else {
       // Nếu chưa kết nối, thêm vào hàng đợi
       subscriptionQueue.push({ destination, callback });
+      return null;
     }
   };
 

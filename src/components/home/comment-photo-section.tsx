@@ -4,9 +4,10 @@ import API from "@/api/api";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/user_context";
 import { FetchClientGetApi, FetchClientPostApi } from "@/api/fetch_client_api";
-import { Button, Card, Form, InputGroup } from "react-bootstrap"; // Thay CardContent bằng Form, InputGroup
+import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import { CommentPhotoItem } from "./comment-photo-item";
 import SpinnerAnimation from "../shared/spiner_animation";
+import { useSocketContext } from "@/context/socket_context";
 
 interface CommentPhotoSectionProps {
   photoId: number;
@@ -21,6 +22,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { user } = useUserContext();
+  const { subscribe } = useSocketContext();
 
   // Tải bình luận từ server
   const fetchComments = async (
@@ -36,7 +38,10 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       `${API.COMMENT.PUBLIC_COMMENT_PHOTO}?${params.toString()}`
     );
 
-    const newComments = data.result ?? [];
+    const newComments = (data.result ?? []).map((comment) => ({
+      ...comment,
+      replies: [], // Khởi tạo replies
+    }));
 
     setComments((prev) => (append ? [...prev, ...newComments] : newComments));
     setLastCreatedAt(
@@ -47,10 +52,9 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     setHasMore(data.currentPage < data.totalPages - 1);
     setIsLoadingMore(false);
   };
+
   useEffect(() => {
-    console.log(photoId)
-    if(photoId!=0)
-    fetchComments();
+    if (photoId !== 0) fetchComments();
   }, [photoId]);
 
   // Gửi bình luận mới
@@ -60,7 +64,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
     setIsSubmitting(true);
 
-    const tempId = `temp-${Date.now()}`;
+    const tempId = Date.now();
     const optimisticComment: CommentClient = {
       id: tempId,
       content,
@@ -69,6 +73,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       authorAvatar: user?.urlPhoto || "",
       replyCount: 0,
       authorId: user?.id || "",
+      replies: [], // Khởi tạo replies
     };
 
     setComments((prev) => [optimisticComment, ...prev]);
@@ -80,12 +85,11 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     });
 
     if (res.status === 200 && res.result) {
-      const actualComment = res.result as CommentClient;
+      const actualComment = { ...res.result, replies: [] } as CommentClient;
       setComments((prev) =>
         prev.map((c) => (c.id === tempId ? actualComment : c))
       );
     } else {
-      console.error("Gửi bình luận thất bại:", res);
       setComments((prev) => prev.filter((c) => c.id !== tempId));
     }
 
@@ -100,6 +104,86 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     }
   };
 
+  // Hàm đệ quy để tìm và chèn bình luận
+  const insertCommentByPath = (
+    comments: CommentClient[],
+    newComment: CommentClient
+  ): CommentClient[] => {
+    if (!newComment.path || newComment.path.length === 0) {
+      return [{ ...newComment, replies: [] }, ...comments];
+    }
+
+    const convertIdsToNumber = (comments: any[]): CommentClient[] => {
+      return comments.map((c) => ({
+        ...c,
+        id: Number(c.id),
+        replies: c.replies ? convertIdsToNumber(c.replies) : [],
+      }));
+    };
+
+    const updatedComments = convertIdsToNumber(comments);
+
+    const insertRecursively = (
+      currentList: CommentClient[],
+      path: number[],
+      level: number
+    ): boolean => {
+      const currentId = path[level];
+
+      const currentComment = currentList.find((c) => c.id === currentId);
+
+      if (!currentComment) {
+        return false;
+      }
+
+      // Đảm bảo replies là mảng
+      currentComment.replies = currentComment.replies || [];
+
+      if (level === path.length - 1) {
+        currentComment.replies.unshift({ ...newComment, replies: [] });
+        currentComment.replyCount = (currentComment.replyCount || 0) + 1;
+        return true;
+      }
+
+      return insertRecursively(currentComment.replies, path, level + 1);
+    };
+
+    const inserted = insertRecursively(updatedComments, newComment.path, 0);
+
+    if (!inserted) {
+      return comments;
+    }
+
+    return updatedComments;
+  };
+
+  // WebSocket subscription cho bình luận mới
+  useEffect(() => {
+    if (!photoId || !user?.id) return;
+
+    const destination = `/topic/photo/${photoId}/comment`;
+
+    const handleMessage = (message: any) => {
+      const newComment: CommentClient = JSON.parse(message.body);
+      if (newComment.authorId === user?.id) return;
+
+      setComments((prev) => {
+        const exists = prev.some((c) => c.id === newComment.id);
+        if (exists) return prev;
+        return insertCommentByPath(prev, { ...newComment, replies: [] });
+      });
+    };
+
+     const subscription = subscribe(destination, handleMessage);
+
+    return () => {
+    if (subscription && typeof subscription.unsubscribe === "function") {
+      subscription.unsubscribe();
+      console.log("Unsubscribed khỏi:", destination);
+    }
+  };
+  }, [photoId]);
+
   return (
     <div className="max-w-3xl mx-auto">
       {/* Nút xem thêm bình luận */}
@@ -113,7 +197,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
           >
             {isLoadingMore ? (
               <div className="d-flex justify-content-center align-items-center">
-                <SpinnerAnimation></SpinnerAnimation>
+                <SpinnerAnimation />
               </div>
             ) : (
               "Xem thêm bình luận cũ hơn"
@@ -124,11 +208,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
       {/* Danh sách bình luận */}
       <div className="space-y-3">
-        {isLoadingMore && comments.length === 0 ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <SpinnerAnimation></SpinnerAnimation>
-          </div>
-        ) : comments.length > 0 ? (
+        {comments.length > 0 ? (
           comments
             .slice()
             .reverse()
@@ -142,21 +222,31 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                     comment={comment}
                     photoId={photoId}
                     currentAccount={user ?? undefined}
+                    setComments={setComments} // Truyền setComments
                   />
                 </Card.Body>
               </Card>
             ))
         ) : (
-          <Card className="border-0 shadow-sm bg-light  rounded-3">
-            <Card.Body className="text-center text-muted">
-              Chưa có bình luận nào.
+          <Card className="border-0 shadow-sm bg-light rounded-3">
+            <Card.Body
+              className="text-center text-muted"
+              style={{ height: 60 }}
+            >
+              {isLoadingMore && comments.length === 0 ? (
+                <div className="d-flex justify-content-center align-items-center">
+                  <SpinnerAnimation />
+                </div>
+              ) : (
+                "Chưa có bình luận nào."
+              )}
             </Card.Body>
           </Card>
         )}
       </div>
 
       {/* Giao diện nhập bình luận mới */}
-      {user && !isLoadingMore&& (
+      {user && (
         <Card className="border-0 bg-light rounded-3 mt-4 mb-5">
           <Card.Body className="">
             <InputGroup>
@@ -167,7 +257,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                 onChange={(e) => setNewCommentContent(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Viết bình luận..."
-                className="border bg-light rounded-3"
+                className="border rounded-3"
                 style={{
                   resize: "vertical",
                   minHeight: "60px",
@@ -182,7 +272,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
               >
                 {isSubmitting ? (
                   <div className="d-flex justify-content-center align-items-center">
-                    <SpinnerAnimation></SpinnerAnimation>
+                    <SpinnerAnimation />
                   </div>
                 ) : (
                   "Gửi"

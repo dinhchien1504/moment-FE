@@ -7,7 +7,7 @@ import {
   FetchClientPutApi,
 } from "@/api/fetch_client_api";
 import { useEffect, useRef, useState } from "react";
-import { Button, Form, Image, InputGroup } from "react-bootstrap"; // Thêm Image, Form, InputGroup
+import { Button, Form, Image, InputGroup } from "react-bootstrap";
 import LoadingSpiner from "../shared/loading_spiner";
 import { formatTimeShort } from "@/utils/utils_time";
 
@@ -16,6 +16,7 @@ interface CommentItemProps {
   level?: number;
   photoId: number;
   currentAccount: IUserResponse | undefined;
+  setComments: React.Dispatch<React.SetStateAction<CommentClient[]>>; // Kiểu đúng cho setter
 }
 
 export const CommentPhotoItem = ({
@@ -23,17 +24,16 @@ export const CommentPhotoItem = ({
   level = 0,
   photoId,
   currentAccount,
+  setComments,
 }: CommentItemProps) => {
-  const [mainComment, setMainComment] = useState<CommentClient>(comment);
-  const [replies, setReplies] = useState<CommentClient[]>([]);
   const [showReplies, setShowReplies] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [newReplyContent, setNewReplyContent] = useState("");
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [isDeletingComment, setIsDeletingComment] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const replyTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   // Tự động focus vào textarea khi hiển thị form trả lời
@@ -46,15 +46,43 @@ export const CommentPhotoItem = ({
   // Gọi API để lấy danh sách phản hồi của 1 bình luận
   const fetchReplies = async (
     page: number,
-    commentId: string,
+    commentId: number,
     append = false
   ) => {
     setIsLoadingReplies(true);
     const data: CommentClientResponse = await FetchClientGetApi(
       `${API.COMMENT.PUBLIC_COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`
     );
+    console.log( `${API.COMMENT.PUBLIC_COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`,data)
 
-    setReplies((prev) => (append ? [...prev, ...data.result] : data.result));
+    const newReplies = (data.result || []).map((reply) => ({
+      ...reply,
+      replies: [],
+    }));
+
+    setComments((prev: CommentClient[]) => {
+      const updatedComments = JSON.parse(
+        JSON.stringify(prev)
+      ) as CommentClient[];
+      const updateRecursively = (commentsArray: CommentClient[]): boolean => {
+        for(const c of commentsArray) {
+          if (c.id === commentId) {
+            c.replies = append
+              ? [...(c.replies || []), ...newReplies]
+              : newReplies;
+            c.replyCount = data.totalItems || newReplies.length;
+            return true;
+          }
+          if (c.replies && updateRecursively(c.replies)) {
+            return true;
+          }
+        }
+        return false;
+      };
+      updateRecursively(updatedComments);
+      return updatedComments;
+    });
+
     setCurrentPage(data.currentPage);
     setTotalItems(data.totalItems || 0);
     setShowReplies(true);
@@ -62,11 +90,12 @@ export const CommentPhotoItem = ({
   };
 
   // Bật/tắt hiển thị phản hồi
+  // Bật/tắt hiển thị phản hồi
   const handleViewReplies = () => {
     if (showReplies) {
       setShowReplies(false);
-    } else if (!replies.length && mainComment.replyCount > 0) {
-      fetchReplies(0, mainComment.id);
+    } else if (!comment.replies?.length && comment.replyCount > 0) {
+      fetchReplies(0, comment.id);
     } else {
       setShowReplies(true);
     }
@@ -79,7 +108,7 @@ export const CommentPhotoItem = ({
 
     setIsSubmittingReply(true);
 
-    const tempId = `temp-${Date.now()}`;
+    const tempId = Date.now();
     const optimisticComment: CommentClient = {
       id: tempId,
       content,
@@ -88,34 +117,85 @@ export const CommentPhotoItem = ({
       authorAvatar: currentAccount?.urlPhoto || "",
       replyCount: 0,
       authorId: currentAccount?.id || "",
+      replies: [],
     };
-    setMainComment((prev) => ({
-      ...prev,
-      replyCount: prev.replyCount + 1,
-    }));
 
-    setReplies((prev) => [optimisticComment, ...prev]);
+    setComments((prev: CommentClient[]) => {
+      const updatedComments = JSON.parse(
+        JSON.stringify(prev)
+      ) as CommentClient[];
+      const updateRecursively = (commentsArray: CommentClient[]): boolean => {
+        for (const c of commentsArray) {
+          if (c.id === comment.id) {
+            c.replyCount = (c.replyCount || 0) + 1;
+            c.replies = c.replies || [];
+            c.replies.unshift(optimisticComment);
+            return true;
+          }
+          if (c.replies && updateRecursively(c.replies)) {
+            return true;
+          }
+        }
+        return false;
+      };
+      updateRecursively(updatedComments);
+      return updatedComments;
+    });
+
     setNewReplyContent("");
     setShowReplies(true);
 
     const res = await FetchClientPostApi(API.COMMENT.COMMENT, {
       photoId,
       content,
-      commentParentId: mainComment.id, // Sửa lỗi thiếu commentParentId
+      commentParentId: comment.id,
     });
 
     if (res.status === 200 && res.result) {
-      const actualComment = res.result as CommentClient;
-      setReplies((prev) =>
-        prev.map((c) => (c.id === tempId ? actualComment : c))
-      );
+      const actualComment = { ...res.result, replies: [] } as CommentClient;
+      setComments((prev: CommentClient[]) => {
+        const updatedComments = JSON.parse(
+          JSON.stringify(prev)
+        ) as CommentClient[];
+        const updateRecursively = (commentsArray: CommentClient[]): boolean => {
+          for (const c of commentsArray) {
+            if (c.id === comment.id) {
+              c.replies = c.replies?.map((r) =>
+                r.id === tempId ? actualComment : r
+              );
+              return true;
+            }
+            if (c.replies && updateRecursively(c.replies)) {
+              return true;
+            }
+          }
+          return false;
+        };
+        updateRecursively(updatedComments);
+        return updatedComments;
+      });
     } else {
       console.error("Gửi phản hồi thất bại:", res);
-      setReplies((prev) => prev.filter((c) => c.id !== tempId));
-      setMainComment((prev) => ({
-        ...prev,
-        replyCount: prev.replyCount - 1,
-      }));
+      setComments((prev: CommentClient[]) => {
+        const updatedComments = JSON.parse(
+          JSON.stringify(prev)
+        ) as CommentClient[];
+        const removeRecursively = (commentsArray: CommentClient[]): boolean => {
+          for (const c of commentsArray) {
+            if (c.id === comment.id) {
+              c.replyCount = (c.replyCount || 1) - 1;
+              c.replies = c.replies?.filter((r) => r.id !== tempId);
+              return true;
+            }
+            if (c.replies && removeRecursively(c.replies)) {
+              return true;
+            }
+          }
+          return false;
+        };
+        removeRecursively(updatedComments);
+        return updatedComments;
+      });
     }
 
     setIsSubmittingReply(false);
@@ -130,7 +210,7 @@ export const CommentPhotoItem = ({
   };
 
   // Xóa bình luận
-  const handleDeleteComment = async (commentId: string) => {
+  const handleDeleteComment = async (commentId: number) => {
     const confirmed = window.confirm(
       "Bạn có chắc chắn muốn xóa bình luận này?"
     );
@@ -143,11 +223,32 @@ export const CommentPhotoItem = ({
     });
 
     if (res.status === 200) {
-      setMainComment((prev) => ({
-        ...prev,
-        content: "Bình luận đã bị xóa",
-        createdAt: "",
-      }));
+      setComments((prev: CommentClient[]) => {
+        const updatedComments = JSON.parse(
+          JSON.stringify(prev)
+        ) as CommentClient[];
+        const updateRecursively = (commentsArray: CommentClient[]): boolean => {
+          for (let i = 0; i < commentsArray.length; i++) {
+            if (commentsArray[i].id === commentId) {
+              commentsArray[i] = {
+                ...commentsArray[i],
+                content: "Bình luận đã bị xóa",
+                createdAt: "",
+              };
+              return true;
+            }
+            if (
+              commentsArray[i].replies &&
+              updateRecursively(commentsArray[i].replies as CommentClient[])
+            ) {
+              return true;
+            }
+          }
+          return false;
+        };
+        updateRecursively(updatedComments);
+        return updatedComments;
+      });
     } else {
       console.error("Failed to delete comment:", res);
     }
@@ -163,8 +264,8 @@ export const CommentPhotoItem = ({
           {/* Avatar */}
           <div className="avatar-wrapper">
             <Image
-              src={mainComment.authorAvatar || "/images/avatar.jpg"}
-              alt={mainComment.authorName}
+              src={comment.authorAvatar || "/images/avatar.jpg"}
+              alt={comment.authorName}
               roundedCircle
               width={level > 0 ? 32 : 40}
               height={level > 0 ? 32 : 40}
@@ -177,7 +278,7 @@ export const CommentPhotoItem = ({
           <div className="flex-grow-1">
             <div className="d-flex justify-content-between align-items-center">
               <span className="fw-semibold text-dark ">
-                {mainComment.authorName}
+                {comment.authorName}  {comment.id}
               </span>
             </div>
             <p
@@ -185,16 +286,16 @@ export const CommentPhotoItem = ({
                 level > 0 ? "sm" : "base"
               } text-dark `}
             >
-              {mainComment.content}
+              {comment.content}
             </p>
             <div className="d-flex align-items-center gap-3 text-muted">
-              {mainComment.createdAt != "" && (
+              {comment.createdAt != "" && (
                 <>
                   <span className="font-sm">
-                    {formatTimeShort(mainComment.createdAt)}
+                    {formatTimeShort(comment.createdAt)}
                   </span>
 
-                  {currentAccount && mainComment.createdAt && (
+                  {currentAccount && comment.createdAt && (
                     <>
                       <Button
                         variant="link"
@@ -209,7 +310,7 @@ export const CommentPhotoItem = ({
                         variant="link"
                         size="sm"
                         className="p-0 text-danger  hover:text-danger-dark  font-sm"
-                        onClick={() => handleDeleteComment(mainComment.id)}
+                        onClick={() => handleDeleteComment(comment.id)}
                         disabled={isDeletingComment}
                       >
                         {isDeletingComment ? <LoadingSpiner /> : "Xóa"}
@@ -224,101 +325,102 @@ export const CommentPhotoItem = ({
       </div>
 
       {/* Phần phản hồi */}
-      {((mainComment.replyCount > 0 || showReplyInput) && mainComment.createdAt != "") && (
-        <div className="ms-2 pt-2 ps-2 border-start border-2 border-secondary-subtle">
-          {/* Nút xem phản hồi */}
-          {!showReplies && mainComment.replyCount > 0 && (
-            <Button
-              variant="link"
-              size="sm"
-              className="p-0 text-primary hover:text-primary-dark font-sm"
-              onClick={handleViewReplies}
-              disabled={isLoadingReplies}
-            >
-              {isLoadingReplies ? (
-                <LoadingSpiner />
-              ) : (
-                `Xem tất cả ${mainComment.replyCount} phản hồi`
-              )}
-            </Button>
-          )}
-
-          {/* Nút tải thêm phản hồi */}
-          {(currentPage + 1) * 10 < totalItems && showReplies && (
-            <Button
-              variant="link"
-              size="sm"
-              className="p-0 text-primary hover:text-primary-dark font-sm ms-3"
-              onClick={() =>
-                fetchReplies(currentPage + 1, mainComment.id, true)
-              }
-              disabled={isLoadingReplies}
-            >
-              {isLoadingReplies ? (
-                <LoadingSpiner />
-              ) : (
-                `Xem ${totalItems - (currentPage + 1) * 10} phản hồi cũ hơn`
-              )}
-            </Button>
-          )}
-
-          {/* Danh sách phản hồi */}
-          {showReplies && (
-            <div className="mt-2">
-              {isLoadingReplies && replies.length === 0 ? (
-                <div className="d-flex justify-content-center">
+      {(comment.replyCount > 0 || showReplyInput) &&
+        comment.createdAt != "" && (
+          <div className="ms-2 pt-2 ps-2 border-start border-2 border-secondary-subtle">
+            {/* Nút xem phản hồi */}
+            {!showReplies && comment.replyCount > 0 && (
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 text-primary hover:text-primary-dark font-sm"
+                onClick={handleViewReplies}
+                disabled={isLoadingReplies}
+              >
+                {isLoadingReplies ? (
                   <LoadingSpiner />
-                </div>
-              ) : (
-                replies
-                  .slice()
-                  .reverse()
-                  .map((reply) => (
-                    <CommentPhotoItem
-                      key={reply.id}
-                      comment={reply}
-                      level={level + 1}
-                      photoId={photoId}
-                      currentAccount={currentAccount}
-                    />
-                  ))
-              )}
-            </div>
-          )}
+                ) : (
+                  `Xem tất cả ${comment.replyCount} phản hồi`
+                )}
+              </Button>
+            )}
 
-          {/* Form nhập phản hồi */}
-          {showReplyInput && (
-            <div className="mt-3">
-              <InputGroup>
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  value={newReplyContent}
-                  onChange={(e) => setNewReplyContent(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Viết phản hồi..."
-                  ref={replyTextAreaRef}
-                  className="border bg-light rounded rounded-3 "
-                  style={{
-                    resize: "vertical",
-                    minHeight: "50px",
-                    maxHeight: "120px",
-                  }}
-                />
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleSubmitNewReply}
-                  disabled={isSubmittingReply || !newReplyContent.trim()}
-                  className="ms-2 align-self-end"
-                >
-                  {isSubmittingReply ? <LoadingSpiner /> : "Gửi"}
-                </Button>
-              </InputGroup>
-            </div>
-          )}
-        </div>
-      )}
+            {/* Nút tải thêm phản hồi */}
+            {(currentPage + 1) * 10 < totalItems && showReplies && (
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 text-primary hover:text-primary-dark font-sm ms-3"
+                onClick={() => fetchReplies(currentPage + 1, comment.id, true)}
+                disabled={isLoadingReplies}
+              >
+                {isLoadingReplies ? (
+                  <LoadingSpiner />
+                ) : (
+                  `Xem ${totalItems - (currentPage + 1) * 10} phản hồi cũ hơn`
+                )}
+              </Button>
+            )}
+
+            {/* Danh sách phản hồi */}
+            {showReplies && (
+              <div className="mt-2">
+                {isLoadingReplies &&
+                (!comment.replies || comment.replies.length === 0) ? (
+                  <div className="d-flex justify-content-center">
+                    <LoadingSpiner />
+                  </div>
+                ) : (
+                  comment.replies
+                    ?.slice()
+                    .reverse()
+                    .map((reply) => (
+                      <CommentPhotoItem
+                        key={reply.id}
+                        comment={reply}
+                        level={level + 1}
+                        photoId={photoId}
+                        currentAccount={currentAccount}
+                        setComments={setComments}
+                      />
+                    ))
+                )}
+              </div>
+            )}
+
+            {/* Form nhập phản hồi */}
+            {showReplyInput && (
+              <div className="mt-3">
+                <InputGroup>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    value={newReplyContent}
+                    onChange={(e) => setNewReplyContent(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Viết phản hồi..."
+                    ref={replyTextAreaRef}
+                    className="border rounded rounded-3 "
+                    style={{
+                      resize: "vertical",
+                      minHeight: "50px",
+                      maxHeight: "120px",
+                    }}
+                  />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleSubmitNewReply}
+                    disabled={isSubmittingReply || !newReplyContent.trim()}
+                    className="ms-2 align-self-end"
+                  >
+                    {isSubmittingReply ? <LoadingSpiner /> : "Gửi"}
+                  </Button>
+                </InputGroup>
+              </div>
+            )}
+          </div>
+        )}
     </div>
   );
 };

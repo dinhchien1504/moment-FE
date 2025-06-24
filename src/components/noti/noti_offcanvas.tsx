@@ -169,7 +169,6 @@ const NotiOffCanvas = (props: IProps) => {
                 const notiViewReq: INotiViewRequest = {
                     notiIds: ids
                 }
-                console.log("notiViewReq >>> ", notiViewReq)
                 setNumberOfNoti(numberOfNoti - ids.length)
                 
                 setNotiAll(prevNotiAll =>
