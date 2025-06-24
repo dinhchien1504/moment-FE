@@ -37,10 +37,12 @@ const OffcanvasComment = ({ photoId }: OffcanvasCommentProps) => {
               ></button>
             </div>
             <div className="height-list-comment-inner overflow-auto">
-              <CommentPhotoSection
-                key={`photo-${photoId}-${show}`}
-                photoId={photoId}
-              />
+              {photoId != 0 && (
+                <CommentPhotoSection
+                  key={`photo-${photoId}-${show}`}
+                  photoId={photoId}
+                />
+              )}
             </div>
           </div>
         </div>
