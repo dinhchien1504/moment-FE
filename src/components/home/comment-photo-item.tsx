@@ -108,9 +108,8 @@ export const CommentPhotoItem = ({
 
     setIsSubmittingReply(true);
 
-    const tempId = Date.now();
     const optimisticComment: CommentClient = {
-      id: tempId,
+      id: 0,
       content,
       createdAt: new Date().toISOString(),
       authorName: currentAccount?.name || "Bạn",
@@ -161,7 +160,7 @@ export const CommentPhotoItem = ({
           for (const c of commentsArray) {
             if (c.id === comment.id) {
               c.replies = c.replies?.map((r) =>
-                r.id === tempId ? actualComment : r
+                r.id === 0 ? actualComment : r
               );
               return true;
             }
@@ -184,7 +183,7 @@ export const CommentPhotoItem = ({
           for (const c of commentsArray) {
             if (c.id === comment.id) {
               c.replyCount = (c.replyCount || 1) - 1;
-              c.replies = c.replies?.filter((r) => r.id !== tempId);
+              c.replies = c.replies?.filter((r) => r.id !== 0);
               return true;
             }
             if (c.replies && removeRecursively(c.replies)) {
@@ -278,7 +277,7 @@ export const CommentPhotoItem = ({
           <div className="flex-grow-1">
             <div className="d-flex justify-content-between align-items-center">
               <span className="fw-semibold text-dark ">
-                {comment.authorName}  {comment.id}
+                {comment.authorName}
               </span>
             </div>
             <p
