@@ -16,7 +16,7 @@ const HomePage = async () => {
   const resPhoto = await FetchServerPostApi(API.PHOTO.LIST, dataPhoto);
   return (
     <>
-      <Container fluid className="container-home">
+      <Container fluid className="container-home overflow-hidden">
         <Row className="h-100">
           <Col md={5} lg={3}  className="d-block p-0">
             <OffcanvasFriend />
