@@ -19,6 +19,7 @@
     "date-fns-tz": "^3.2.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "firebase": "^11.9.1",
     "js-cookie": "^3.0.5",
     "mobile-detect": "^1.4.5",
     "next": "14.2.15",

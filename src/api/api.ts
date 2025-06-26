@@ -8,6 +8,7 @@ import PROFILE_API from "./endpoints/profile";
 import SETTING_API from "./endpoints/setting";
 import NOTI_VIEW_API from "./endpoints/noti_view";
 import COMMENT_API from "./endpoints/comment";
+import NOTI_PUSH_API from "./endpoints/noti_push";
 
 const API = {
   AUTH: AUTH_API,
@@ -19,7 +20,8 @@ const API = {
   PROFILE:PROFILE_API,
   NOTI: NOTI_API,
   SETTING:SETTING_API,
-  NOTI_VIEW : NOTI_VIEW_API
+  NOTI_VIEW : NOTI_VIEW_API,
+  NOTI_PUSH:NOTI_PUSH_API
 };
 
 export default API;

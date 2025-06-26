@@ -35,7 +35,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
     if (beforeCreatedAt) params.append("createdAt", beforeCreatedAt);
 
     const data: CommentClientResponse = await FetchClientGetApi(
-      `${API.COMMENT.PUBLIC_COMMENT_PHOTO}?${params.toString()}`
+      `${API.COMMENT.COMMENT_PHOTO}?${params.toString()}`
     );
 
     const newComments = (data.result ?? []).map((comment) => ({

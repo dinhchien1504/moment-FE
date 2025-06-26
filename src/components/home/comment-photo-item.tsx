@@ -51,9 +51,9 @@ export const CommentPhotoItem = ({
   ) => {
     setIsLoadingReplies(true);
     const data: CommentClientResponse = await FetchClientGetApi(
-      `${API.COMMENT.PUBLIC_COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`
+      `${API.COMMENT.COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`
     );
-    console.log( `${API.COMMENT.PUBLIC_COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`,data)
+    console.log( `${API.COMMENT.COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`,data)
 
     const newReplies = (data.result || []).map((reply) => ({
       ...reply,
