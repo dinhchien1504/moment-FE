@@ -53,7 +53,6 @@ export const CommentPhotoItem = ({
     const data: CommentClientResponse = await FetchClientGetApi(
       `${API.COMMENT.COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`
     );
-    console.log( `${API.COMMENT.COMMENT_PHOTO_REPLY}?commentId=${commentId}&page=${page}`,data)
 
     const newReplies = (data.result || []).map((reply) => ({
       ...reply,
@@ -65,7 +64,7 @@ export const CommentPhotoItem = ({
         JSON.stringify(prev)
       ) as CommentClient[];
       const updateRecursively = (commentsArray: CommentClient[]): boolean => {
-        for(const c of commentsArray) {
+        for (const c of commentsArray) {
           if (c.id === commentId) {
             c.replies = append
               ? [...(c.replies || []), ...newReplies]
@@ -305,15 +304,17 @@ export const CommentPhotoItem = ({
                       >
                         Trả lời
                       </Button>
-                      <Button
-                        variant="link"
-                        size="sm"
-                        className="p-0 text-danger  hover:text-danger-dark  font-sm"
-                        onClick={() => handleDeleteComment(comment.id)}
-                        disabled={isDeletingComment}
-                      >
-                        {isDeletingComment ? <LoadingSpiner /> : "Xóa"}
-                      </Button>
+                      {currentAccount?.id == comment.authorId && (
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="p-0 text-danger  hover:text-danger-dark  font-sm"
+                          onClick={() => handleDeleteComment(comment.id)}
+                          disabled={isDeletingComment}
+                        >
+                          {isDeletingComment ? <LoadingSpiner /> : "Xóa"}
+                        </Button>
+                      )}
                     </>
                   )}
                 </>
