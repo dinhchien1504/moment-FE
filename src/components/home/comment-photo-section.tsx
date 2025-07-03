@@ -22,6 +22,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { user } = useUserContext();
+  const [userCurrent, setUserCurrent] = useState<IUserResponse|null>(null);
   const { subscribe } = useSocketContext();
 
   // Tải bình luận từ server
@@ -56,6 +57,11 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
   useEffect(() => {
     if (photoId !== 0) fetchComments();
   }, [photoId]);
+
+  useEffect(() => {
+    if (user == undefined) return;
+    setUserCurrent(user);
+  }, [user]);
 
   // Gửi bình luận mới
   const handleSubmitNewComment = async () => {
@@ -174,14 +180,14 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       });
     };
 
-     const subscription = subscribe(destination, handleMessage);
+    const subscription = subscribe(destination, handleMessage);
 
     return () => {
-    if (subscription && typeof subscription.unsubscribe === "function") {
-      subscription.unsubscribe();
-      console.log("Unsubscribed khỏi:", destination);
-    }
-  };
+      if (subscription && typeof subscription.unsubscribe === "function") {
+        subscription.unsubscribe();
+        console.log("Unsubscribed khỏi:", destination);
+      }
+    };
   }, [photoId]);
 
   return (
@@ -208,7 +214,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
       {/* Danh sách bình luận */}
       <div className="space-y-3">
-        {comments.length > 0 ? (
+        {comments.length > 0 && userCurrent!=null ? (
           comments
             .slice()
             .reverse()
@@ -217,14 +223,14 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                 key={`comment-card-${comment.id}`}
                 className="border-0 bg-light rounded-3"
               >
-                <Card.Body className="p-0">
-                  <CommentPhotoItem
-                    comment={comment}
-                    photoId={photoId}
-                    currentAccount={user ?? undefined}
-                    setComments={setComments} // Truyền setComments
-                  />
-                </Card.Body>
+                  <Card.Body className="p-0">
+                    <CommentPhotoItem
+                      comment={comment}
+                      photoId={photoId}
+                      currentAccount={userCurrent}
+                      setComments={setComments} // Truyền setComments
+                    />
+                  </Card.Body>
               </Card>
             ))
         ) : (

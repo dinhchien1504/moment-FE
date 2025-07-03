@@ -15,7 +15,7 @@ interface CommentItemProps {
   comment: CommentClient;
   level?: number;
   photoId: number;
-  currentAccount: IUserResponse | undefined;
+  currentAccount: IUserResponse ;
   setComments: React.Dispatch<React.SetStateAction<CommentClient[]>>; // Kiểu đúng cho setter
 }
 
