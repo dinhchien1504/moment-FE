@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Form, Image, InputGroup } from "react-bootstrap";
 import LoadingSpiner from "../shared/loading_spiner";
 import { formatTimeShort } from "@/utils/utils_time";
+import { GetImage } from "@/utils/handle_images";
 
 interface CommentItemProps {
   comment: CommentClient;
@@ -262,7 +263,7 @@ export const CommentPhotoItem = ({
           {/* Avatar */}
           <div className="avatar-wrapper">
             <Image
-              src={comment.authorAvatar || "/images/avatar.jpg"}
+              src={GetImage(comment.authorAvatar) || "/images/avatar.jpg"}
               alt={comment.authorName}
               roundedCircle
               width={level > 0 ? 32 : 40}
