@@ -32,39 +32,37 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const handleOAuth = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
+  const handleOAuth = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
 
-      if (!code) {
-        return;
-      }
-      setIsLoading(true);
+    if (!code) {
+      return;
+    }
+    setIsLoading(true);
 
-      try {
-        const data = await fetchGoogleToken(code);
-        if (data?.token) {
-          await fetchGetUser();
+    try {
+      const data = await fetchGoogleToken(code);
+      if (data?.token) {
+        await fetchGetUser();
 
-          const newUrl = window.location.origin + window.location.pathname;
-          window.history.replaceState({}, document.title, newUrl);
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
 
-          router.push("/");
-        } else {
-          console.error("Token không hợp lệ");
-          router.push("/");
-        }
-      } catch (error) {
-        console.error("Lỗi xác thực Google:", error);
+        router.push("/");
+      } else {
+        console.error("Token không hợp lệ");
         router.push("/");
       }
-      finally{
-        setIsLoading(true);
-      }
-    };
+    } catch (error) {
+      console.error("Lỗi xác thực Google:", error);
+      router.push("/");
+    }
+  };
 
-    handleOAuth();
+  useEffect(() => {
+      handleOAuth();
+    
   }, [router]);
 
   const { startLoadingSpiner, stopLoadingSpiner } = useLoadingContext();

@@ -63,9 +63,9 @@ const VerticalSwiper = (props: Props) => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!swiperRef.current) return;
 
-      if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      if (event.key === "ArrowUp" ) {
         swiperRef.current.slidePrev();
-      } else if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      } else if (event.key === "ArrowDown") {
         swiperRef.current.slideNext();
       }
     };

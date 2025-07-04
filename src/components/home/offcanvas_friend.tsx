@@ -2,6 +2,7 @@
 import { useState } from "react";
 import FriendList from "./friend_list";
 import RequestFriend from "../friend/request_friend";
+import { PushNotificationRegister } from "../push/PushNotificationRegister";
 const OffcanvasFriend = () => {
   const [show, setShow] = useState(false);
   const [showBadge, setShowBadge] = useState<boolean>(false);
@@ -63,6 +64,7 @@ const OffcanvasFriend = () => {
           >&nbsp;</span>
         )}
       </div>
+     <PushNotificationRegister />
     </>
   );
 };
