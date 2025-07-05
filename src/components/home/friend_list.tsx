@@ -25,8 +25,10 @@ const FriendList = () => {
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
-      setAccountAcceptedResponse(res.result);
-      setCountTotalFriend(res.totalItems);
+      if(res.status == 200){
+        setAccountAcceptedResponse(res.result);
+        setCountTotalFriend(res.totalItems);
+      }
     } catch (error) {
       console.error("Lỗi khi lấy danh sách bạn bè:", error);
     }
