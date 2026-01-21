@@ -92,9 +92,6 @@ const InforUser = (props: Props) => {
       setIsLoadingAction(false)
     }
   };
-  useEffect(() => {
-    console.log('friendStatus updated:', friendStatus);
-  }, [friendStatus]);
 
 
   useEffect(() => {

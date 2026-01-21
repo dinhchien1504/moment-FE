@@ -22,28 +22,30 @@ const OffcanvasComment = ({ photoId }: OffcanvasCommentProps) => {
           }`}
           onClick={() => handleClose()}
         ></div>
-        <div className="d-flex flex-column comment-position-sm-fixed rounded-top-5 p-2">
+        <div className="d-flex flex-column comment-position-sm-fixed rounded-top-4 p-2">
           <div className="height-list-comment">
-            <div className="d-flex justify-content-between px-2 mt-2">
-              <h3 className="offcanvas-title" id="offcanvasLabel">
-                Bình luận
-              </h3>
-              <button
-                onClick={handleClose}
-                type="button"
-                className="btn-close text-reset"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="height-list-comment-inner overflow-auto">
-              {photoId != 0 && (
-                <CommentPhotoSection
-                  key={`photo-${photoId}-${show}`}
-                  photoId={photoId}
-                />
-              )}
-            </div>
+            {photoId != 0 && (
+              <>
+                <div className="d-flex justify-content-between px-2 mt-2">
+                  <h3 className="offcanvas-title" id="offcanvasLabel">
+                    Bình luận
+                  </h3>
+                  <button
+                    onClick={handleClose}
+                    type="button"
+                    className="btn-close text-reset"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="height-list-comment-inner">
+                  <CommentPhotoSection
+                    key={`photo-${photoId}-${show}`}
+                    photoId={photoId}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

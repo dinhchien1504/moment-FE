@@ -34,7 +34,7 @@ export default async function RootLayout({
         <link rel="manifest" href="/manifest.json" />
 
       </head>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className}`} style={{height:"100dvh"}}>
         <div id="nprogress-overlay"></div>
         <LoadingProvider>
           <SocketProvider>

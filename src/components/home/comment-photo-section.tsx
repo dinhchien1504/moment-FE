@@ -22,7 +22,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { user } = useUserContext();
-  const [userCurrent, setUserCurrent] = useState<IUserResponse|null>(null);
+  const [userCurrent, setUserCurrent] = useState<IUserResponse | null>(null);
   const { subscribe } = useSocketContext();
 
   // Tải bình luận từ server
@@ -75,11 +75,12 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       id: tempId,
       content,
       createdAt: "",
-      authorName: user?.name || "Bạn",
-      authorAvatar: user?.urlPhoto || "",
+      authorName: userCurrent?.name || "Bạn",
+      authorAvatar: userCurrent?.urlPhoto || "",
       replyCount: 0,
-      authorId: user?.id || "",
-      replies: [], // Khởi tạo replies
+      authorId: userCurrent?.id || "",
+      replies: [],
+      userName: userCurrent?.userName || "",
     };
 
     setComments((prev) => [optimisticComment, ...prev]);
@@ -165,13 +166,13 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
   // WebSocket subscription cho bình luận mới
   useEffect(() => {
-    if (!photoId || !user?.id) return;
+    if (!photoId || !userCurrent?.id) return;
 
     const destination = `/topic/photo/${photoId}/comment`;
 
     const handleMessage = (message: any) => {
       const newComment: CommentClient = JSON.parse(message.body);
-      if (newComment.authorId === user?.id) return;
+      if (newComment.authorId === userCurrent?.id) return;
 
       setComments((prev) => {
         const exists = prev.some((c) => c.id === newComment.id);
@@ -191,7 +192,7 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
   }, [photoId]);
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto h-100">
       {/* Nút xem thêm bình luận */}
       {hasMore && (
         <div className="mb-3">
@@ -213,8 +214,11 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
       )}
 
       {/* Danh sách bình luận */}
-      <div className="space-y-3">
-        {comments.length > 0 && userCurrent!=null ? (
+      <div
+        className="space-y-3 overflow-auto"
+        style={{ height: "calc(100% - 70px)" }}
+      >
+        {comments.length > 0 && userCurrent != null ? (
           comments
             .slice()
             .reverse()
@@ -223,14 +227,14 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                 key={`comment-card-${comment.id}`}
                 className="border-0 bg-light rounded-3"
               >
-                  <Card.Body className="p-0">
-                    <CommentPhotoItem
-                      comment={comment}
-                      photoId={photoId}
-                      currentAccount={userCurrent}
-                      setComments={setComments} // Truyền setComments
-                    />
-                  </Card.Body>
+                <Card.Body className="p-0">
+                  <CommentPhotoItem
+                    comment={comment}
+                    photoId={photoId}
+                    currentAccount={userCurrent}
+                    setComments={setComments} // Truyền setComments
+                  />
+                </Card.Body>
               </Card>
             ))
         ) : (
@@ -253,8 +257,8 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
 
       {/* Giao diện nhập bình luận mới */}
       {user && (
-        <Card className="border-0 bg-light rounded-3 mt-4 mb-5">
-          <Card.Body className="">
+        <Card className="border-0 bg-light rounded-3 p-2">
+          <Card.Body className="p-1">
             <InputGroup>
               <Form.Control
                 as="textarea"
@@ -266,8 +270,9 @@ const CommentPhotoSection = ({ photoId }: CommentPhotoSectionProps) => {
                 className="border rounded-3"
                 style={{
                   resize: "vertical",
-                  minHeight: "60px",
+                  minHeight: "38px",
                   maxHeight: "150px",
+                  height: "38px",
                 }}
               />
               <Button

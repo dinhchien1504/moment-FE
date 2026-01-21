@@ -18,6 +18,8 @@ import LiveSearch from '../home/search';
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import PostDetailModal from '../post_detail/post_detail_modal';
 import "@/styles/header.css";
+import { FetchClientPostApi } from '@/api/fetch_client_api';
+import API from '@/api/api';
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -48,8 +50,20 @@ const Header = () => {
 
     }, [])
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         startLoadingSpiner()
+        const fcmToken = localStorage.getItem("fcmToken");
+        if (fcmToken) {
+            try {
+            await FetchClientPostApi(API.NOTI_PUSH.DELETE_TOKEN_NOTI, {
+                token: fcmToken,
+            });
+            console.log("✅ Đã xóa FCM token trên server");
+            } catch (err) {
+            console.error("❌ Lỗi khi xóa FCM token:", err);
+            }
+        }
+        localStorage.removeItem("fcmToken");
         cookie.remove("session-id");
         disconnect()
         setNumberOfNoti(0)

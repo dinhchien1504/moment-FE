@@ -11,12 +11,13 @@ import { Button, Form, Image, InputGroup } from "react-bootstrap";
 import LoadingSpiner from "../shared/loading_spiner";
 import { formatTimeShort } from "@/utils/utils_time";
 import { GetImage } from "@/utils/handle_images";
+import Link from "next/link";
 
 interface CommentItemProps {
   comment: CommentClient;
   level?: number;
   photoId: number;
-  currentAccount: IUserResponse ;
+  currentAccount: IUserResponse;
   setComments: React.Dispatch<React.SetStateAction<CommentClient[]>>; // Kiểu đúng cho setter
 }
 
@@ -111,6 +112,7 @@ export const CommentPhotoItem = ({
     const optimisticComment: CommentClient = {
       id: 0,
       content,
+      userName: currentAccount?.userName,
       createdAt: new Date().toISOString(),
       authorName: currentAccount?.name || "Bạn",
       authorAvatar: currentAccount?.urlPhoto || "",
@@ -262,23 +264,32 @@ export const CommentPhotoItem = ({
         <div className="d-flex align-items-start gap-3">
           {/* Avatar */}
           <div className="avatar-wrapper">
-            <Image
-              src={GetImage(comment.authorAvatar) || "/images/avatar.jpg"}
-              alt={comment.authorName}
-              roundedCircle
-              width={level > 0 ? 32 : 40}
-              height={level > 0 ? 32 : 40}
-              className=""
-              onError={(e) => (e.currentTarget.src = "/images/avatar.jpg")}
-            />
+            <Link href={`/${comment.userName}`}>
+              <Image
+                src={
+                  comment.authorAvatar != ""
+                    ? GetImage(comment.authorAvatar)
+                    : "/images/avatar.jpg"
+                }
+                alt={comment.authorName}
+                roundedCircle
+                width={level > 0 ? 32 : 40}
+                height={level > 0 ? 32 : 40}
+                className=""
+                onError={(e) => (e.currentTarget.src = "/images/avatar.jpg")}
+              />
+            </Link>
           </div>
 
           {/* Nội dung comment */}
           <div className="flex-grow-1">
             <div className="d-flex justify-content-between align-items-center">
-              <span className="fw-semibold text-dark ">
+              <Link
+                className="fw-semibold text-dark text-black hover-text-decoration-underline"
+                href={`/${comment.userName}`}
+              >
                 {comment.authorName}
-              </span>
+              </Link>
             </div>
             <p
               className={`mt-1 mb-2 text-${
@@ -299,7 +310,7 @@ export const CommentPhotoItem = ({
                       <Button
                         variant="link"
                         size="sm"
-                        className="p-0 text-primary hover:text-primary-dark font-sm"
+                        className="p-0 text-primary hover:text-primary-dark font-sm text-decoration-none"
                         onClick={() => setShowReplyInput(true)}
                         disabled={showReplyInput}
                       >
@@ -309,7 +320,7 @@ export const CommentPhotoItem = ({
                         <Button
                           variant="link"
                           size="sm"
-                          className="p-0 text-danger  hover:text-danger-dark  font-sm"
+                          className="p-0 text-danger  hover:text-danger-dark text-decoration font-sm"
                           onClick={() => handleDeleteComment(comment.id)}
                           disabled={isDeletingComment}
                         >
@@ -334,7 +345,7 @@ export const CommentPhotoItem = ({
               <Button
                 variant="link"
                 size="sm"
-                className="p-0 text-primary hover:text-primary-dark font-sm"
+                className="p-0 text-primary hover:text-primary-dark font-sm text-decoration-none"
                 onClick={handleViewReplies}
                 disabled={isLoadingReplies}
               >
@@ -404,13 +415,13 @@ export const CommentPhotoItem = ({
                     className="border rounded rounded-3 "
                     style={{
                       resize: "vertical",
-                      minHeight: "50px",
+                      minHeight: "38px",
+                      height: "38px",
                       maxHeight: "120px",
                     }}
                   />
                   <Button
                     variant="primary"
-                    size="sm"
                     onClick={handleSubmitNewReply}
                     disabled={isSubmittingReply || !newReplyContent.trim()}
                     className="ms-2 align-self-end"

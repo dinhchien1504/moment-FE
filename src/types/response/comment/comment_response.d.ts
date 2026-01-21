@@ -2,6 +2,7 @@ interface CommentClient {
   id: number;
   authorName: string;
   authorId: string;
+  userName: string;
   authorAvatar: string;
   createdAt: string;
   content: string;

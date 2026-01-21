@@ -45,9 +45,9 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
         console.error("❌ Lỗi khi xóa FCM token:", err);
       }
     }
+    localStorage.removeItem("fcmToken");
     cookie.remove("session-id");
     router.push("/login");
-    localStorage.removeItem("fcmToken");
     
   };
 
