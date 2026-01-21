@@ -14,7 +14,7 @@ body,html {
 .container-home {
   background-color: #f2f4f7;
   position: relative;
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
 }
 
 .wrapper-swiper {
@@ -72,7 +72,7 @@ body,html {
 .zoomed-image {
   max-width: 100vw;
   height: auto;
-  max-height: 100vh;
+  max-height: 100dvh;
   width: auto;
   object-fit: contain;
 }
@@ -89,14 +89,14 @@ body,html {
 }
 
 .button-show-friend{
-  top:calc(100vh - 88px)
+  top:calc(100dvh - 88px)
 }
 .button-show-comment{
   bottom: 120px;
 }
 
 .height-list-friend{
-  height: calc(100vh - 100px);
+  height: calc(100dvh - 100px);
   overflow: auto;
 }
 .height-list-friend::-webkit-scrollbar-thumb {
@@ -108,7 +108,7 @@ body,html {
   height: 5px;
 }
 .height-list-comment{
-  height: calc(100vh - 100px);
+  height: calc(100dvh - 100px);
 }
 .height-list-comment::-webkit-scrollbar-thumb {
   background: #9a9a9a45;
@@ -119,7 +119,7 @@ body,html {
   height: 5px;
 }
 .height-list-comment-inner{
-    height: calc(100vh - 150px);
+    height: calc(100dvh - 150px);
 }
 
 .badge-home{
@@ -134,7 +134,7 @@ body,html {
   }
 
   /* .container-home{
-    height: calc(100vh - 110px);
+    height: calc(100dvh - 110px);
   } */
   .position-sm-fixed {
     position: fixed;
@@ -160,7 +160,7 @@ body,html {
     left: 0;
     bottom: 0;
     z-index: 2;
-    height: calc(100vh - 150px);
+    height: calc(100dvh - 100px);
     background: #ffffff;
   }
 }

@@ -9,7 +9,6 @@ import API from "@/api/api";
 
 export const PushNotificationRegister = () => {
   const { user } = useUserContext();
-
   useEffect(() => {
     console.log("check_user: ", user);
     if (!user) return; // Chờ user có dữ liệu mới thực hiện
@@ -38,15 +37,21 @@ export const PushNotificationRegister = () => {
           return;
         }
 
-        const existingReg = await navigator.serviceWorker.getRegistration(
+        let registration = await navigator.serviceWorker.getRegistration(
           "/firebase-messaging-sw.js"
         );
 
-        const registration =
-          existingReg ||
-          (await navigator.serviceWorker.register("/firebase-messaging-sw.js"));
+        if (!registration) {
+          registration = await navigator.serviceWorker.register(
+            "/firebase-messaging-sw.js"
+          );
+          console.log("🆕 Đã đăng ký Service Worker mới:", registration);
+        } else {
+          console.log("✅ Service Worker đã có sẵn:", registration);
+        }
 
-        console.log("✅ Service Worker đã được đăng ký:", registration);
+        // 2. Đảm bảo SW đã kích hoạt
+        await ensureServiceWorkerActive(registration);
 
         // Đợi SW active
         if (!registration.active) {
@@ -64,14 +69,24 @@ export const PushNotificationRegister = () => {
               resolve(true);
             }
           });
+          await new Promise((res) => setTimeout(res, 250));
         }
 
         const vapidKey = process.env.NEXT_PUBLIC_VAPID_KEY;
-        const token = await getToken(messaging, {
-          vapidKey,
-          serviceWorkerRegistration: registration,
-        });
-
+        let token;
+        try {
+          token = await getToken(messaging, {
+            vapidKey,
+            serviceWorkerRegistration: registration,
+          });
+        } catch (error) {
+          console.error("❌ Lỗi khi gọi getToken:", error);
+          return;
+        }
+        if (!token) {
+          console.warn("⚠️ getToken() trả về null. Không lưu token.");
+          return;
+        }
         handleSaveToken(token);
       } catch (err) {
         console.error("❌ Đăng ký FCM thất bại:", err);
@@ -80,7 +95,7 @@ export const PushNotificationRegister = () => {
 
     const handleSaveToken = async (token: string) => {
       const savedToken = localStorage.getItem("fcmToken");
-        console.log("da co fcmToken: ",savedToken)
+      console.log("lay fcmToken cũ: ", savedToken);
       if (savedToken !== token) {
         try {
           const res = await FetchClientPostApi(API.NOTI_PUSH.SAVE_TOKEN_NOTI, {
@@ -88,18 +103,21 @@ export const PushNotificationRegister = () => {
             accountId: user.id,
           });
 
-          console.log("Token FCM đã được gửi lên server:", {
+          console.log("Token FCM đã được gửi lên server: ", {
             token,
             accountId: user.id,
-            response: res,
+            response: res.result,
           });
-
-          localStorage.setItem("fcmToken", token);
+          if (res.status == 200) {
+            localStorage.setItem("fcmToken", res.result.token);
+          }
         } catch (err) {
           console.error("Lỗi khi gửi token FCM lên server:", err);
         }
       } else {
-        console.log("Token đã tồn tại và không thay đổi. Bỏ qua gửi lên server.");
+        console.log(
+          "Token đã tồn tại và không thay đổi. Bỏ qua gửi lên server."
+        );
       }
     };
 
@@ -108,3 +126,15 @@ export const PushNotificationRegister = () => {
 
   return null;
 };
+
+async function ensureServiceWorkerActive(reg: ServiceWorkerRegistration) {
+  if (reg.active) return;
+  const sw = reg.installing || reg.waiting;
+  if (!sw) return;
+
+  await new Promise((resolve) => {
+    sw.addEventListener("statechange", () => {
+      if (sw.state === "activated") resolve(null);
+    });
+  });
+}

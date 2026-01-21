@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useLoadingContext } from '@/context/loading_context';
 import { validUserName } from '@/validation/valid';
 import { useUserContext } from '@/context/user_context';
+import { deleteToken, getMessaging } from 'firebase/messaging';
 
 
 function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: string; onSave: (newUserName: string) => void }) {
@@ -22,7 +23,7 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {startLoadingSpiner, stopLoadingSpiner  } = useLoadingContext();
-  const {fetchGetUser} = useUserContext()
+  // const {fetchGetUser} = useUserContext()
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -33,23 +34,40 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
   };
 
   const handleLogout = async () => {
-    startLoadingSpiner();
-    const fcmToken = localStorage.getItem("fcmToken");
-    if (fcmToken) {
-      try {
-        await FetchClientPostApi(API.NOTI_PUSH.DELETE_TOKEN_NOTI, {
-          token: fcmToken,
-        });
-        console.log("✅ Đã xóa FCM token trên server");
-      } catch (err) {
-        console.error("❌ Lỗi khi xóa FCM token:", err);
+  startLoadingSpiner();
+
+  const fcmToken = localStorage.getItem("fcmToken");
+
+  if (fcmToken) {
+    try {
+      // 1. Gọi API backend xoá token
+      await FetchClientPostApi(API.NOTI_PUSH.DELETE_TOKEN_NOTI, {
+        token: fcmToken,
+      });
+
+      // 2. Xoá token khỏi trình duyệt (Firebase)
+      const messaging = getMessaging();
+      const deleted = await deleteToken(messaging);
+      if (deleted) {
+        console.log("✅ Đã xoá FCM token ở client và server");
+      } else {
+        console.warn("⚠️ Token không tồn tại hoặc không thể xoá ở client");
       }
+    } catch (err) {
+      console.error("❌ Lỗi khi xóa FCM token:", err);
     }
-    localStorage.removeItem("fcmToken");
-    cookie.remove("session-id");
-    router.push("/login");
-    
-  };
+  } else {
+    console.log("ℹ️ Không tìm thấy FCM token trong localStorage");
+  }
+
+  // 3. Xoá dữ liệu session
+  localStorage.removeItem("fcmToken");
+  cookie.remove("session-id");
+
+  // 4. Điều hướng về trang login
+  router.push("/login");
+};
+
 
   const validateNewUserName = (username: string): boolean => {
     if (!validUserName(username)) {

@@ -52,7 +52,7 @@
   .zoomed-image-detail {
     max-width: 100vw;
     height: auto;
-    max-height: 100vh;
+    max-height: 100dvh;
     width: auto;
     object-fit: contain;
   }

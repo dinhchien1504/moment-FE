@@ -28,7 +28,7 @@ const nextConfig = {
         bodySizeLimit: "10mb", // Tăng giới hạn body size lên 10MB
       },
     },
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   ...withPWA({
 

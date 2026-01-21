@@ -310,7 +310,7 @@ export const CommentPhotoItem = ({
                       <Button
                         variant="link"
                         size="sm"
-                        className="p-0 text-primary hover:text-primary-dark font-sm text-decoration-none"
+                        className="p-0 text-primary hover:text-primary-dark font-sm text-decoration-none hover-text-decoration-underline"
                         onClick={() => setShowReplyInput(true)}
                         disabled={showReplyInput}
                       >
@@ -320,7 +320,7 @@ export const CommentPhotoItem = ({
                         <Button
                           variant="link"
                           size="sm"
-                          className="p-0 text-danger  hover:text-danger-dark text-decoration font-sm"
+                          className="p-0 text-danger  hover:text-danger-dark text-decoration-none hover-text-decoration-underline font-sm"
                           onClick={() => handleDeleteComment(comment.id)}
                           disabled={isDeletingComment}
                         >
