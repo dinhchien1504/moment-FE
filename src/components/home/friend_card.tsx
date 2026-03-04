@@ -9,6 +9,7 @@ import "@/styles/friend_card.css";
 import SpinnerAnimation from "../shared/spiner_animation";
 import { toast } from "react-toastify";
 import FriendErrorCode from "@/exception/friend_error_code";
+import { GetImage } from "@/utils/handle_images";
 
 interface Props {
   accountResponse: IAccountResponse;
@@ -45,8 +46,8 @@ const FriendCard = ({ accountResponse }: Props) => {
           <span>
             Đã kết bạn
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="outline-dark"
               onClick={() => handleChangeStatus("deleted")}
             >
               Hủy
@@ -58,8 +59,8 @@ const FriendCard = ({ accountResponse }: Props) => {
           <span>
             Đã gửi
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="outline-dark"
               onClick={() => handleChangeStatus("deleted")}
             >
               Xóa
@@ -70,15 +71,17 @@ const FriendCard = ({ accountResponse }: Props) => {
         return (
           <div title={`Yêu cầu vào ${timeDifference}`}>
             <Button
-              className="btn-sm m-1 btn btn-primary"
+              className="btn-sm m-1 btn-primary"
               onClick={() => handleChangeStatus("accepted")}
+              style={{backgroundColor:"black", borderColor:"black"}}
             >
               Chấp nhận
             </Button>
             <Button
-              className="btn-sm m-1 btn"
-              variant="outline-primary"
+              className="btn-sm m-1"
+              variant="dark"
               onClick={() => handleChangeStatus("deleted")}
+              style={{backgroundColor:"white", color:"black"}}
             >
               Từ chối
             </Button>
@@ -87,7 +90,7 @@ const FriendCard = ({ accountResponse }: Props) => {
       case "me":
         return (
           <Button
-            variant="outline-primary"
+            variant="outline-dark"
             className="btn-sm m-1"
             href={urlProfile}
           >
@@ -97,7 +100,8 @@ const FriendCard = ({ accountResponse }: Props) => {
       case "none":
         return (
           <Button
-            className="btn-sm m-1 btn btn-primary"
+            variant="dark"
+            className="btn-sm m-1"
             onClick={() => handleSend()}
           >
             Kết bạn
@@ -201,9 +205,10 @@ const FriendCard = ({ accountResponse }: Props) => {
   return (
     <div className="friend-card bg-hover p-2 rounded-2 d-flex" title={name}>
       <img
-        src={urlPhoto || "/images/avatar.jpg"}
+        src={GetImage(urlPhoto) || "/images/avatar.jpg"}
         alt={name}
         className="img-avt d-flex flex-column mx-2"
+        style={{objectFit:"cover"}}
       />
       <div className="info-friend">
         <Link

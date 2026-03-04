@@ -6,11 +6,11 @@ import InforUser from "@/components/profile/infor_user";
 import "@/styles/profile_user.css";
 import { getServerUTC } from "@/utils/utc_server_action";
 import { Col, Container, Row } from "react-bootstrap";
+import NotFound from "../not-found";
 
 
 const ProfileUser = async (props: any ) => {
   const { params } = props;
-  // console.log ('para',params.id);
   const timestamp= await getServerUTC()
 
   const dataProfile: IProfileFillterRequest  = {
@@ -19,23 +19,11 @@ const ProfileUser = async (props: any ) => {
     userName:params.id,
   }
   const resProfile = await FetchServerPostApi(API.PROFILE.PROFILE ,dataProfile);
-  // console.log(resProfile.result);
-  // const resProfile = await FetchServerGetApi(API.PROFILE.GETPROFILE , dataProfile);
-  // const resProfile = await FetchServerGetApi(API.PHOTO.LIST , dataProfile);
-
-
-  // console.log('this is',resProfile)
-
-  // const res:IProfileResponse  = {
-  //   id:11,
-  //   listUrlPhoto:[
-  //     "",
-  //   ],
-  //   name:"em Chien",
-  //   urlAvt:"https://via.placeholder.com/150",
-  //   userName:"DinhChien",
-  // }; 
-
+  if (resProfile && resProfile.status != 200) {
+    return (<>
+      <NotFound/>
+    </>)
+  }
 
   return (
     <div style={{backgroundColor:"#f2f4f7"}}>
@@ -53,13 +41,13 @@ const ProfileUser = async (props: any ) => {
         <Col md={4} className="mb-4 width90ps">
           <div className="mb-4  " >
             <InforUser profileRespone = {resProfile.result } 
+             time =  {timestamp}
               params = {params.id}
             />
           </div>
           <div>
             <ContentOfUser profileRespone={resProfile.result}
              time =  {timestamp}
-              
               params = {params.id}
 
             />

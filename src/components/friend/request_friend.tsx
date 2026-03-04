@@ -3,7 +3,6 @@
 import { useSocketContext } from "@/context/socket_context";
 import { useEffect, useState } from "react";
 import FriendCard from "../home/friend_card";
-import sendPushNotification from "../shared/send_push_notification";
 import { FetchClientGetApi } from "@/api/fetch_client_api";
 import API from "@/api/api";
 
@@ -45,10 +44,6 @@ const RequestFriend = (props: Props) => {
       });
   
       setHasRequest(true);
-      sendPushNotification(
-        `${receivedMessage.name} gửi lời mời kết bạn`,
-        `/friends`
-      );
     });
     
   }, []);

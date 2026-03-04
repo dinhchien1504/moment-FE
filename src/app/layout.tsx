@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { UserProvider } from "@/context/user_context";
-import Header from "@/components/shared/header";
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import { SocketProvider } from "@/context/socket_context";
 import NextTopLoader from "nextjs-toploader";
@@ -10,6 +9,7 @@ import { LoadingProvider } from "@/context/loading_context";
 import LoadingSpiner from "@/components/shared/loading_spiner";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "@/components/shared/header";
 
 
 const inter = Inter({ subsets: ["latin"] });

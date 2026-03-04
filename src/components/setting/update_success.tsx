@@ -16,7 +16,7 @@ function UpdateSuccessUserName({ show, handleClose, handleLogout }: UpdateSucces
         </Modal.Header>
         <Modal.Body>Bạn đã thay đổi tên đăng nhập thành công! Vui lòng đăng nhập lại!</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleLogout}>
+          <Button variant="primary" onClick={handleLogout} style={{backgroundColor:"black", color:"white", borderColor:"black"}}>
             Đăng xuất
           </Button>
         </Modal.Footer>

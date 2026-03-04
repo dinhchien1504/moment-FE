@@ -34,7 +34,7 @@ const PhotoCard = (props: IProps) => {
             <div className="swiper-lazy-preloader"></div>
           </div>
           <div className="d-block">
-          <Link className="text-black text-decoration-none" href={`/${userName}`}>{name}</Link>
+          <Link className="text-black hover-text-decoration-underline" href={`/${userName}`}>{name}</Link>
             <p className="m-0 fs-6" style={{cursor:"pointer"}}
               onClick={() => {handleShowPostDetail(slug)}}
             >{formatDate(createdAt)}</p>

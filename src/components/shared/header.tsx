@@ -2,7 +2,6 @@
 import { useLoadingContext } from '@/context/loading_context';
 import { useSocketContext } from '@/context/socket_context';
 import { useUserContext } from '@/context/user_context';
-import "@/styles/header.css";
 import { GetImage } from '@/utils/handle_images';
 import cookie from "js-cookie";
 import Image from 'next/image';
@@ -18,6 +17,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import LiveSearch from '../home/search';
 import NotiOffCanvas from '../noti/noti_offcanvas';
 import PostDetailModal from '../post_detail/post_detail_modal';
+import "@/styles/header.css";
 const Header = () => {
     const pathname = usePathname();
     const { user, fetchGetUser } = useUserContext();
@@ -29,27 +29,7 @@ const Header = () => {
     const { disconnect } = useSocketContext()
 
 
-    useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then((registration) => {
-                    console.log('Service Worker đã đăng ký', registration);
-                })
-                .catch((error) => {
-                    console.log('Đăng ký Service Worker thất bại:', error);
-                });
-        }
-
-        if (Notification.permission !== 'granted') {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Quyền nhận thông báo đã được cấp!');
-                } else {
-                    console.log('Quyền nhận thông báo bị từ chối');
-                }
-            });
-        }
-    }, []);
+    
 
 
     useEffect(() => {
@@ -133,6 +113,7 @@ const Header = () => {
 
                                     <Dropdown
                                         drop='down'
+                                        className='img-profile-header'
                                     >
                                         <Dropdown.Toggle as="div" id="dropdown-custom-components"
                                         >

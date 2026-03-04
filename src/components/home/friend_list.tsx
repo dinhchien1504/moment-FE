@@ -25,8 +25,10 @@ const FriendList = () => {
         time: time,
       };
       const res = await FetchClientPostApi(API.ACCOUNT.LIST, dataBody);
-      setAccountAcceptedResponse(res.result);
-      setCountTotalFriend(res.totalItems);
+      if(res.status == 200){
+        setAccountAcceptedResponse(res.result);
+        setCountTotalFriend(res.totalItems);
+      }
     } catch (error) {
       console.error("Lỗi khi lấy danh sách bạn bè:", error);
     }
@@ -39,11 +41,11 @@ const FriendList = () => {
       <div className="title d-flex justify-content-between p-2">
         <div className="d-flex align-items-center">
           <h5>
-            Bạn bè <span className="fs-5 ms-2">{countTotalFriend==0?'':countTotalFriend}</span>
+            Bạn bè <span className="fs-5 ms-2" style={{color:"#e16697"}}>{countTotalFriend==0?'':countTotalFriend}</span>
           </h5>
         </div>
 
-        <Link href={"/friends"} className=" hover-text-decoration-underline">
+        <Link href={"/friends"} className=" hover-text-decoration-underline text-secondary">
           Xem tất cả
         </Link>
       </div>

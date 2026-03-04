@@ -1,5 +1,5 @@
 import API from '@/api/api';
-import { FetchClientPutApi } from '@/api/fetch_client_api';
+import { FetchClientPostApi, FetchClientPutApi } from '@/api/fetch_client_api';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -32,10 +32,23 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
     setShow(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     startLoadingSpiner();
+    const fcmToken = localStorage.getItem("fcmToken");
+    if (fcmToken) {
+      try {
+        await FetchClientPostApi(API.NOTI_PUSH.DELETE_TOKEN_NOTI, {
+          token: fcmToken,
+        });
+        console.log("✅ Đã xóa FCM token trên server");
+      } catch (err) {
+        console.error("❌ Lỗi khi xóa FCM token:", err);
+      }
+    }
     cookie.remove("session-id");
     router.push("/login");
+    localStorage.removeItem("fcmToken");
+    
   };
 
   const validateNewUserName = (username: string): boolean => {
@@ -112,10 +125,10 @@ function ModelChangeUserName({ currentUserName, onSave }: { currentUserName: str
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} disabled={isSaving} style={{backgroundColor:"black",borderColor:"black", fontSize:"12px"}}>
+          <Button variant="secondary" onClick={handleClose} disabled={isSaving}  style={{backgroundColor:"white", color:"black"}}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleSave} disabled={isSaving} style={{backgroundColor:"#ff0066",borderColor:"#ff0066", fontSize:"12px"}}>
+          <Button variant="primary" onClick={handleSave} disabled={isSaving} style={{backgroundColor:"black", borderColor:"black"}}>
             {isSaving ? "Đang lưu..." : "Lưu"}
           </Button>
         </Modal.Footer>

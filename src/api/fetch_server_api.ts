@@ -63,3 +63,23 @@ export const FetchServerGetApi = async (api: string) => {
     }
 }
 
+export const FetchServerGetApiNoToken = async (api: string)=> {
+    try {
+        const res = await fetch(api, {
+          method: "GET", // Đúng phương thức POST
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json", // Đặt Content-Type là JSON
+          },
+        });
+        const data = await res.json();
+
+         if (data.status === 401) {
+        throw new Error("Unauthorization"); 
+      }
+        return data;
+      } catch (error) {
+
+      } 
+}
+

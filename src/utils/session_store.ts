@@ -10,7 +10,9 @@ export function getSessionId(): SessionId | undefined {
 
 export function setSessionId(sessionId: SessionId): void {
   const cookieStore = cookies();
-  cookieStore.set("session-id", sessionId);
+  cookieStore.set("session-id", sessionId,{
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30});
 }
 
 export function getSessionIdAndCreateIfMissing() {

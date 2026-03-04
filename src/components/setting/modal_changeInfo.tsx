@@ -176,10 +176,10 @@ function ModalChangInfo({ accountInfo, onSave }: ModalChangInfoProps) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} style={{backgroundColor:"black",borderColor:"black", fontSize:"12px"}}>
+          <Button variant="secondary" onClick={handleClose} style={{backgroundColor:"white", color:"black"}}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleSave} style={{backgroundColor:"#ff0066",borderColor:"#ff0066", fontSize:"12px"}}>
+          <Button variant="primary" onClick={handleSave} style={{backgroundColor:"black",  borderColor:"black"}}>
             Lưu
           </Button>
         </Modal.Footer>

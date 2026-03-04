@@ -51,53 +51,27 @@ const SettingSidebar = () => {
     }
     return (
         <>
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+            <Tab.Container id="left-tabs-example" defaultActiveKey="second">
                 <div className={styles.tabContainer}>
                     <Row>
                         <Col sm={3}>
-                            <Nav variant="pills" activeKey={activeTab}
-                                onSelect={(selectedKey) => selectedKey && setActiveTab(selectedKey)} className={`flex-column ${styles.navPills}`}>
-                                <div className={styles.rowNav}>
+                            <Nav variant="pills" className={`flex-column ${styles.navPills}`}>
+                                <div  className={styles.rowNav}>
 
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            as="div"
-                                            eventKey="first"
-                                            style={{
-                                                backgroundColor: activeTab === "first" ? "black" : "transparent",
-                                                color: activeTab === "first" ? "white" : "black",
-                                                fontSize:"12px",
-                                                borderRadius: "5px",
-                                                textAlign: "center",
-                                                cursor: "pointer",
-                                                transition: "0.3s",
-                                                margin: "0px",
-                                            }}
-                                            onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "#ddd"}
-                                            onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = activeTab === "first" ? "black" : "transparent"}
-                                        >
-                                            Mật khẩu & bảo mật
-                                        </Nav.Link>
-                                    </Nav.Item>
-
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            as="div"
-                                            eventKey="second"
-                                            style={{
-                                                backgroundColor: activeTab === "second" ? "black" : "transparent",
-                                                color: activeTab === "second" ? "white" : "black",
-                                                fontSize:"12px",
-                                                borderRadius: "5px",
-                                                textAlign: "center",
-                                                cursor: "pointer",
-                                                margin: "0px",
-                                            }}
-                                        >
-                                            Thông tin cá nhân
-                                        </Nav.Link>
-                                    </Nav.Item>
-
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link as={"div"}  eventKey="second" className={styles.customNavLink}>
+                                        Thông tin cá nhân
+                                    </Nav.Link>
+                                </Nav.Item>
+                                
+                                <Nav.Item className={styles.navItem}>
+                                    <Nav.Link  as={"div"}  eventKey="first" className={styles.customNavLink}>
+                                        Mật khẩu & bảo mật
+                                    </Nav.Link>
+                                </Nav.Item>
+                               
+                          
+                                
                                 </div>
                             </Nav>
                         </Col>
